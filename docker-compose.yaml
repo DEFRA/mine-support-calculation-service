@@ -4,5 +4,11 @@ services:
     build: .
     image: mine-support-calculation-service
     container_name: mine-support-calculation-service
+    networks:
+      - mine-support
     ports:
-        - "3005:3005"
+      - "3005:3005"
+
+networks:
+  mine-support:
+    external: true
