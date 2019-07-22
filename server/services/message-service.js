@@ -1,50 +1,33 @@
-const amqp = require('amqplib/callback_api')
-const calculationService = require('./calculation-service')
+const container = require('rhea')
 const config = require('../config')
+const calculationService = require('./calculation-service')
 
 module.exports = {
   receiveClaim: function () {
-    const messageQueue = config.messageQueue
-    amqp.connect(messageQueue, function (err, conn) {
-      if (err) {
-        console.log(err)
-      } else {
-        conn.createChannel(function (err, ch) {
-          if (err) {
-            console.log(err)
-          } else {
-            const calculationQueue = 'calculation'
-            ch.assertQueue(calculationQueue, { durable: false })
-            console.log('waiting for messages')
-            ch.consume(calculationQueue, function (msg) {
-              console.log(`claim received for calculation - ${msg.content.toString()}`)
-              const claim = JSON.parse(msg.content)
-              const value = calculationService.calculate(claim)
-              publishCalculation({ claimId: claim.claimId, value: value })
-            }, { noAck: true })
-          }
-        })
-      }
-    })
-  }
-}
-
-function publishCalculation (calculation) {
-  amqp.connect('amqp://localhost', function (err, conn) {
-    if (err) {
-      console.log(err)
+    const calculationQueue = 'calculation'
+    const valueQueue = 'value'
+    const activeMQOptions = {
+      transport: config.messageQueuePort === 5672 ? 'tcp' : 'ssl',
+      port: config.messageQueuePort,
+      reconnect_limit: 10,
+      host: config.messageQueue,
+      hostname: config.messageQueue,
+      username: config.messageQueueUser,
+      password: config.messageQueuePass
     }
-    conn.createChannel(function (err, ch) {
-      if (err) {
-        console.log(err)
-      }
-
-      const data = JSON.stringify(calculation)
-
-      const valueQueue = 'value'
-      ch.assertQueue(valueQueue, { durable: false })
-      ch.sendToQueue(valueQueue, Buffer.from(data))
-      console.log('calculation queued for payment')
+    container.on('connection_open', (context) => {
+      context.connection.open_receiver(calculationQueue).on('message', (context) => {
+        console.log(`claim received for calculation - ${context.message.body}`)
+        const claim = JSON.parse(context.message.body)
+        const value = calculationService.calculate(claim)
+        context.connection.open_sender(valueQueue).on('sendable', (context) => {
+          const data = JSON.stringify({ claimId: claim.claimId, value: value })
+          context.sender.send({ body: data })
+          console.log('calculation queued for payment')
+        })
+        context.delivery.release({ undeliverable_here: true })
+      })
     })
-  })
+    container.connect(activeMQOptions)
+  }
 }
