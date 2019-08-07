@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+  mine-support-calculation-service:
+    command: ./wait-for amq:8161 -- npm run test
+    volumes:
+      - node_modules:/usr/src/app/node_modules
+      - .:/usr/src/app
+      - ./test-output:/usr/src/app/test-output
+
+volumes:
+  node_modules:

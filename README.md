@@ -30,3 +30,14 @@ The service has been developed with the intention of running in Kubernetes.  A h
 Unit tests are written in Lab and can be run with the following command:
 
 `npm run test`
+
+# Sample JSON
+
+{ 
+  "claimId": "MINE123",
+  "propertyType": "business",
+  "accessible": false,
+  "dateOfSubsidence": "2019-07-26T09:54:19.622Z",
+  "mineType": ["gold"],
+  "email": "test@email.com"
+}

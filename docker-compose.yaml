@@ -4,6 +4,15 @@ services:
     build: .
     image: mine-support-calculation-service
     container_name: mine-support-calculation-service
+    environment:
+     MESSAGE_QUEUE_HOST : "host.docker.internal"
+     MESSAGE_QUEUE_PORT : "5672"
+     CALCULATION_QUEUE_ADDRESS : "calculation"
+     CALCULATION_QUEUE_USER : "artemis"
+     CALCULATION_QUEUE_PASSWORD : "artemis"
+     PAYMENT_QUEUE_ADDRESS : "payment"
+     PAYMENT_QUEUE_USER : "artemis"
+     PAYMENT_QUEUE_PASSWORD : "artemis"
     depends_on:
       - amq
   amq:

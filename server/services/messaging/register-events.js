@@ -3,8 +3,12 @@ const rheaPromise = require('rhea-promise')
 function registerEvents (receiver, address, action) {
   receiver.on(rheaPromise.ReceiverEvents.message, (context) => {
     console.log(`message received - ${address} - ${context.message.body}`)
-    const claim = JSON.parse(context.message.body)
-    action(claim)
+    try {
+      const claim = JSON.parse(context.message.body)
+      action(claim)
+    } catch (ex) {
+      console.error('error with message', ex)
+    }
   })
 
   receiver.on(rheaPromise.ReceiverEvents.receiverError, (context) => {
