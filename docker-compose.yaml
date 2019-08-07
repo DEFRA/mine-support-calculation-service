@@ -1,14 +1,17 @@
-version: '3'
+version: '3.4'
 services:
-  mine-support-claim-service:
+  mine-support-calculation-service:
     build: .
     image: mine-support-calculation-service
     container_name: mine-support-calculation-service
-    networks:
-      - mine-support
+    depends_on:
+      - amq
+  amq:
+    image: vromero/activemq-artemis:latest-alpine
     ports:
-      - "3005:3005"
-
-networks:
-  mine-support:
-    external: true
+    - "8161:8161"
+    - "61616:61616"
+    - "5672:5672"
+    environment:
+      ARTEMIS_USERNAME: artemis
+      ARTEMIS_PASSWORD: artemis

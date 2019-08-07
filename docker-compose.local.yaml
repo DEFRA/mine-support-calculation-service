@@ -1,0 +1,32 @@
+version: '3.4'
+services:
+  mine-support-calculation-service:
+    command:  ./wait-for amq:8161 -- npm run start-watch
+    environment:
+     MESSAGE_QUEUE_HOST : "host.docker.internal"
+     MESSAGE_QUEUE_PORT : "5672"
+     CALCULATION_QUEUE_ADDRESS : "calculation"
+     CALCULATION_QUEUE_USER : "artemis"
+     CALCULATION_QUEUE_PASSWORD : "artemis"
+     PAYMENT_QUEUE_ADDRESS : "payment"
+     PAYMENT_QUEUE_USER : "artemis"
+     PAYMENT_QUEUE_PASSWORD : "artemis"
+    networks:
+      - mine-support
+      - mine-support-amq
+    ports:
+      - "3005:3005"
+    volumes:
+      - node_modules:/usr/src/app/node_modules
+      - .:/usr/src/app
+
+  amq:
+    networks:
+     - mine-support-amq
+
+networks:
+  mine-support:
+   external: true
+  mine-support-amq: {}
+volumes:
+  node_modules:
