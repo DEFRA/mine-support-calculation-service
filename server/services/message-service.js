@@ -1,7 +1,7 @@
-const MessageSender = require('./message-sender')
-const MessageReceiver = require('./message-receiver')
-const calculationService = require('../calculation-service')
-const config = require('../../config')
+const MessageSender = require('./messaging/message-sender')
+const MessageReceiver = require('./messaging/message-receiver')
+const calculationService = require('./calculation-service')
+const config = require('../config')
 
 const messageSender = new MessageSender(config.paymentQueueConfig)
 const messageReceiver = new MessageReceiver(config.calculationQueueConfig)
@@ -36,5 +36,6 @@ async function openConnections () {
 }
 
 module.exports = {
-  registerQueues
+  registerQueues,
+  closeConnections
 }
