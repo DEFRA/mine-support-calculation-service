@@ -1,40 +1,40 @@
-const publishMessage = require('./send-message')
-const setupReceiver = require('./setup-receiver')
-
-const rheaPromise = require('rhea-promise')
+const MessageSender = require('./message-sender')
+const MessageReceiver = require('./message-receiver')
 const calculationService = require('../calculation-service')
 const config = require('../../config')
 
-let connection
+const messageSender = new MessageSender(config.paymentQueueConfig)
+const messageReceiver = new MessageReceiver(config.calculationQueueConfig)
 
-async function closeConnection () {
-  if (connection) {
-    await connection.close()
+async function registerQueues () {
+  await openConnections()
+  await messageReceiver.setupReceiver(eventAction)
+}
+
+async function eventAction (claim) {
+  try {
+    const value = calculationService.calculate(claim)
+    await messageSender.sendMessage({ claimId: claim.claimId, value })
+  } catch (error) {
+    console.log('error sending message', error)
   }
 }
 
 process.on('SIGTERM', async function () {
-  await closeConnection()
+  await closeConnections()
   process.exit(0)
 })
 
-async function receiveClaim () {
-  connection = connection || new rheaPromise.Connection(config.calculationQueueConfig)
-  try {
-    await connection.open()
-    await setupReceiver(connection, config.calculationQueueConfig.address, eventAction)
-  } catch (err) {
-    console.log(`unable to connect to message queue ${err}`)
-  }
+async function closeConnections () {
+  await messageSender.closeConnection()
+  await messageReceiver.closeConnection()
 }
 
-function eventAction (claim) {
-  const value = calculationService.calculate(claim)
-  console.log('******VALUE RECEIVED *******', value)
-  publishMessage(config.paymentQueueConfig, { claimId: claim.claimId, value })
+async function openConnections () {
+  await messageSender.openConnection()
+  await messageReceiver.openConnection()
 }
 
 module.exports = {
-  receiveClaim,
-  closeConnection
+  registerQueues
 }

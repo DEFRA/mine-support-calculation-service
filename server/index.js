@@ -24,7 +24,7 @@ async function createServer () {
     await server.register(require('./plugins/logging'))
   }
 
-  messageService.receiveClaim()
+  await messageService.registerQueues()
 
   return server
 }

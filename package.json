@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start-watch": "nodemon --inspect=0.0.0.0 --ext js --legacy-watch index.js",
+    "start-watch": "nodemon index.js",
     "lint": "standard",
     "pretest": "npm run lint",
     "test": "jest",
