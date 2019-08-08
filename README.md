@@ -21,18 +21,59 @@ Digital service mock to claim public money in the event property subsides into m
 
 The application is designed to run as a container via Docker Compose or Kubernetes (with Helm).
 
-A convenience script is provided to run via Docker Compose:
+## Using Docker Compose
 
-`scripts/start`
+A set of convenience scripts are provided for local development and running via Docker Compose.
 
-This will create the required `mine-support` network before starting the service so that it can communicate with other Mine Support services running alongside it through docker-compose. The script will then attach to the running service, tailing its logs and allowing the service to be brought down by pressing `Ctrl + C`.
+```
+# Build service containers
+scripts/build
 
-# Kubernetes
+# Start the service and attach to running containers (press `ctrl + c` to quit)
+scripts/start
 
-The service has been developed with the intention of running in Kubernetes.  A helm chart is included in the `.\helm` folder.
+# Stop the service and remove Docker volumes and networks created by the start script
+scripts/stop
+```
+
+Any arguments provided to the build and start scripts are passed to the Docker Compose `build` and `up` commands, respectively. For example:
+
+```
+# Build without using the Docker cache
+scripts/build --no-cache
+
+# Start the service without attaching to containers
+scripts/start --detach
+```
+
+This service depends on an external Docker network named `mine-support` to communicate with other Mine Support services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
+
+## Using Kubernetes
+
+The service has been developed with the intention of running on Kubernetes in production.  A helm chart is included in the `.\helm` folder.
+
+Running via Helm requires a local Postgres database to be installed and setup with the username and password defined in the [values.yaml](./helm/values.yaml). It is much simpler to develop using Docker Compose locally than to set up a local Kubernetes environment. See above for instructions.
+
+To test Helm deployments locally, a [deploy](./deploy) script is provided.
+
+```
+# Build service containers
+scripts/build
+
+# Deploy to the current Helm context
+scripts/deploy
+```
 
 # How to run tests
 
-Unit tests are written in Lab and can be run with the following command:
+A convenience script is provided to run automated tests in a containerised environment:
 
-`npm run test`
+```
+scripts/test
+```
+
+Alternatively, the same tests may be run locally via npm:
+
+```
+npm run test
+```
