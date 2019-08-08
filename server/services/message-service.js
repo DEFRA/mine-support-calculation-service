@@ -3,8 +3,8 @@ const MessageReceiver = require('./messaging/message-receiver')
 const calculationService = require('./calculation-service')
 const config = require('../config')
 
-const messageSender = new MessageSender(config.paymentQueueConfig)
-const messageReceiver = new MessageReceiver(config.calculationQueueConfig)
+const messageSender = new MessageSender('payment-service-sender', config.paymentQueueConfig)
+const messageReceiver = new MessageReceiver('payment-service-reciever', config.calculationQueueConfig)
 
 async function registerQueues () {
   await openConnections()

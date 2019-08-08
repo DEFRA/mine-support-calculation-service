@@ -3,9 +3,8 @@ const { getReceiverConfig } = require('./config-helper')
 const MessagerBase = require('./messager-base')
 
 class MessageReceiver extends MessagerBase {
-  constructor (config) {
-    super(config)
-    this.name = 'reciever-payment-service'
+  constructor (name, config) {
+    super(name, config)
     this.connection = new rheaPromise.Connection(config)
     this.receiverConfig = getReceiverConfig(this.name, config)
   }

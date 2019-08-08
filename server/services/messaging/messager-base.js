@@ -1,7 +1,8 @@
 const rheaPromise = require('rhea-promise')
 
 class MessagerBase {
-  constructor (config) {
+  constructor (name, config) {
+    this.name = name
     this.connection = new rheaPromise.Connection(config)
   }
 
