@@ -1,59 +1,32 @@
 const rheaPromise = require('rhea-promise')
+const { getReceiverConfig } = require('./config-helper')
+const MessagerBase = require('./messager-base')
 
-class MessageReceiver {
+class MessageReceiver extends MessagerBase {
   constructor (config) {
-    this.config = config
-    this.receiverConfig = this.getReceiverConfig(config.address)
+    super(config)
+    this.name = 'reciever-payment-service'
     this.connection = new rheaPromise.Connection(config)
-  }
-
-  getReceiverConfig (address) {
-    return {
-      name: `reciever-payment-service-${address}`,
-      source: { address },
-      onSessionError: (context) => {
-        const sessionError = context.session && context.session.error
-        if (sessionError) {
-          console.log(`session error for ${this.receiverConfig.name} receiver`, sessionError)
-        }
-      }
-    }
+    this.receiverConfig = getReceiverConfig(this.name, config)
   }
 
   registerEvents (receiver, action) {
     receiver.on(rheaPromise.ReceiverEvents.message, async (context) => {
-      console.log(`message received: ${this.receiverConfig.name}`, context.message.body)
+      console.log(`${this.name} received message`, context.message.body)
       try {
         const message = JSON.parse(context.message.body)
         await action(message)
       } catch (ex) {
-        console.error(`error with message in ${this.receiverConfig.name}`, ex)
+        console.error(`${this.name} error with message`, ex)
       }
     })
 
     receiver.on(rheaPromise.ReceiverEvents.receiverError, (context) => {
       const receiverError = context.receiver && context.receiver.error
       if (receiverError) {
-        console.error(`receipt error for ${this.receiverConfig.name}`, receiverError)
+        console.error(`${this.name} receipt error`, receiverError)
       }
     })
-  }
-
-  async openConnection () {
-    try {
-      await this.connection.open()
-      console.log(`${this.receiverConfig.name} connection opened`)
-    } catch (error) {
-      console.error(`error opening ${this.receiverConfig.name} connection`)
-      throw error
-    }
-  }
-
-  async closeConnection () {
-    if (this.connection) {
-      await this.connection.close()
-      console.log(`${this.receiverConfig.name} connection closed`)
-    }
   }
 
   async setupReceiver (action) {
