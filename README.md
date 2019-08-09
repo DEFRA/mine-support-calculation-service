@@ -17,6 +17,22 @@ Digital service mock to claim public money in the event property subsides into m
 - Node v10+
 - Access to an AMQP 1.0 compatible message queue service
 
+# How to run tests
+
+A convenience script is provided to run automated tests in a containerised environment:
+
+```
+scripts/test
+```
+
+This runs tests via a `docker-compose run` command. If tests complete successfully, all containers, networks and volumes are cleaned up before the script exits. If there is an error or any tests fail, the associated Docker resources will be left available for inspection.
+
+Alternatively, the same tests may be run locally via npm:
+
+```
+npm run test
+```
+
 # Running the application
 
 The application is designed to run as a container via Docker Compose or Kubernetes (with Helm).
@@ -48,6 +64,8 @@ scripts/start --detach
 
 This service depends on an external Docker network named `mine-support` to communicate with other Mine Support services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
 
+The external network is declared in a secondary Docker Compose configuration (referenced by the above scripts) so that this service can be run in isolation without creating an external Docker network.
+
 ## Using Kubernetes
 
 The service has been developed with the intention of running on Kubernetes in production.  A helm chart is included in the `.\helm` folder.
@@ -62,18 +80,4 @@ scripts/build
 
 # Deploy to the current Helm context
 scripts/deploy
-```
-
-# How to run tests
-
-A convenience script is provided to run automated tests in a containerised environment:
-
-```
-scripts/test
-```
-
-Alternatively, the same tests may be run locally via npm:
-
-```
-npm run test
 ```

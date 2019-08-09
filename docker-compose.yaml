@@ -1,14 +1,14 @@
 version: '3'
 services:
-  mine-support-claim-service:
+  mine-support-calculation-service:
     build: .
     image: mine-support-calculation-service
     container_name: mine-support-calculation-service
-    networks:
-      - mine-support
     ports:
       - "3005:3005"
+    volumes:
+      - node_modules:/mine-support-calculation-service/node_modules
+      - .:/mine-support-calculation-service
 
-networks:
-  mine-support:
-    external: true
+volumes:
+  node_modules:
