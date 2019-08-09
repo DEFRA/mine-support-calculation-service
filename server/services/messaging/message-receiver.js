@@ -1,8 +1,8 @@
 const rheaPromise = require('rhea-promise')
 const { getReceiverConfig } = require('./config-helper')
-const MessagerBase = require('./messager-base')
+const MessageBase = require('./message-base')
 
-class MessageReceiver extends MessagerBase {
+class MessageReceiver extends MessageBase {
   constructor (name, config) {
     super(name, config)
     this.connection = new rheaPromise.Connection(config)

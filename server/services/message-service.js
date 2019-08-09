@@ -1,6 +1,6 @@
 const MessageSender = require('./messaging/message-sender')
 const MessageReceiver = require('./messaging/message-receiver')
-const calculationService = require('./calculation-service')
+const messageAction = require('./message-action')
 const config = require('../config')
 
 const messageSender = new MessageSender('payment-service-sender', config.paymentQueueConfig)
@@ -8,16 +8,7 @@ const messageReceiver = new MessageReceiver('payment-service-reciever', config.c
 
 async function registerQueues () {
   await openConnections()
-  await messageReceiver.setupReceiver(eventAction)
-}
-
-async function eventAction (claim) {
-  try {
-    const value = calculationService.calculate(claim)
-    await messageSender.sendMessage({ claimId: claim.claimId, value })
-  } catch (error) {
-    console.log('error sending message', error)
-  }
+  await messageReceiver.setupReceiver((message) => messageAction(message, messageSender))
 }
 
 process.on('SIGTERM', async function () {

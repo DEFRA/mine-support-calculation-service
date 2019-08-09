@@ -16,7 +16,5 @@ RUN npm install
 COPY --chown=node:node . .
 USER node
 
-ARG PORT=3005
-ENV PORT ${PORT}
-EXPOSE ${PORT} 9229 9230
+EXPOSE 9229 9230
 CMD [ "node", "index" ]

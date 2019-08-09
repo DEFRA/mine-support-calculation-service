@@ -3,12 +3,10 @@ const mqConfig = require('./mq-config')
 
 // Define config schema
 const schema = {
-  port: joi.number().default(3005),
   env: joi.string().valid('development', 'test', 'production').default('development')
 }
 
 const config = {
-  port: process.env.PORT,
   env: process.env.NODE_ENV
 }
 

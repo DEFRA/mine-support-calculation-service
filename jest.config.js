@@ -12,6 +12,7 @@ module.exports = {
   ],
   'coveragePathIgnorePatterns': [
     'jest.config.js',
+    'index.js',
     '<rootDir>/node_modules/',
     '<rootDir>/test-output/',
     '<rootDir>/test/',
@@ -23,7 +24,8 @@ module.exports = {
     }
   },
   'modulePathIgnorePatterns': [
-    'node_modules'
+    '<rootDir>/node_modules/'
+
   ],
   'reporters': [
     'default',

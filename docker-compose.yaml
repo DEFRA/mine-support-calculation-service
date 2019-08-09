@@ -19,7 +19,6 @@ services:
     image: vromero/activemq-artemis:latest-alpine
     ports:
     - "8161:8161"
-    - "61616:61616"
     - "5672:5672"
     environment:
       ARTEMIS_USERNAME: artemis

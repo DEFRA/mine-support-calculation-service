@@ -1,14 +1,14 @@
-function onError (context, name) {
+function onSenderError (context, name) {
   const senderError = context.sender && context.sender.error
   if (senderError) {
-    console.error(`session error for ${name} sender`, senderError)
+    console.error(`sender error for ${name}`, senderError)
   }
 }
 
 function onSessionError (context, name) {
-  const senderError = context.sender && context.sender.error
-  if (senderError) {
-    console.error(`session error for ${name} sender`, senderError)
+  const sessionError = context.session && context.session.error
+  if (sessionError) {
+    console.error(`session error for ${name}`, sessionError)
   }
 }
 
@@ -16,9 +16,9 @@ function getSenderConfig (name, config) {
   return {
     name,
     target: { address: config.address },
-    onError: (context) => onError(context, name),
+    onError: (context) => onSenderError(context, name),
     onSessionError: (context) => onSessionError(context, name),
-    sendTimeoutInSeconds: config.sendTimeoutInSeconds || 10
+    sendTimeoutInSeconds: config.sendTimeoutInSeconds
   }
 }
 

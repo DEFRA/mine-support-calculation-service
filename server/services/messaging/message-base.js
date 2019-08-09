@@ -1,6 +1,6 @@
 const rheaPromise = require('rhea-promise')
 
-class MessagerBase {
+class MessageBase {
   constructor (name, config) {
     this.name = name
     this.connection = new rheaPromise.Connection(config)
@@ -11,7 +11,7 @@ class MessagerBase {
       await this.connection.open()
       console.log(`${this.name} connection opened`)
     } catch (error) {
-      console.error(`error opening ${this.name} connection`)
+      console.error(`error opening ${this.name} connection`, error)
       throw error
     }
   }
@@ -22,4 +22,4 @@ class MessagerBase {
   }
 }
 
-module.exports = MessagerBase
+module.exports = MessageBase
