@@ -23,11 +23,11 @@ describe('message receiver', () => {
       done = resolve
     })
     const testConfig = { ...config.paymentQueueConfig, address }
-    messageReceiver = new MessageReceiver(testConfig)
+    messageReceiver = new MessageReceiver('test-receiver', testConfig)
     await messageReceiver.openConnection()
     await messageReceiver.setupReceiver((result) => done(result.hello === message.hello))
 
-    messageSender = new MessageSender(testConfig)
+    messageSender = new MessageSender('test-sender', testConfig)
     await messageSender.openConnection()
     await messageSender.sendMessage(message)
 

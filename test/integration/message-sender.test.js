@@ -13,7 +13,7 @@ describe('message sender', () => {
   })
   test('can send messages', async () => {
     const testConfig = { ...config.paymentQueueConfig, address }
-    messageSender = new MessageSender(testConfig)
+    messageSender = new MessageSender('test-sender', testConfig)
     await messageSender.openConnection()
     const delivery = await messageSender.sendMessage(message)
     expect(delivery.settled).toBeTruthy()

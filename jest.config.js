@@ -11,6 +11,7 @@ module.exports = {
     'lcov'
   ],
   'coveragePathIgnorePatterns': [
+    'jest.config.js',
     '<rootDir>/node_modules/',
     '<rootDir>/test-output/',
     '<rootDir>/test/',

@@ -25,6 +25,11 @@ process.on('SIGTERM', async function () {
   process.exit(0)
 })
 
+process.on('SIGINT', async function () {
+  await closeConnections()
+  process.exit(0)
+})
+
 async function closeConnections () {
   await messageSender.closeConnection()
   await messageReceiver.closeConnection()
