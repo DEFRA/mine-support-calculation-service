@@ -1,19 +1,18 @@
 FROM node:10
 
-# Create app directory
-WORKDIR /mine-support-calculation-service
+USER node
+WORKDIR /home/node
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY package*.json ./
-
+COPY --chown=node:node package*.json ./
 RUN npm install
 # If you are building your code for production
 # RUN npm ci --only=production
 
 # Bundle app source
-COPY . .
+COPY --chown=node:node . .
 
 EXPOSE 3005
 CMD [ "node", "index" ]
