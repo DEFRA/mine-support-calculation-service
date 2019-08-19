@@ -4,7 +4,7 @@ services:
     build: .
     image: mine-support-calculation-service
     container_name: mine-support-calculation-service
-    command:  ./wait-for amq:8161 -- npm run start:watch
+    command: sh -c "scripts/wait-for/wait-for amq:8161 -- npm run start:watch"
     depends_on:
       - amq
     environment:
