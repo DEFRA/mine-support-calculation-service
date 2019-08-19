@@ -1,0 +1,8 @@
+export MESSAGE_QUEUE_HOST="localhost"
+export MESSAGE_QUEUE_PORT="5672"
+export CALCULATION_QUEUE_ADDRESS="calculation"
+export CALCULATION_QUEUE_USER="artemis"
+export CALCULATION_QUEUE_PASSWORD="artemis"
+export PAYMENT_QUEUE_ADDRESS="payment"
+export PAYMENT_QUEUE_USER="artemis"
+export PAYMENT_QUEUE_PASSWORD="artemis"

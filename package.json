@@ -8,28 +8,34 @@
     "start:watch": "nodemon --inspect=0.0.0.0 --ext js --legacy-watch index.js",
     "test": "npm run test:unit",
     "test:lint": "standard",
-    "test:unit": "lab -c -r console -o stdout -r lcov -o lcov.info"
+    "test:unit": "jest",
+    "test:unit-watch": "jest --coverage=false --onlyChanged --watch"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "amqplib": "^0.5.3",
     "async-polling": "^0.2.1",
-    "boom": "7.2.2",
-    "hapi": "17.7.0",
-    "joi": "14.0.4",
-    "lodash": "^4.17.11"
+    "@hapi/joi": "^15.1.0",
+    "lodash": "^4.17.11",
+    "rhea": "^1.0.8",
+    "rhea-promise": "^1.0.0"
   },
   "devDependencies": {
-    "blipp": "3.1.1",
-    "code": "5.2.3",
-    "codeclimate-test-reporter": "0.5.1",
-    "good": "8.1.1",
-    "good-console": "7.1.0",
-    "good-file": "6.0.1",
-    "good-squeeze": "5.1.0",
-    "lab": "^18.0.2",
+    "jest": "^24.8.0",
+    "jest-junit": "^7.0.0",
     "nodemon": "^1.19.1",
     "standard": "12.0.1"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "beforeEach",
+      "expect",
+      "test",
+      "afterEach",
+      "jest",
+      "beforeAll",
+      "afterAll"
+    ]
   }
 }

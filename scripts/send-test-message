@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source ./scripts/testEnv
+node ./test/send-test-message.js

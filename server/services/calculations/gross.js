@@ -1,10 +1,10 @@
-const baseValue = 100
+const BASE_VALUE = 100
 
-module.exports = {
-  calculate: function (claim) {
-    switch (claim.propertyType) {
-      case 'business': return baseValue * 2
-      default: return baseValue
-    }
+function calculate (claim) {
+  switch (claim.propertyType) {
+    case 'business': return BASE_VALUE * 2
+    default: return BASE_VALUE
   }
 }
+
+module.exports = calculate

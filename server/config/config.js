@@ -1,17 +1,13 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
+const mqConfig = require('./mq-config')
 
 // Define config schema
 const schema = {
-  port: joi.number().default(3005),
-  env: joi.string().valid('development', 'test', 'production').default('development'),
-  messageQueue: joi.string().uri().default('amqp://localhost')
+  env: joi.string().valid('development', 'test', 'production').default('development')
 }
 
-// Build config
 const config = {
-  port: process.env.PORT,
-  env: process.env.NODE_ENV,
-  messageQueue: process.env.MINE_SUPPORT_MESSAGE_QUEUE
+  env: process.env.NODE_ENV
 }
 
 // Validate config
@@ -30,5 +26,8 @@ const value = result.value
 // Add some helper props
 value.isDev = value.env === 'development'
 value.isProd = value.env === 'production'
+
+value.paymentQueueConfig = mqConfig.paymentQueueConfig
+value.calculationQueueConfig = mqConfig.calculationQueueConfig
 
 module.exports = value

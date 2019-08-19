@@ -1,8 +1,7 @@
-const createServer = require('./server')
+const messageService = require('./server/services/message-service')
 
-createServer()
-  .then(server => server.start())
-  .catch(err => {
-    console.log(err)
-    process.exit(1)
-  })
+async function startService () {
+  await messageService.registerQueues()
+}
+
+startService()

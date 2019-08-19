@@ -20,7 +20,7 @@ spec:
         env:                
         - name: NODE_ENV
           value: {{ .Values.environment }}
-        - name: MINE_SUPPORT_MESSAGE_QUEUE
+        - name:MESSAGE_QUEUE
           value: {{ .Values.containers.service.messageQueue }}
         ports:
         - containerPort: {{ .Values.containers.service.port }}

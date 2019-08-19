@@ -1,15 +1,29 @@
-version: '3'
+version: '3.4'
 services:
   mine-support-calculation-service:
     build: .
     image: mine-support-calculation-service
     container_name: mine-support-calculation-service
-    command: npm run start:watch
+    command:  ./wait-for amq:8161 -- npm run start:watch
+    depends_on:
+      - amq
+    environment:
+     MESSAGE_QUEUE_HOST : "host.docker.internal"
+     MESSAGE_QUEUE_PORT : "5672"
+     CALCULATION_QUEUE_ADDRESS : "calculation"
+     CALCULATION_QUEUE_USER : "artemis"
+     CALCULATION_QUEUE_PASSWORD : "artemis"
+     PAYMENT_QUEUE_ADDRESS : "payment"
+     PAYMENT_QUEUE_USER : "artemis"
+     PAYMENT_QUEUE_PASSWORD : "artemis"
     ports:
       - "3005:3005"
-    volumes:
-      - node_modules:/usr/src/app/node_modules
-      - .:/usr/src/app
 
-volumes:
-  node_modules:
+  amq:
+    image: vromero/activemq-artemis:latest-alpine
+    ports:
+    - "8161:8161"
+    - "5672:5672"
+    environment:
+      ARTEMIS_USERNAME: artemis
+      ARTEMIS_PASSWORD: artemis

@@ -1,11 +1,21 @@
-version: '3'
+version: '3.4'
 services:
   mine-support-calculation-service:
-    environment:
-      MINE_SUPPORT_MESSAGE_QUEUE: amqp://mine-support-message-queue
     networks:
       - mine-support
+      - mine-support-amq
+    volumes:
+      - node_modules:/usr/src/app/node_modules
+      - .:/usr/src/app
+
+  amq:
+    networks:
+     - mine-support-amq
 
 networks:
   mine-support:
-    external: true
+   external: true
+  mine-support-amq: {}
+
+volumes:
+  node_modules:
