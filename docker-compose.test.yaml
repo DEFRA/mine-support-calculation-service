@@ -1,10 +1,8 @@
 version: '3.4'
 services:
   mine-support-calculation-service:
-    command: ./wait-for amq:8161 -- npm run test
+    command: scripts/wait-for/wait-for mine-support-calculation-message-queue:8161 -- npm run test
     volumes:
-      - node_modules:/usr/src/app/node_modules
-      - .:/usr/src/app
       - ./test-output:/usr/src/app/test-output
 
 volumes:

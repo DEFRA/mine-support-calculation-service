@@ -77,11 +77,15 @@ The external network is declared in a secondary Docker Compose configuration (re
 
 ### Message Queues
 
-This service reacts to messages retrieved from a message queue comformant with the AMQP 1.0 protocol. The [docker-compose.local.yaml](docker-compose.local.yaml) override file used by the start script also launches an instance of Artemis as an AMQP 1.0 Service bus with accounts and queue names set up to test the application locally.
+This service reacts to messages retrieved from a message queue comformant with the AMQP 1.0 protocol. The [start script](./scripts/start) is designed for full-stack application testing so it expects an Artemis instance to already be running on ports 5672 and 8161 (for AMQP and the Artemis web interface, respectively).
 
-The script [wait-for](./wait-for) is used to ensure Artemis is accepting connections before subscribing to the calculation queue. Further details on `wait-for` are available [here](https://github.com/gesellix/wait-for).
+For testing this service in isolation, the default Docker Compose [override file](docker-compose.override.yaml) launches an instance of Artemis as an AMQP 1.0 Service bus with appropriate accounts and queue names.
 
-When the `start` script is running test messages can be sent via the Artemis console UI hosted at http://localhost:8161/console/login. Sample valid JSON to send to the calculation queue can be found at the end of this README.
+```
+docker-compose up
+```
+
+Test messages can be sent via the Artemis console UI hosted at http://localhost:8161/console/login. Sample valid JSON to send to the calculation queue can be found at the end of this README.
 
 Alternatively the script [./scripts/send-test-mesage](./scripts/send-test-message) may be run to send a valid message to the running Artemis instance.
 
