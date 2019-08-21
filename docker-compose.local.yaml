@@ -13,7 +13,7 @@ services:
 
 networks:
   mine-support:
-   external: true
+    external: true
 
 volumes:
   node_modules:
