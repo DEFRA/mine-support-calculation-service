@@ -13,4 +13,4 @@ services:
       - ./test-output:/usr/src/app/test-output
 
 volumes:
-  node_modules:
+  node_modules: {}

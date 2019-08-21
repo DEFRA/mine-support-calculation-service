@@ -44,4 +44,4 @@ volumes:
   message-queue-etc: {}
   message-queue-etc-override: {}
   message-queue-lock: {}
-  node_modules:
+  node_modules: {}

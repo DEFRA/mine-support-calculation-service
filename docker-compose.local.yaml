@@ -20,4 +20,4 @@ networks:
     external: true
 
 volumes:
-  node_modules:
+  node_modules: {}
