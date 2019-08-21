@@ -1,10 +1,10 @@
 version: '3.4'
 services:
   mine-support-calculation-service:
-    build: .
-    image: mine-support-calculation-service
-    container_name: mine-support-calculation-service
-    command: sh -c "scripts/wait-for/wait-for mine-support-calculation-message-queue:8161 -- npm run start:watch"
+    command: >
+      sh -c "
+        scripts/wait-for/wait-for mine-support-calculation-message-queue:8161 --
+        npm run start:watch"
     depends_on:
       - mine-support-calculation-message-queue
     networks:
