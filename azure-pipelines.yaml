@@ -69,7 +69,7 @@ steps:
       docker-compose.test.yaml
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
-    dockerComposeCommand: build --no-cache $(imageName)
+    dockerComposeCommand: build --no-cache
   displayName: build tests image
   # run tests
 - task: DockerCompose@0
