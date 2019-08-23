@@ -1,36 +1,66 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  name: {{ .Values.name }}
   labels:
-    app.component: {{ .Values.containers.service.name }}
-  name: {{ .Values.containers.service.name }}
+    app: {{ .Values.name }}
+    environment: {{ .Values.environment }}
 spec:
-  replicas: {{ .Values.replicas }}
+  replicas: {{ .Values.replicaCount }}
   minReadySeconds: {{ .Values.minReadySeconds }}
-  strategy: {}
   template:
     metadata:
       labels:
-        app.component: {{ .Values.containers.service.name }}
+        app: {{ .Values.name }}
+        environment: {{ .Values.environment }}
+      annotations:
+        redeployOnChange: {{ .Values.container.redeployOnChange | quote }}
     spec:
+      restartPolicy: {{ .Values.container.restartPolicy }}
       containers:   
-      - name: {{ .Values.containers.service.name }}
-        image: {{ if .Values.containers.service.registry }}{{ .Values.containers.service.registry }}/{{ end }}{{ .Values.containers.service.image }}:{{ .Values.containers.service.tag }}
-        imagePullPolicy: {{ .Values.containers.service.imagePullPolicy }}
+      - name: {{ .Values.name }}
+        image: {{ .Values.image }}
+        {{- if .Values.container.command }}
+        {{- with .Values.container.command }}
+          command:
+            {{- toYaml . | nindent 12 }}
+        {{- end }}
+        {{- with .Values.container.args }}
+          args:
+            {{- toYaml . | nindent 12 }}
+        {{- end }}
+        {{- end }}
+        imagePullPolicy: {{ .Values.container.imagePullPolicy }}
+        securityContext:
+          runAsUser: {{ .Values.container.runAsUser }}
+          runAsNonRoot: {{ .Values.container.runAsNonRoot }}
+          readOnlyRootFilesystem: {{ .Values.container.readOnlyRootFilesystem }}
+          allowPrivilegeEscalation: {{ .Values.container.allowPrivilegeEscalation }}
         env:                
         - name: NODE_ENV
           value: {{ .Values.environment }}
-        - name:MESSAGE_QUEUE
-          value: {{ .Values.containers.service.messageQueue }}
-        ports:
-        - containerPort: {{ .Values.containers.service.port }}
+        - name: MESSAGE_QUEUE_HOST
+          value: {{ .Values.container.messageQueueHost }}
+        - name: MESSAGE_QUEUE_PORT
+          value: {{ .Values.container.messageQueuePort | quote }}
+        - name: MESSAGE_QUEUE_TRANSPORT
+          value: {{ .Values.container.messageQueueTransport }}
+        - name: CALCULATION_QUEUE_ADDRESS
+          value: {{ .Values.container.calculationQueueAddress }}
+        - name: CALCULATION_QUEUE_USER
+          value: {{ .Values.container.calculationQueueUser }}
+        - name: CALCULATION_QUEUE_PASSWORD
+          value: {{ .Values.container.calculationQueuePassword }}
+        - name: PAYMENT_QUEUE_ADDRESS
+          value: {{ .Values.container.paymentQueueAddress }}
+        - name: PAYMENT_QUEUE_USER
+          value: {{ .Values.container.paymentQueueUser }}
+        - name: PAYMENT_QUEUE_PASSWORD
+          value: {{ .Values.container.paymentQueuePassword }}
         resources:
           requests:
-            memory: {{ .Values.containers.service.requestMemory | quote }}
-            cpu: {{ .Values.containers.service.requestCpu | quote }}
+            memory: {{ .Values.container.requestMemory }}
+            cpu: {{ .Values.container.requestCpu }}
           limits:
-            memory: {{ .Values.containers.service.limitMemory | quote }}
-            cpu: {{ .Values.containers.service.limitCpu | quote }}   
-        volumes:                      
-      restartPolicy: {{ .Values.containers.service.restartPolicy }}
-status: {}
+            memory: {{ .Values.container.limitMemory }}
+            cpu: {{ .Values.container.limitCpu }}   

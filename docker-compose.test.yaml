@@ -11,6 +11,8 @@ services:
         npm run test"
     volumes:
       - ./test-output:/usr/src/app/test-output
+    environment: 
+     MESSAGE_QUEUE_HOST : "amq"
 
 volumes:
   node_modules: {}

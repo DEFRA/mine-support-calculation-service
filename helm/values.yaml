@@ -1,23 +1,28 @@
 environment: development
-containers:
-  service:
-    name: mine-support-calculation-service
-    port: 3005
-    registry:
-    image: mine-support-calculation-service
-    tag: latest
-    imagePullPolicy: IfNotPresent
-    requestMemory: 30Mi
-    requestCpu: 10m
-    limitMemory: 60Mi
-    limitCpu: 40m
-    runAsNonRoot: true
-    runAsUser: 1000
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
-    restartPolicy: Always   
-    messageQueue: amqp://mine-support-message-service
-replicas: 1
+name: mine-support-calculation-service
+image: mine-support-calculation-service
+container:
+  imagePullPolicy: IfNotPresent
+  requestMemory: 30Mi
+  requestCpu: 10m
+  limitMemory: 60Mi
+  limitCpu: 40m
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  restartPolicy: Always
+  redeployOnChange: update this field to force a change
+  messageQueueHost: amq
+  messageQueuePort: 5672
+  messageQueueTransport: tcp
+  calculationQueueAddress: calculation
+  calculationQueueUser: artemis
+  calculationQueuePassword: artemis
+  paymentQueueAddress: payment
+  paymentQueueUser: artemis
+  paymentQueuePassword: artemis
+replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1
 maxUnavailable: 1
