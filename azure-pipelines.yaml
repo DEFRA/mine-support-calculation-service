@@ -64,9 +64,12 @@ steps:
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistryFull)
     dockerComposeFile: docker-compose.yaml
+    additionalDockerComposeFiles: |
+      docker-compose.override.yaml
+      docker-compose.test.yaml
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
-    dockerComposeCommand: -f docker-compose.test.yaml build --no-cache $(imageName)
+    dockerComposeCommand: build --no-cache $(imageName)
   displayName: build tests image
   # run tests
 - task: DockerCompose@0
@@ -75,9 +78,12 @@ steps:
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistryFull)
     dockerComposeFile: docker-compose.yaml
+    additionalDockerComposeFiles: |
+      docker-compose.override.yaml
+      docker-compose.test.yaml
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
-    dockerComposeCommand: -f docker-compose.test.yaml up --force-recreate  $(imageName)
+    dockerComposeCommand: run $(imageName)
   displayName: run tests
   # build base image
 - task: DockerCompose@0
@@ -154,7 +160,7 @@ steps:
     scriptLocation: inlineScript
     inlineScript: |
       helm init -c
-      az configure --defaults acr=$(azureContainerRegistry) 
+      az configure --defaults acr=$(azureContainerRegistry)
       az acr helm repo add
       helm package ./helm --save
       packageFile=`ls elm-rbac-* |  xargs echo`
@@ -189,7 +195,7 @@ steps:
     command: package
     chartPath: ./helm
     save: false
-  # copy yaml values for release  
+  # copy yaml values for release
 - task: CopyFiles@2
   displayName: 'Copy values files'
   inputs:
