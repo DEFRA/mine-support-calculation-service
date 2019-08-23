@@ -7,7 +7,7 @@ services:
   mine-support-calculation-service:
     command: >
       sh -c "
-        scripts/wait-for/wait-for mine-support-calculation-message-queue:8161 --
+        scripts/wait-for/wait-for mine-support-calculation-message-queue:5672 --
         npm run start:watch"
     depends_on:
       - mine-support-calculation-message-queue
