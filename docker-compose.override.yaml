@@ -11,6 +11,8 @@ services:
         npm run start:watch"
     depends_on:
       - mine-support-calculation-message-queue
+    environment:
+      MESSAGE_QUEUE_HOST : mine-support-calculation-message-queue
     networks:
       - mine-support-calculation
     volumes:

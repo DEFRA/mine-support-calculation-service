@@ -5,7 +5,7 @@ services:
     image: mine-support-calculation-service
     container_name: mine-support-calculation-service
     environment:
-      MESSAGE_QUEUE_HOST : host.docker.internal
+      MESSAGE_QUEUE_HOST : mine-support-message-queue
       MESSAGE_QUEUE_PORT : 5672
       CALCULATION_QUEUE_ADDRESS : calculation
       CALCULATION_QUEUE_USER : artemis
