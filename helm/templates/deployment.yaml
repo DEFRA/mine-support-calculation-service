@@ -17,7 +17,11 @@ spec:
         redeployOnChange: {{ .Values.container.redeployOnChange | quote }}
     spec:
       restartPolicy: {{ .Values.container.restartPolicy }}
-      containers:   
+      {{- if .Values.imagePullSecret }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecret }}
+      {{- end }}
+      containers:
       - name: {{ .Values.name }}
         image: {{ .Values.image }}
         {{- if .Values.container.command }}
