@@ -73,17 +73,21 @@ scripts/start --detach
 
 This service depends on an external Docker network named `mine-support` to communicate with other Mine Support services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
 
-The external network is declared in a secondary Docker Compose configuration (referenced by the above scripts) so that this service can be run in isolation without creating an external Docker network.
+The external network is declared in a secondary Docker Compose configuration (referenced by the above scripts) so that this service can be run in isolation without creating an external Docker network by using standard Docker Compose commands:
+
+```
+# Build containers
+docker-compose build
+
+# Start the service is isolation
+docker-compose up
+```
 
 ### Message Queues
 
 This service reacts to messages retrieved from a message queue comformant with the AMQP 1.0 protocol. The [start script](./scripts/start) is designed for full-stack application testing so it expects an Artemis instance to already be running on ports 5672 and 8161 (for AMQP and the Artemis web interface, respectively).
 
 For testing this service in isolation, the default Docker Compose [override file](docker-compose.override.yaml) launches an instance of Artemis as an AMQP 1.0 Service bus with appropriate accounts and queue names.
-
-```
-docker-compose up
-```
 
 Test messages can be sent via the Artemis console UI hosted at http://localhost:8161/console/login. Sample valid JSON to send to the calculation queue can be found at the end of this README.
 
@@ -115,6 +119,8 @@ scripts/deploy
   "mineType": ["gold"],
   "email": "test@email.com"
 }
+
+# Build pipeline
 
 The [azure-pipelines.yaml](azure-pipelines.yaml) performs the following tasks:
 - Runs unit tests
