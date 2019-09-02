@@ -67,3 +67,6 @@ test-output
 
 #VS Code files
 .vscode
+
+# readiness health check file
+healthy.txt

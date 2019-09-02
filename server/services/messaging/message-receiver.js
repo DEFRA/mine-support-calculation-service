@@ -1,6 +1,7 @@
 const rheaPromise = require('rhea-promise')
 const { getReceiverConfig } = require('./config-helper')
 const MessageBase = require('./message-base')
+const healthService = require('../health-service')
 
 class MessageReceiver extends MessageBase {
   constructor (name, config) {
@@ -31,6 +32,7 @@ class MessageReceiver extends MessageBase {
   async setupReceiver (action) {
     const receiver = await this.connection.createReceiver(this.receiverConfig)
     this.registerEvents(receiver, action)
+    await healthService.writeHealthy()
   }
 }
 

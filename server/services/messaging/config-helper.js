@@ -1,3 +1,5 @@
+const healthService = require('../health-service')
+
 function onSenderError (context, name) {
   const senderError = context.sender && context.sender.error
   if (senderError) {
@@ -5,10 +7,11 @@ function onSenderError (context, name) {
   }
 }
 
-function onSessionError (context, name) {
+async function onSessionError (context, name) {
   const sessionError = context.session && context.session.error
   if (sessionError) {
     console.error(`session error for ${name}`, sessionError)
+    await healthService.deleteHealthy()
   }
 }
 
