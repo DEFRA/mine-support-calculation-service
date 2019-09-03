@@ -9,7 +9,6 @@ async function startService () {
 startService()
 
 process.on('SIGTERM', async function () {
-  console.log('killed')
   await healthService.deleteHealthy()
   process.exit(0)
 })
