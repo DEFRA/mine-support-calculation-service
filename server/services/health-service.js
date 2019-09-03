@@ -4,7 +4,7 @@ const FILE_NAME = path.join(__dirname, '../healthy.txt')
 
 module.exports = {
   writeHealthy: async function () {
-    fs.writeFile(FILE_NAME, 'healthy', 'utf8', (err) => {
+    fs.writeFile(FILE_NAME, 'healthy', { encoding: 'utf8', mode: 0o777 }, (err) => {
       if (err) {
         throw err
       }

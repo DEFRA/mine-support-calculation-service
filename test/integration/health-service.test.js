@@ -19,7 +19,7 @@ describe('Health service', () => {
   })
 
   test('deleteHealthy deletes file', async () => {
-    fs.writeFile(FILE_NAME, 'healthy', 'utf8', async (err) => {
+    fs.writeFile(FILE_NAME, 'healthy', { encoding: 'utf8', mode: 0o777 }, async (err) => {
       if (err) {
         console.log(err)
         throw err
