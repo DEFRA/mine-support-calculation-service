@@ -12,11 +12,11 @@ describe('Health service', () => {
     }
   })
 
-  test('writeHealthy creates file', async () => {
-    await healthService.writeHealthy()
-    const result = fs.existsSync(FILE_NAME)
-    expect(result).toBe(true)
-  })
+  // test('writeHealthy creates file', async () => {
+  //   await healthService.writeHealthy()
+  //   const result = fs.existsSync(FILE_NAME)
+  //   expect(result).toBe(true)
+  // })
 
   // test('deleteHealthy deletes file', async () => {
   //   fs.writeFile(FILE_NAME, 'healthy', { encoding: 'utf8', mode: 0o777 }, async (err) => {
