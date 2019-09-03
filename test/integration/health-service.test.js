@@ -4,7 +4,7 @@ const path = require('path')
 const FILE_NAME = path.join(__dirname, '../../server/healthy.txt')
 
 describe('Health service', () => {
-  afterEach(async () => {
+  afterEach(() => {
     try {
       fs.unlinkSync(FILE_NAME)
     } catch (err) {

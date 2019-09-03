@@ -1,4 +1,4 @@
-const MessageReceiver = require('../../server/services/messaging/message-receiver')
+let MessageReceiver
 let MessageSender
 const config = require('../../server/config')
 
@@ -13,6 +13,7 @@ const message = {
 describe('message receiver', () => {
   beforeAll(() => {
     jest.mock('../../server/services/health-service')
+    MessageReceiver = require('../../server/services/messaging/message-receiver')
     MessageSender = require('../../server/services/messaging/message-sender')
   })
 
