@@ -18,11 +18,6 @@ module.exports = {
     '<rootDir>/test/',
     '.*/__mocks__/.*'
   ],
-  'coverageThreshold': {
-    'global': {
-      'statements': 90
-    }
-  },
   'modulePathIgnorePatterns': [
     '<rootDir>/node_modules/'
 

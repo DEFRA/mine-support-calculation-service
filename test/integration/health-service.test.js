@@ -20,11 +20,4 @@ describe('Health service', () => {
     const result = fs.existsSync(FILE_NAME)
     expect(result).toBe(true)
   })
-
-  test('deleteHealthy deletes file', async () => {
-    await healthService.writeHealthy()
-    await healthService.deleteHealthy()
-    const result = fs.existsSync(FILE_NAME)
-    expect(result).toBe(false)
-  })
 })
