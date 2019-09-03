@@ -1,4 +1,4 @@
-const configHelper = require('../../../server/services/messaging/config-helper')
+let configHelper
 const config = require('../../../server/config')
 const name = 'test-sender-config'
 const address = 'test-send'
@@ -9,11 +9,19 @@ console.error = mockConsoleError
 
 describe('config helper', () => {
   describe('error handling', () => {
+    beforeAll(() => {
+      configHelper = require('../../../server/services/messaging/config-helper')
+    })
     afterAll(() => {
       console.log = logOrig
+      jest.mock('../../../server/services/health-service')
     })
     beforeEach(() => {
       mockConsoleError.mockClear()
+    })
+
+    afterEach(() => {
+      jest.unmock('../../../server/services/health-service')
     })
 
     test('session error handler should log session error for sender', async () => {

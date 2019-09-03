@@ -1,10 +1,19 @@
-const configHelper = require('../../../server/services/messaging/config-helper')
+let configHelper
 const config = require('../../../server/config')
 const name = 'test-sender-config'
 const address = 'test-send'
 
 describe('config helper', () => {
   describe('configuration', () => {
+    beforeAll(() => {
+      jest.mock('../../../server/services/health-service')
+      configHelper = require('../../../server/services/messaging/config-helper')
+    })
+
+    afterAll(() => {
+      jest.unmock('../../../server/services/health-service')
+    })
+
     test('sender config should set name, address, session error handler, error handler, and default timeout of 10 seconds', async () => {
       const testConfig = { ...config.paymentQueueConfig, address }
 

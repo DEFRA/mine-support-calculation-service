@@ -1,5 +1,5 @@
 const MessageReceiver = require('../../server/services/messaging/message-receiver')
-const MessageSender = require('../../server/services/messaging/message-sender')
+let MessageSender
 const config = require('../../server/config')
 
 let messageReceiver
@@ -11,6 +11,15 @@ const message = {
 }
 
 describe('message receiver', () => {
+  beforeAll(() => {
+    jest.mock('../../server/services/health-service')
+    MessageSender = require('../../server/services/messaging/message-sender')
+  })
+
+  afterAll(() => {
+    jest.unmock('../../server/services/health-service')
+  })
+
   afterEach(async () => {
     await messageReceiver.closeConnection()
     await messageSender.closeConnection()

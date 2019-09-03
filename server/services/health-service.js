@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const FILE_NAME = path.join(__dirname, '../../healthy.txt')
+const FILE_NAME = path.join(__dirname, '../healthy.txt')
 
 module.exports = {
   writeHealthy: async function () {

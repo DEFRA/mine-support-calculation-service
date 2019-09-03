@@ -72,7 +72,7 @@ spec:
           exec:
             command:
             - cat
-            - healthy.txt
+            - server/healthy.txt
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}

@@ -1,4 +1,4 @@
-const MessageSender = require('../../server/services/messaging/message-sender')
+let MessageSender
 const config = require('../../server/config')
 
 const address = 'test-send'
@@ -8,6 +8,15 @@ const message = {
 let messageSender
 
 describe('message sender', () => {
+  beforeAll(() => {
+    jest.mock('../../server/services/health-service')
+    MessageSender = require('../../server/services/messaging/message-sender')
+  })
+
+  afterAll(() => {
+    jest.unmock('../../server/services/health-service')
+  })
+
   afterEach(async () => {
     await messageSender.closeConnection()
   })
