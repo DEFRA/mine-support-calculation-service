@@ -67,6 +67,3 @@ test-output
 
 #VS Code files
 .vscode
-
-# health check file
-healthy.txt
