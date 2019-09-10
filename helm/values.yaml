@@ -27,3 +27,8 @@ replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1
 maxUnavailable: 1
+
+livenessProbe:
+  initialDelaySeconds: 70
+  periodSeconds: 10
+  failureThreshold: 3

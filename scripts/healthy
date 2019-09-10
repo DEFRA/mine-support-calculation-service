@@ -1,0 +1,13 @@
+#!/bin/sh
+
+currentDate=`date +%s%N | cut -b1-13`
+fileDate=$(head -n 1 ./server/services/healthy.txt)
+difference=`expr $currentDate - $fileDate`
+
+if [ $difference -gt 10000 ]; then
+  echo "not healthy"
+  exit 1
+else
+  echo "healthy"
+  exit 0
+fi

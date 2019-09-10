@@ -68,3 +68,12 @@ spec:
           limits:
             memory: {{ .Values.container.limitMemory }}
             cpu: {{ .Values.container.limitCpu }}   
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - /scripts/healthy.sh
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
