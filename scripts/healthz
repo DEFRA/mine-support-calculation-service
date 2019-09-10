@@ -1,7 +1,7 @@
 #!/bin/sh
 
 currentDate=`date +%s%N | cut -b1-13`
-fileDate=$(head -n 1 ./server/services/healthy.txt)
+fileDate=$(head -n 1 /tmp/calculation-service-healthz.txt)
 difference=`expr $currentDate - $fileDate`
 
 if [ $difference -gt 10000 ]; then

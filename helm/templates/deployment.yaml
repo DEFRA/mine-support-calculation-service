@@ -71,9 +71,9 @@ spec:
         livenessProbe:
           exec:
             command:
-            - /bin/sh
+            - sh
             - -c
-            - /scripts/healthy.sh
+            - /scripts/healthz.sh
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
