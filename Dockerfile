@@ -16,5 +16,8 @@ RUN npm install
 # Bundle app source
 COPY --chown=node:node . .
 
+# Allow writing to /tmp for liveness probe file
+RUN chown -R node:node /tmp
+
 EXPOSE 9229 9230
 CMD [ "node", "index" ]
