@@ -13,7 +13,5 @@ services:
       PAYMENT_QUEUE_ADDRESS : payment
       PAYMENT_QUEUE_USER : artemis
       PAYMENT_QUEUE_PASSWORD : artemis
-    tmpfs:
-      - /tmp
     ports:
       - "3005:3005"

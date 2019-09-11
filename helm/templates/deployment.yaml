@@ -77,3 +77,9 @@ spec:
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        volumeMounts:
+        - mountPath: /tmp
+          name: health-dir
+      volumes:
+      - name: health-dir
+        emptyDir: {}
