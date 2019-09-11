@@ -73,7 +73,7 @@ spec:
             command:
             - sh
             - -c
-            - usr/src/app/scripts/healthz.sh
+            - usr/src/app/scripts/healthz
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
