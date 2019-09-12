@@ -5,7 +5,6 @@ const MessageBase = require('./message-base')
 class MessageReceiver extends MessageBase {
   constructor (name, config) {
     super(name, config)
-    this.connection = new rheaPromise.Connection(config)
     this.receiverConfig = getReceiverConfig(this.name, config)
   }
 
