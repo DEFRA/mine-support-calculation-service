@@ -3,8 +3,7 @@ const MessageBase = require('./message-base')
 
 class MessageSender extends MessageBase {
   constructor (name, config) {
-    super(config)
-    this.name = name
+    super(name, config)
     this.senderConfig = getSenderConfig(this.name, config)
   }
 
