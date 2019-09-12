@@ -15,9 +15,6 @@ services:
       MESSAGE_QUEUE_HOST : ffc-demo-calculation-message-queue
     networks:
       - ffc-demo-calculation
-    volumes:
-      - node_modules:/usr/src/app/node_modules
-      - .:/usr/src/app
 
   ffc-demo-calculation-message-queue:
     container_name: ffc-demo-calculation-message-queue
@@ -46,4 +43,3 @@ volumes:
   message-queue-etc: {}
   message-queue-etc-override: {}
   message-queue-lock: {}
-  node_modules: {}
