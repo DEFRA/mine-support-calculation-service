@@ -15,6 +15,8 @@ class MessageSender extends MessageBase {
       const delivery = await sender.send({ body: data })
       console.log(`message sent ${this.name}`)
       return delivery
+    } catch (error) {
+      console.error('failed to send message', error)
     } finally {
       await sender.close()
     }

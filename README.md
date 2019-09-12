@@ -117,9 +117,7 @@ The [start](./scripts/start) script runs [ActiveMQ Artemis](https://activemq.apa
 
 Test messages can be sent via the Artemis console UI hosted at http://localhost:8161/console/login. Messages should match the format of the sample JSON below.
 
-Alternatively the script [./scripts/send-test-mesage](./scripts/send-test-message) may be run to send a valid message to the running Artemis instance.
-
-## Sample valid JSON
+__Sample valid JSON__
 
 ```
 {
@@ -130,6 +128,13 @@ Alternatively the script [./scripts/send-test-mesage](./scripts/send-test-messag
   "mineType": ["gold"],
   "email": "test@email.com"
 }
+```
+
+Alternatively, the [send-test-mesage](./scripts/send-test-message) script may be run to send a sample message to the running Artemis instance.
+
+```
+# Send a sample message to the Artemis message queue
+scripts/send-test-message
 ```
 
 # Build pipeline
