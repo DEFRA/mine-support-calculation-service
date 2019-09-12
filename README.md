@@ -115,9 +115,9 @@ This service reacts to messages retrieved from an AMQP 1.0 message broker.
 
 The [start](./scripts/start) script runs [ActiveMQ Artemis](https://activemq.apache.org/components/artemis) alongside the application to provide the required message bus and broker.
 
-Test messages can be sent via the Artemis console UI hosted at http://localhost:8161/console/login. Messages should match the format of the sample JSON below.
+Test messages can be sent via the Artemis console UI hosted at http://localhost:8161/console/login (username: artemis, password: artemis). Messages should match the format of the sample JSON below.
 
-__Sample valid JSON__
+__Sample calculation queue message__
 
 ```
 {
