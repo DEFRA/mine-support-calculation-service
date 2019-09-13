@@ -4,29 +4,29 @@ version: '3.4'
 # to provide required sibling services for local testing
 
 services:
-  mine-support-calculation-service:
+  ffc-demo-calculation-service:
     command: >
       sh -c "
-        scripts/wait-for/wait-for mine-support-calculation-message-queue:5672 --
+        scripts/wait-for/wait-for ffc-demo-calculation-message-queue:5672 --
         npm run start:watch"
     depends_on:
-      - mine-support-calculation-message-queue
+      - ffc-demo-calculation-message-queue
     environment:
-      MESSAGE_QUEUE_HOST : mine-support-calculation-message-queue
+      MESSAGE_QUEUE_HOST : ffc-demo-calculation-message-queue
     networks:
-      - mine-support-calculation
+      - ffc-demo-calculation
     volumes:
       - node_modules:/usr/src/app/node_modules
       - .:/usr/src/app
 
-  mine-support-calculation-message-queue:
-    container_name: mine-support-calculation-message-queue
+  ffc-demo-calculation-message-queue:
+    container_name: ffc-demo-calculation-message-queue
     image: vromero/activemq-artemis:2.9.0-alpine
     environment:
       ARTEMIS_USERNAME: artemis
       ARTEMIS_PASSWORD: artemis
     networks:
-      - mine-support-calculation
+      - ffc-demo-calculation
     ports:
       - "8161:8161"
       - "5672:5672"
@@ -38,7 +38,7 @@ services:
       - message-queue-lock:/var/lib/artemis/lock
 
 networks:
-  mine-support-calculation: {}
+  ffc-demo-calculation: {}
 
 volumes:
   message-queue-data: {}

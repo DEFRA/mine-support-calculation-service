@@ -1,11 +1,11 @@
 version: '3.4'
 services:
-  mine-support-calculation-service:
+  ffc-demo-calculation-service:
     build: .
-    image: mine-support-calculation-service
-    container_name: mine-support-calculation-service
+    image: ffc-demo-calculation-service
+    container_name: ffc-demo-calculation-service
     environment:
-      MESSAGE_QUEUE_HOST : mine-support-message-queue
+      MESSAGE_QUEUE_HOST : ffc-demo-message-queue
       MESSAGE_QUEUE_PORT : 5672
       CALCULATION_QUEUE_ADDRESS : calculation
       CALCULATION_QUEUE_USER : artemis

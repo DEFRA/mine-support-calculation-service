@@ -4,19 +4,19 @@ version: '3.4'
 # connect this service to sibling services from other repositories
 
 services:
-  mine-support-calculation-service:
+  ffc-demo-calculation-service:
     command: >
       sh -c "
-        scripts/wait-for/wait-for mine-support-message-queue:5672 --
+        scripts/wait-for/wait-for ffc-demo-message-queue:5672 --
         npm run start:watch"
     networks:
-      - mine-support
+      - ffc-demo
     volumes:
       - node_modules:/usr/src/app/node_modules
       - .:/usr/src/app
 
 networks:
-  mine-support:
+  ffc-demo:
     external: true
 
 volumes:
