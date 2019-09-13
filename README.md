@@ -4,7 +4,24 @@
 
 Digital service mock to claim public money in the event property subsides into mine shaft.  The calculation service subscribes to a message queue for new claims and calculates a value for each claim.  Once calculated it publishes the value to a message queue.
 
+# Prerequisites
+
+Either:
+- Docker
+- Docker Compose
+
+Or:
+- Kubernetes
+- Helm
+
+Or:
+- Node 10
+- AMQP 1.0 message queue
+
 # Environment variables
+
+The following environment variables are required by the application container. Values for development are set in the Docker Compose configuration. Default values for production-like deployments are set in the Helm chart and may be overridden by build and release pipelines.
+
  | Name                       | Description                 | Required | Default     | Valid                               | Notes |
  |----------------------------|-----------------------------|:--------:|-------------|-------------------------------------|-------|
  | NODE_ENV                   | Node environment            | no       | development | development,test,production         |       |
@@ -17,11 +34,6 @@ Digital service mock to claim public money in the event property subsides into m
  | PAYMENT_QUEUE_ADDRESS      | payment queue name          | no       |             | payment                             |       |
  | PAYMENT_QUEUE_USER         | payment queue user name     | no       |             |                                     |       |
  | PAYMENT_QUEUE_PASSWORD     | payment queue password      | no       |             |                                     |       |
-
-# Prerequisites
-
-- Node v10+
-- Access to an AMQP 1.0 compatible message queue service
 
 # How to run tests
 
