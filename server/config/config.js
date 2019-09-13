@@ -4,7 +4,7 @@ const mqConfig = require('./mq-config')
 // Define config schema
 const schema = {
   env: joi.string().valid('development', 'test', 'production').default('development'),
-  healthzFileInterval: joi.number().default(10000)
+  healthzFileInterval: joi.number().default(10000).max(30000)
 }
 
 const config = {
