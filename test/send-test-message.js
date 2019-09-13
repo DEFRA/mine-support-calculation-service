@@ -10,7 +10,7 @@ const calculationMessage = {
   'email': 'test@email.com'
 }
 
-async function sendMessage(queueConfig, message) {
+async function sendMessage (queueConfig, message) {
   const sender = new MessageSender(
     `test-${queueConfig.address}-sender`,
     queueConfig
