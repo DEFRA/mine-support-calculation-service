@@ -71,7 +71,7 @@ scripts/build --no-cache
 scripts/start --detach
 ```
 
-This service depends on an external Docker network named `ffc-demo` to communicate with other Mine Support services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
+This service depends on an external Docker network named `ffc-demo` to communicate with other services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
 
 The external network is declared in a secondary Docker Compose configuration (referenced by the above scripts) so that this service can be run in isolation without creating an external Docker network.
 
