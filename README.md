@@ -1,6 +1,6 @@
 [![Build Status](https://defradev.visualstudio.com/DEFRA_FutureFarming/_apis/build/status/DEFRA.mine-support-calculation-service?branchName=master)](https://defradev.visualstudio.com/DEFRA_FutureFarming/_build/latest?definitionId=612&branchName=master)
 
-# Mine Support Calculation Service
+# FFC Demo Calculation Service
 
 Digital service mock to claim public money in the event property subsides into mine shaft.  The calculation service subscribes to a message queue for new claims and calculates a value for each claim.  Once calculated it publishes the value to a message queue.
 
@@ -71,7 +71,7 @@ scripts/build --no-cache
 scripts/start --detach
 ```
 
-This service depends on an external Docker network named `mine-support` to communicate with other Mine Support services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
+This service depends on an external Docker network named `ffc-demo` to communicate with other Mine Support services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
 
 The external network is declared in a secondary Docker Compose configuration (referenced by the above scripts) so that this service can be run in isolation without creating an external Docker network.
 
@@ -122,6 +122,6 @@ The [azure-pipelines.yaml](azure-pipelines.yaml) performs the following tasks:
 - Pushes containers to the registry tagged with the PR number or release version
 - Deletes PR deployments, containers, and namepace upon merge
 
-Builds will be deployed into a namespace with the format `mine-support-calculation-service-{identifier}` where `{identifier}` is either the release version, the PR number, or the branch name.
+Builds will be deployed into a namespace with the format `ffc-demo-calculation-service-{identifier}` where `{identifier}` is either the release version, the PR number, or the branch name.
 
 A detailed description on the build pipeline and PR work flow is available in the [Defra Confluence page](https://eaflood.atlassian.net/wiki/spaces/FFCPD/pages/1281359920/Build+Pipeline+and+PR+Workflow)
