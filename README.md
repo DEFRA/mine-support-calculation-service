@@ -105,6 +105,10 @@ scripts/build
 scripts/deploy
 ```
 
+### Probes
+
+The service has a command based liveness probe.  The probe will write a file containing a timestamp to the `/tmp` directory.  If the timestamp has not been updated in the last 30 seconds, the probe will report the service is not functioning.
+
 # Sample valid JSON
 
 {
