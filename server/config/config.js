@@ -3,11 +3,13 @@ const mqConfig = require('./mq-config')
 
 // Define config schema
 const schema = {
-  env: joi.string().valid('development', 'test', 'production').default('development')
+  env: joi.string().valid('development', 'test', 'production').default('development'),
+  healthzFileInterval: joi.number().default(10000)
 }
 
 const config = {
-  env: process.env.NODE_ENV
+  env: process.env.NODE_ENV,
+  healthzFileInterval: process.env.HEALTHZ_FILE_INTERVAL_IN_MILLIS
 }
 
 // Validate config

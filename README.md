@@ -17,6 +17,7 @@ Digital service mock to claim public money in the event property subsides into m
  | PAYMENT_QUEUE_ADDRESS      | payment queue name          | no       |             | payment                             |       |
  | PAYMENT_QUEUE_USER         | payment queue user name     | no       |             |                                     |       |
  | PAYMENT_QUEUE_PASSWORD     | payment queue password      | no       |             |                                     |       |
+ | HEALTHZ_FILE_INTERVAL_IN_MILLIS | Interval for creation of healthz file | no       | 10000            |                                     |       |
 
 # Prerequisites
 

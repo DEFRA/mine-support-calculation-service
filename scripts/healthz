@@ -4,7 +4,7 @@ currentDate=`date +%s%N | cut -b1-13`
 fileDate=$(head -n 1 /tmp/calculation-service-healthz.txt)
 difference=`expr $currentDate - $fileDate`
 
-if [ $difference -gt 10000 ]; then
+if [ $difference -gt 30000 ]; then
   echo "not healthy"
   exit 1
 else
