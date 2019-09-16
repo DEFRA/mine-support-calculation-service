@@ -85,12 +85,6 @@ scripts/start
 # Start the service without attaching to containers
 scripts/start --detach
 
-# Send a sample request to the /submit endpoint
-curl  -i --header "Content-Type: application/json" \
-  --request POST \
-  --data '{ "claimId": "MINE123", "propertyType": "business",  "accessible": false,   "dateOfSubsidence": "2019-07-26T09:54:19.622Z",  "mineType": ["gold"] }' \
-  http://localhost:3003/submit
-
 # Stop the service and remove Docker volumes and networks created by the start script
 scripts/stop
 ```
