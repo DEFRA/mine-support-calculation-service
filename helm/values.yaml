@@ -1,6 +1,6 @@
 environment: development
-name: mine-support-calculation-service
-image: mine-support-calculation-service
+name: ffc-demo-calculation-service
+image: ffc-demo-calculation-service
 imagePullSecret:
 container:
   imagePullPolicy: IfNotPresent

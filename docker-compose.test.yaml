@@ -4,10 +4,10 @@ version: '3.4'
 # that test output is saved to the host
 
 services:
-  mine-support-calculation-service:
+  ffc-demo-calculation-service:
     command: >
       sh -c "
-        scripts/wait-for/wait-for mine-support-calculation-message-queue:5672 --
+        scripts/wait-for/wait-for ffc-demo-calculation-message-queue:5672 --
         npm run test"
     volumes:
       - ./test-output:/usr/src/app/test-output

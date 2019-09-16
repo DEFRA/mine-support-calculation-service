@@ -1,13 +1,10 @@
-const rheaPromise = require('rhea-promise')
 const { getSenderConfig } = require('./config-helper')
 const MessageBase = require('./message-base')
 
 class MessageSender extends MessageBase {
   constructor (name, config) {
-    super(config)
-    this.name = name
+    super(name, config)
     this.senderConfig = getSenderConfig(this.name, config)
-    this.connection = new rheaPromise.Connection(config)
   }
 
   async sendMessage (message) {
@@ -18,6 +15,8 @@ class MessageSender extends MessageBase {
       const delivery = await sender.send({ body: data })
       console.log(`message sent ${this.name}`)
       return delivery
+    } catch (error) {
+      console.error('failed to send message', error)
     } finally {
       await sender.close()
     }

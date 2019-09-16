@@ -1,10 +1,27 @@
 [![Build Status](https://defradev.visualstudio.com/DEFRA_FutureFarming/_apis/build/status/defra-ffc-demo-calculation-service?branchName=master)](https://defradev.visualstudio.com/DEFRA_FutureFarming/_build/latest?definitionId=612&branchName=master)
 
-# Mine Support Calculation Service
+# FFC Demo Calculation Service
 
 Digital service mock to claim public money in the event property subsides into mine shaft.  The calculation service subscribes to a message queue for new claims and calculates a value for each claim.  Once calculated it publishes the value to a message queue.
 
+# Prerequisites
+
+Either:
+- Docker
+- Docker Compose
+
+Or:
+- Kubernetes
+- Helm
+
+Or:
+- Node 10
+- AMQP 1.0 message queue
+
 # Environment variables
+
+The following environment variables are required by the application container. Values for development are set in the Docker Compose configuration. Default values for production-like deployments are set in the Helm chart and may be overridden by build and release pipelines.
+
  | Name                       | Description                 | Required | Default     | Valid                               | Notes |
  |----------------------------|-----------------------------|:--------:|-------------|-------------------------------------|-------|
  | NODE_ENV                   | Node environment            | no       | development | development,test,production         |       |
@@ -18,11 +35,6 @@ Digital service mock to claim public money in the event property subsides into m
  | PAYMENT_QUEUE_USER         | payment queue user name     | no       |             |                                     |       |
  | PAYMENT_QUEUE_PASSWORD     | payment queue password      | no       |             |                                     |       |
  | HEALTHZ_FILE_INTERVAL_IN_MILLIS | Interval for creation of healthz file | no       | 10000            |                                     | Maximum value 30000  |
-
-# Prerequisites
-
-- Node v10+
-- Access to an AMQP 1.0 compatible message queue service
 
 # How to run tests
 
@@ -45,73 +57,87 @@ Running the integration tests locally requires a message bus that supports AMQP 
 
 # Running the application
 
-The application is designed to run as a container via Docker Compose or Kubernetes (with Helm).
+The application is designed to run in containerised environments: Docker Compose for development; Kubernetes for production.
 
-## Using Docker Compose
+A Helm chart is provided for deployment to Kubernetes and scripts are provided for local development and testing.
 
-A set of convenience scripts are provided for local development and running via Docker Compose.
+## Build container image
+
+Container images are built using Docker Compose and the same image may be run in either Docker Compose or Kubernetes.
+
+The [`build`](./scripts/build) script is essentially a shortcut and will pass any arguments through to the `docker-compose build` command.
 
 ```
-# Build service containers
+# Build images using default Docker behaviour
 scripts/build
 
+# Build images without using the Docker cache
+scripts/build --no-cache
+```
+
+## Run as an isolated service
+
+To test this service in isolation, use the provided scripts to start and stop a local instance. This relies on Docker Compose and will run direct dependencies, such as message queues and databases, as additional containers. Arguments given to the [`start`](./scripts/start) script will be passed through to the `docker-compose up` command.
+
+```
 # Start the service and attach to running containers (press `ctrl + c` to quit)
 scripts/start
+
+# Start the service without attaching to containers
+scripts/start --detach
+
+# Send a sample request to the /submit endpoint
+curl  -i --header "Content-Type: application/json" \
+  --request POST \
+  --data '{ "claimId": "MINE123", "propertyType": "business",  "accessible": false,   "dateOfSubsidence": "2019-07-26T09:54:19.622Z",  "mineType": ["gold"] }' \
+  http://localhost:3003/submit
 
 # Stop the service and remove Docker volumes and networks created by the start script
 scripts/stop
 ```
 
-Any arguments provided to the build and start scripts are passed to the Docker Compose `build` and `up` commands, respectively. For example:
+## Connect to sibling services
+
+To test this service in combination with other parts of the FFC demo application, it is necessary to connect each service to an external Docker network and shared dependencies, such as message queues. Start the shared dependencies from the [`mine-support-development`](https://github.com/DEFRA/mine-support-development) repository and then use the `connected-` [`scripts`](./scripts/) to start this service. Follow instructions in other repositories to connect each service to the shared dependencies and network.
 
 ```
-# Build without using the Docker cache
-scripts/build --no-cache
+# Start the service
+script/connected-start
 
-# Start the service without attaching to containers
-scripts/start --detach
+# Stop the service
+script/connected-stop
 ```
 
-This service depends on an external Docker network named `mine-support` to communicate with other Mine Support services running alongside it. The start script will automatically create the network if it doesn't exist and the stop script will remove the network if no other containers are using it.
+## Deploy to Kubernetes
 
-The external network is declared in a secondary Docker Compose configuration (referenced by the above scripts) so that this service can be run in isolation without creating an external Docker network.
+For production deployments, a helm chart is included in the `.\helm` folder. This service connects to an AMQP 1.0 message broker, using credentials defined in [values.yaml](./helm/values.yaml), which must be made available prior to deployment.
 
-### Message Queues
-
-This service reacts to messages retrieved from a message queue comformant with the AMQP 1.0 protocol. The [start script](./scripts/start) is designed for full-stack application testing so it expects an Artemis instance to already be running on ports 5672 and 8161 (for AMQP and the Artemis web interface, respectively).
-
-For testing this service in isolation, the default Docker Compose [override file](docker-compose.override.yaml) launches an instance of Artemis as an AMQP 1.0 Service bus with appropriate accounts and queue names.
+Scripts are provided to test the Helm chart by deploying the service, along with an appropriate message broker, into the current Helm/Kubernetes context.
 
 ```
-docker-compose up
+# Deploy to current Kubernetes context
+scripts/helm/install
+
+# Remove from current Kubernetes context
+scripts/helm/delete
 ```
 
-Test messages can be sent via the Artemis console UI hosted at http://localhost:8161/console/login. Sample valid JSON to send to the calculation queue can be found at the end of this README.
+# Manual testing
 
-Alternatively the script [./scripts/send-test-mesage](./scripts/send-test-message) may be run to send a valid message to the running Artemis instance.
+This service reacts to messages retrieved from an AMQP 1.0 message broker.
 
-## Using Kubernetes
+The [start](./scripts/start) script runs [ActiveMQ Artemis](https://activemq.apache.org/components/artemis) alongside the application to provide the required message bus and broker.
 
-The service has been developed with the intention of running on Kubernetes in production.  A helm chart is included in the `.\helm` folder.
-
-Running via Helm requires a local Postgres database to be installed and setup with the username and password defined in the [values.yaml](./helm/values.yaml). It is much simpler to develop using Docker Compose locally than to set up a local Kubernetes environment. See above for instructions.
-
-To test Helm deployments locally, a [deploy](./deploy) script is provided.
-
-```
-# Build service containers
-scripts/build
-
-# Deploy to the current Helm context
-scripts/deploy
-```
+Test messages can be sent via the Artemis console UI hosted at http://localhost:8161/console/login (username: artemis, password: artemis). Messages should match the format of the sample JSON below.
 
 ### Probes
 
 The service has a command based liveness probe.  The probe will write a file containing a timestamp to the `/tmp` directory.  If the timestamp has not been updated in the last 30 seconds, the probe will report the service is not functioning.
 
 # Sample valid JSON
+__Sample calculation queue message__
 
+```
 {
   "claimId": "MINE123",
   "propertyType": "business",
@@ -120,6 +146,16 @@ The service has a command based liveness probe.  The probe will write a file con
   "mineType": ["gold"],
   "email": "test@email.com"
 }
+```
+
+Alternatively, the [send-test-mesage](./scripts/send-test-message) script may be run to send a sample message to the running Artemis instance.
+
+```
+# Send a sample message to the Artemis message queue
+scripts/send-test-message
+```
+
+# Build pipeline
 
 The [azure-pipelines.yaml](azure-pipelines.yaml) performs the following tasks:
 - Runs unit tests
@@ -127,6 +163,6 @@ The [azure-pipelines.yaml](azure-pipelines.yaml) performs the following tasks:
 - Pushes containers to the registry tagged with the PR number or release version
 - Deletes PR deployments, containers, and namepace upon merge
 
-Builds will be deployed into a namespace with the format `mine-support-calculation-service-{identifier}` where `{identifier}` is either the release version, the PR number, or the branch name.
+Builds will be deployed into a namespace with the format `ffc-demo-calculation-service-{identifier}` where `{identifier}` is either the release version, the PR number, or the branch name.
 
 A detailed description on the build pipeline and PR work flow is available in the [Defra Confluence page](https://eaflood.atlassian.net/wiki/spaces/FFCPD/pages/1281359920/Build+Pipeline+and+PR+Workflow)

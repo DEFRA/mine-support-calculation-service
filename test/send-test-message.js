@@ -1,7 +1,7 @@
 const MessageSender = require('../server/services/messaging/message-sender')
 const config = require('../server/config')
 
-const message = {
+const calculationMessage = {
   'claimId': 'TEST123',
   'propertyType': 'business',
   'accessible': false,
@@ -10,17 +10,22 @@ const message = {
   'email': 'test@email.com'
 }
 
-async function sendMessage () {
-  const testConfig = { ...config.paymentQueueConfig, address: 'calculation' }
-  const messageSender = new MessageSender('test-sender', testConfig)
-  try {
-    await messageSender.openConnection()
-    const delivery = await messageSender.sendMessage(message)
-    console.log('delivered', delivery)
-  } catch (ex) {
-    console.log(ex)
-  }
-  await messageSender.closeConnection()
+async function sendMessage (queueConfig, message) {
+  const sender = new MessageSender(
+    `test-${queueConfig.address}-sender`,
+    queueConfig
+  )
+  await sender.openConnection()
+  const delivery = await sender.sendMessage(message)
+  await sender.closeConnection()
+
+  return delivery
 }
 
-sendMessage()
+sendMessage(config.calculationQueueConfig, calculationMessage)
+  .then((delivery) => console.debug('Message sent:', delivery))
+  .catch(() => {
+    console.error('Failed to send message')
+    process.exitCode = 1
+  })
+  .finally(() => process.exit())
