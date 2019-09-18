@@ -35,7 +35,7 @@ The following environment variables are required by the application container. V
  | PAYMENT_QUEUE_ADDRESS      | payment queue name          | no       |             | payment                             |       |
  | PAYMENT_QUEUE_USER         | payment queue user name     | no       |             |                                     |       |
  | PAYMENT_QUEUE_PASSWORD     | payment queue password      | no       |             |                                     |       |
- | HEALTHZ_FILE_INTERVAL_IN_MILLIS | Interval for creation of healthz file | no       | 10000            |                                     | Maximum value 30000  |
+ | HEALTHZ_FILE_INTERVAL_IN_MILLIS | Interval for creation of healthz file | no | 10000 |                                  | Maximum value 30000  |
 
 # How to run tests
 
