@@ -1,16 +1,16 @@
 module.exports = {
-  'collectCoverage': true,
-  'collectCoverageFrom': [
+  collectCoverage: true,
+  collectCoverageFrom: [
     '**/*.js',
     '!**/*.test.js'
   ],
-  'coverageDirectory': 'test-output',
-  'coverageReporters': [
+  coverageDirectory: 'test-output',
+  coverageReporters: [
     'text-summary',
     'cobertura',
     'lcov'
   ],
-  'coveragePathIgnorePatterns': [
+  coveragePathIgnorePatterns: [
     'jest.config.js',
     'index.js',
     '<rootDir>/node_modules/',
@@ -18,27 +18,27 @@ module.exports = {
     '<rootDir>/test/',
     '.*/__mocks__/.*'
   ],
-  'coverageThreshold': {
-    'global': {
-      'statements': 89
+  coverageThreshold: {
+    global: {
+      statements: 89
     }
   },
-  'modulePathIgnorePatterns': [
+  modulePathIgnorePatterns: [
     '<rootDir>/node_modules/'
 
   ],
-  'reporters': [
+  reporters: [
     'default',
     [
       'jest-junit',
       {
-        'suiteName': 'jest tests',
-        'outputDirectory': 'test-output',
-        'outputName': 'junit.xml'
+        suiteName: 'jest tests',
+        outputDirectory: 'test-output',
+        outputName: 'junit.xml'
       }
     ]
   ],
-  'resetModules': true,
-  'restoreMocks': true,
-  'testEnvironment': 'node'
+  resetModules: true,
+  restoreMocks: true,
+  testEnvironment: 'node'
 }

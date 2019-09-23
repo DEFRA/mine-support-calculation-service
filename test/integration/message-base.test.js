@@ -2,14 +2,18 @@
 const MessageBase = require('../../server/services/messaging/message-base')
 const config = require('../../server/config')
 
+const consoleErrorOrig = console.consoleError
+
+let mockConsoleError
 let messageBase
 
-const logOrig = console.log
-let mockConsoleError = jest.fn()
-console.error = mockConsoleError
 describe('message base', () => {
+  beforeAll(() => {
+    mockConsoleError = jest.fn()
+    console.error = mockConsoleError
+  })
   afterAll(() => {
-    console.log = logOrig
+    console.error = consoleErrorOrig
   })
   beforeEach(() => {
     mockConsoleError.mockClear()

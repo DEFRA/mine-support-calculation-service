@@ -2,10 +2,10 @@ const joi = require('@hapi/joi')
 const mqConfig = require('./mq-config')
 
 // Define config schema
-const schema = {
+const schema = joi.object({
   env: joi.string().valid('development', 'test', 'production').default('development'),
   healthzFileInterval: joi.number().default(10000).max(30000)
-}
+})
 
 const config = {
   env: process.env.NODE_ENV,
@@ -13,7 +13,7 @@ const config = {
 }
 
 // Validate config
-const result = joi.validate(config, schema, {
+const result = schema.validate(config, {
   abortEarly: false
 })
 

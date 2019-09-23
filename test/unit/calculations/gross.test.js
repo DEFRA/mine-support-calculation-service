@@ -3,7 +3,7 @@ const gross = require('../../../server/services/calculations/gross')
 describe('gross', () => {
   test('a business has a gross of 200', () => {
     const claim = {
-      'propertyType': 'business'
+      propertyType: 'business'
     }
     const result = gross(claim)
     expect(result).toEqual(200)
@@ -11,7 +11,7 @@ describe('gross', () => {
 
   test('a non-business has a gross of 100', () => {
     const claim = {
-      'propertyType': 'home'
+      propertyType: 'home'
     }
     const result = gross(claim)
     expect(result).toEqual(100)

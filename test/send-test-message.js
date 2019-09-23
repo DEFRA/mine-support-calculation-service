@@ -2,12 +2,12 @@ const MessageSender = require('../server/services/messaging/message-sender')
 const config = require('../server/config')
 
 const calculationMessage = {
-  'claimId': 'TEST123',
-  'propertyType': 'business',
-  'accessible': false,
-  'dateOfSubsidence': '2019-07-26T09:54:19.622Z',
-  'mineType': ['coal'],
-  'email': 'test@email.com'
+  claimId: 'TEST123',
+  propertyType: 'business',
+  accessible: false,
+  dateOfSubsidence: '2019-07-26T09:54:19.622Z',
+  mineType: ['coal'],
+  email: 'test@email.com'
 }
 
 async function sendMessage (queueConfig, message) {
