@@ -9,7 +9,5 @@ dockerPrefix="ffc-demo-calculation"
 (
   cd "${projectRoot}"
 
-  helm delete --purge \
-    ${dockerPrefix}-postgres \
-    ${dockerPrefix}-service
+  helm delete --purge ${dockerPrefix}-service
 )

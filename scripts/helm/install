@@ -9,28 +9,5 @@ dockerPrefix="ffc-demo-calculation"
 (
   cd "${projectRoot}"
 
-  echo "Deploying user PostgreSQL"
-  helm upgrade \
-    --atomic \
-    --install \
-    --namespace ${dockerPrefix}-service \
-    --set persistence.enabled=false \
-    --set postgresqlDatabase=mine_users \
-    --set postgresqlPassword=changeme \
-    --set postgresqlUsername=postgres@mine-support2 \
-    --set service.port=5432 \
-    --wait \
-    ${dockerPrefix}-postgres \
-    stable/postgresql
-
-  echo "Deploying user service"
-  helm upgrade \
-    --atomic \
-    --install \
-    --namespace ${dockerPrefix}-service \
-    --set postgresHost=${dockerPrefix}-postgres-postgresql \
-    --set postgresServiceName=${dockerPrefix}-postgres \
-    --wait \
-    ${dockerPrefix}-service \
-    ./helm
+  helm upgrade ${dockerPrefix}-service --install --namespace ${dockerPrefix}-service ./helm
 )
