@@ -5,9 +5,14 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/../.." || return
 
 # Set expected prefix for Docker resource names managed by this script
 dockerPrefix="ffc-demo-calculation"
+kubernetesNamespace="ffc-demo"
 
 (
   cd "${projectRoot}"
 
-  helm upgrade ${dockerPrefix}-service --install --namespace ${dockerPrefix}-service ./helm
+  helm upgrade \
+    --install \
+    --namespace ${kubernetesNamespace} \
+     ${dockerPrefix}-service \
+    ./helm
 )
