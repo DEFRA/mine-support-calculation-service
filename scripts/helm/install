@@ -14,5 +14,5 @@ kubernetesNamespace="ffc-demo"
     --install \
     --namespace ${kubernetesNamespace} \
      ${dockerPrefix}-service \
-    ./helm
+    ./helm/ffc-demo-calculation-service
 )
