@@ -5,7 +5,8 @@ version: '3.4'
 
 services:
   ffc-demo-calculation-test:
-    image: ffc-demo-calculation-service
+    build: .
+    image: ffc-demo-calculation-test
     container_name: ffc-demo-calculation-test
     command: >
       sh -c "
