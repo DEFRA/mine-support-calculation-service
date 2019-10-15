@@ -15,11 +15,12 @@ variables:
     azureContainerRegistryFull: jwminesupport.azurecr.io
     azureSubscriptionEndpoint: MineSupport
     azureResourceGroup: MineSupport
-    kubernetesCluster: MineSupport
-    imageName:  ffc-demo-calculation-service
     containerTag: $(Build.SourceBranchName)
-    safeContainerTag: $(Build.SourceBranchName)
+    imageName:  ffc-demo-calculation-service
+    kubernetesCluster: MineSupport
     mergedPrNo:
+    safeContainerTag: $(Build.SourceBranchName)
+    testImageName: ffc-demo-calculation-test
 steps:
   # extracts PR number from refs/pull/{prNo}/ branch name and sets to containerTag if pull request
 - script: |
@@ -63,10 +64,7 @@ steps:
     containerregistrytype: Azure Container Registry
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistryFull)
-    dockerComposeFile: docker-compose.yaml
-    additionalDockerComposeFiles: |
-      docker-compose.override.yaml
-      docker-compose.test.yaml
+    dockerComposeFile: docker-compose.test.yaml
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
     dockerComposeCommand: build --no-cache
@@ -77,13 +75,10 @@ steps:
     containerregistrytype: Azure Container Registry
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistryFull)
-    dockerComposeFile: docker-compose.yaml
-    additionalDockerComposeFiles: |
-      docker-compose.override.yaml
-      docker-compose.test.yaml
+    dockerComposeFile: docker-compose.test.yaml
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
-    dockerComposeCommand: run $(imageName)
+    dockerComposeCommand: run $(testImageName)
   displayName: run tests
   # build base image
 - task: DockerCompose@0
