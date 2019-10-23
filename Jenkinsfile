@@ -140,7 +140,7 @@ node {
             usernamePassword(credentialsId: 'calculationListenPR', usernameVariable: 'calculationQueueUsername', passwordVariable: 'calculationQueuePassword'),
             usernamePassword(credentialsId: 'paymentSendPR', usernameVariable: 'paymentQueueUsername', passwordVariable: 'paymentQueuePassword')
           ]) {
-          def extraCommands = "--values ./helm/ffc-demo-calculation-service/jenkins-aws.yaml --set name=ffc-demo-calculation-service-$containerTag,container.messageQueueHost=\"$messageQueueHost\",container.paymentQueueUser=\"$paymentQueueUsername\",container.paymentQueuePassword=\"$paymentQueuePassword\",container.calculationQueueUser=\"$calculationQueueUsername\",container.calculationQueuePassword=\"$calculationQueuePassword\""
+          def extraCommands = "--values ./helm/ffc-demo-calculation-service/jenkins-aws.yaml --set container.messageQueueHost=\"$messageQueueHost\",container.paymentQueueUser=\"$paymentQueueUsername\",container.paymentQueuePassword=\"$paymentQueuePassword\",container.calculationQueueUser=\"$calculationQueueUsername\",container.calculationQueuePassword=\"$calculationQueuePassword\""
           deployPR(kubeCredsId, registry, imageName, containerTag, extraCommands)
         }
       }
