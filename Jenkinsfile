@@ -47,7 +47,7 @@ def updateGithubCommitStatus(message, state, repoUrl, commitSha) {
 def buildTestImage(name, suffix) {
   sh 'docker image prune -f || echo could not prune images'
   // NOTE: the docker-compose file currently makes use of global $BUILD_NUMBER env vars fo image names
-  sh "docker-compose -p $name-$suffix -f docker-compose.yaml -f docker-compose.test.yaml build --no-cache $name"
+  sh "docker-compose -p $name-$suffix -f docker-compose.test.yaml build --no-cache"
 }
 
 def runTests(name, suffix) {
@@ -55,7 +55,7 @@ def runTests(name, suffix) {
   try {
     sh 'mkdir -p test-output'
     sh 'chmod 777 test-output'
-    sh "docker-compose -p $name-$suffix -f docker-compose.test.yaml up $name"
+    sh "docker-compose -p $name-$suffix -f docker-compose.test.yaml up"
 
   } finally {
     sh "docker-compose -p $name-$suffix -f docker-compose.test.yaml down -v"
