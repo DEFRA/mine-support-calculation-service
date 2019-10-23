@@ -55,7 +55,7 @@ def runTests(name, suffix) {
   try {
     sh 'mkdir -p test-output'
     sh 'chmod 777 test-output'
-    sh "docker-compose -p $name-$suffix -f docker-compose.test.yaml up"
+    sh "docker-compose -p $name-$suffix -f docker-compose.test.yaml run ffc-demo-calculation-test"
 
   } finally {
     sh "docker-compose -p $name-$suffix -f docker-compose.test.yaml down -v"
