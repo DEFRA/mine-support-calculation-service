@@ -1,0 +1,7 @@
+name: ffc-demo-calculation-service
+imagePullSecret: myregistrykey
+container:
+  allowPrivilegeEscalation: true
+  imagePullPolicy: Always
+  messageQueuePort: "5671"
+  messageQueueTransport: ssl
