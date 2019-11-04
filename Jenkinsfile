@@ -1,4 +1,4 @@
-@Library('defra-library@add-deploy-trigger')
+@Library('defra-library@master')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
@@ -64,7 +64,6 @@ node {
       stage('Publish chart') {
         defraUtils.publishChart(registry, imageName, containerTag)
       }
-    }
       stage('Trigger Deployment') {
         withCredentials([
           string(credentialsId: 'JenkinsDeployUrl', variable: 'jenkinsDeployUrl'),
@@ -73,7 +72,7 @@ node {
           defraUtils.triggerDeploy(jenkinsDeployUrl, 'ffc-demo-calculation-service-deploy', jenkinsToken, ['chartVersion':'1.0.0'])
         }
       }
-    // }
+    }
     if (mergedPrNo != '') {
       stage('Remove merged PR') {
         defraUtils.undeployChart(kubeCredsId, imageName, mergedPrNo)
