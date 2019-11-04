@@ -1,48 +1,15 @@
+@Library('defra-library@master')
+import uk.gov.defra.ffc.DefraUtils
+def defraUtils = new DefraUtils()
+
 def registry = '562955126301.dkr.ecr.eu-west-2.amazonaws.com'
 def regCredsId = 'ecr:eu-west-2:ecr-user'
 def kubeCredsId = 'awskubeconfig002'
-def ingressServer = "ffc.aws-int.defra.cloud"
 def imageName = 'ffc-demo-calculation-service'
 def repoName = 'ffc-demo-calculation-service'
-def repoUrl = ''
-def commitSha = ''
-def branch = ''
 def pr = ''
 def mergedPrNo = ''
 def containerTag = ''
-
-def getMergedPrNo() {
-    def mergedPrNo = sh(returnStdout: true, script: "git log --pretty=oneline --abbrev-commit -1 | sed -n 's/.*(#\\([0-9]\\+\\)).*/\\1/p'").trim()
-    return mergedPrNo ? "pr$mergedPrNo" : ''
-}
-
-def getRepoURL() {
-  return sh(returnStdout: true, script: "git config --get remote.origin.url").trim()
-}
-
-def getCommitSha() {
-  return sh(returnStdout: true, script: "git rev-parse HEAD").trim()
-}
-
-def getVariables(repoName) {
-    def branch = BRANCH_NAME
-    // use the git API to get the open PR for a branch
-    // Note: This will cause issues if one branch has two open PRs
-    def pr = sh(returnStdout: true, script: "curl https://api.github.com/repos/DEFRA/$repoName/pulls?state=open | jq '.[] | select(.head.ref == \"$branch\") | .number'").trim()
-    def rawTag = pr == '' ? branch : "pr$pr"
-    def containerTag = rawTag.replaceAll(/[^a-zA-Z0-9]/, '-').toLowerCase()
-    return [branch, pr, containerTag,  getMergedPrNo(), getRepoURL(), getCommitSha()]
-}
-
-def updateGithubCommitStatus(message, state, repoUrl, commitSha) {
-  step([
-    $class: 'GitHubCommitStatusSetter',
-    reposSource: [$class: "ManuallyEnteredRepositorySource", url: repoUrl],
-    commitShaSource: [$class: "ManuallyEnteredShaSource", sha: commitSha],
-    errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
-    statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
-  ])
-}
 
 def buildTestImage(name, suffix) {
   sh 'docker image prune -f || echo could not prune images'
@@ -65,62 +32,12 @@ def runTests(name, suffix) {
   }
 }
 
-def pushContainerImage(registry, credentialsId, imageName, tag) {
-  docker.withRegistry("https://$registry", credentialsId) {
-    sh "docker-compose build --no-cache"
-    sh "docker tag $imageName $registry/$imageName:$tag"
-    sh "docker push $registry/$imageName:$tag"
-  }
-}
-
-def deployPR(credentialsId, registry, imageName, tag, extraCommands) {
-  withKubeConfig([credentialsId: credentialsId]) {
-    def deploymentName = "$imageName-$tag"
-    sh "kubectl get namespaces $deploymentName || kubectl create namespace $deploymentName"
-    sh "helm upgrade $deploymentName --install --namespace $deploymentName --atomic ./helm/$imageName --set image=$registry/$imageName:$tag $extraCommands"
-  }
-}
-
-def undeployPR(credentialsId, imageName, tag) {
-  withKubeConfig([credentialsId: credentialsId]) {
-    def deploymentName = "$imageName-$tag"
-    sh "helm delete --purge $deploymentName || echo error removing deployment $deploymentName"
-    sh "kubectl delete namespaces $deploymentName || echo error removing namespace $deploymentName"
-  }
-}
-
-def publishChart(imageName) {
-  // jenkins doesn't tidy up folder, remove old charts before running
-  sh "rm -rf helm-charts"
-  sshagent(credentials: ['helm-chart-creds']) {
-    sh "git clone git@gitlab.ffc.aws-int.defra.cloud:helm/helm-charts.git"
-    dir('helm-charts') {
-      sh 'helm init -c'
-      sh "helm package ../helm/$imageName"
-      sh 'helm repo index .'
-      sh 'git config --global user.email "buildserver@defra.gov.uk"'
-      sh 'git config --global user.name "buildserver"'
-      sh 'git checkout master'
-      sh 'git add -A'
-      sh "git commit -m 'update $imageName helm chart from build job'"
-      sh 'git push'
-    }
-  }
-}
 node {
   checkout scm
   try {
     stage('Set branch, PR, and containerTag variables') {
-      (branch, pr, containerTag, mergedPrNo, repoUrl, commitSha) = getVariables(repoName)
-      if (pr ) {
-        sh "echo Building $pr"
-      } else if (branch == "master") {
-        sh "echo Building master branch"
-      } else {
-        currentBuild.result = 'ABORTED'
-        error('Build aborted - not a PR or a master branch')
-      }
-      updateGithubCommitStatus('Build started', 'PENDING', repoUrl, commitSha)
+      (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName)
+      defraUtils.updateGithubCommitStatus('Build started', 'PENDING')
     }
     stage('Build test image') {
       buildTestImage(imageName, BUILD_NUMBER)
@@ -128,10 +45,8 @@ node {
     stage('Run tests') {
       runTests(imageName, BUILD_NUMBER)
     }
-    // note: there should be a `build production image` step here,
-    // but the docker file is currently not set up to create a production only image
     stage('Push container image') {
-      pushContainerImage(registry, regCredsId, imageName, containerTag)
+      defraUtils.pushContainerImage(regCredsId, registry, imageName, containerTag)
     }
     if (pr != '') {
       stage('Helm install') {
@@ -141,24 +56,23 @@ node {
             usernamePassword(credentialsId: 'paymentSendPR', usernameVariable: 'paymentQueueUsername', passwordVariable: 'paymentQueuePassword')
           ]) {
           def extraCommands = "--values ./helm/ffc-demo-calculation-service/jenkins-aws.yaml --set container.messageQueueHost=\"$messageQueueHost\",container.paymentQueueUser=\"$paymentQueueUsername\",container.paymentQueuePassword=\"$paymentQueuePassword\",container.calculationQueueUser=\"$calculationQueueUsername\",container.calculationQueuePassword=\"$calculationQueuePassword\""
-          deployPR(kubeCredsId, registry, imageName, containerTag, extraCommands)
+          defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
         }
       }
     }
     if (pr == '') {
       stage('Publish chart') {
-        publishChart(imageName)
+        defraUtils.publishChart(registry, imageName, containerTag)
       }
     }
     if (mergedPrNo != '') {
       stage('Remove merged PR') {
-        sh "echo removing deployment for PR $mergedPrNo"
-        undeployPR(kubeCredsId, imageName, mergedPrNo)
+        defraUtils.undeployChart(kubeCredsId, imageName, mergedPrNo)
       }
     }
-    updateGithubCommitStatus('Build successful', 'SUCCESS', repoUrl, commitSha)
+    defraUtils.updateGithubCommitStatus('Build successful', 'SUCCESS')
   } catch(e) {
-    updateGithubCommitStatus(e.message, 'FAILURE', repoUrl, commitSha)
+    defraUtils.updateGithubCommitStatus(e.message, 'FAILURE')
     throw e
   }
 }
