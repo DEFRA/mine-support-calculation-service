@@ -64,7 +64,8 @@ steps:
     containerregistrytype: Azure Container Registry
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistryFull)
-    dockerComposeFile: docker-compose.test.yaml
+    dockerComposeFile: docker-compose.yaml
+    additionalDockerComposeFiles: docker-compose.test.yaml  
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
     dockerComposeCommand: build --no-cache
@@ -75,7 +76,8 @@ steps:
     containerregistrytype: Azure Container Registry
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistryFull)
-    dockerComposeFile: docker-compose.test.yaml
+    dockerComposeFile: docker-compose.yaml  
+    additionalDockerComposeFiles: docker-compose.test.yaml
     projectName: $(Build.Repository.Name)
     qualifyImageNames: true
     dockerComposeCommand: run $(testImageName)
