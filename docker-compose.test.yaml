@@ -4,53 +4,10 @@ version: '3.4'
 # that test output is saved to the host
 
 services:
-  ffc-demo-calculation-test:
-    build: .
-    image: ffc-demo-calculation-test
-    container_name: ffc-demo-calculation-test
+  ffc-demo-calculation-service:
     command: >
       sh -c "
         scripts/wait-for/wait-for ffc-demo-calculation-test-message-queue:5672 --
         npm run test"
     depends_on:
-      - ffc-demo-calculation-test-message-queue
-    environment:
-      MESSAGE_QUEUE_HOST : ffc-demo-calculation-test-message-queue
-      MESSAGE_QUEUE_PORT : 5672
-      CALCULATION_QUEUE_ADDRESS : calculation
-      CALCULATION_QUEUE_USER : artemis
-      CALCULATION_QUEUE_PASSWORD : artemis
-      PAYMENT_QUEUE_ADDRESS : payment
-      PAYMENT_QUEUE_USER : artemis
-      PAYMENT_QUEUE_PASSWORD : artemis
-    networks:
-      - ffc-demo-calculation-test
-    volumes:
-      - node_modules:/usr/src/app/node_modules
-      - .:/usr/src/app
-
-  ffc-demo-calculation-test-message-queue:
-    container_name: ffc-demo-calculation-test-message-queue
-    image: vromero/activemq-artemis:2.9.0-alpine
-    environment:
-      ARTEMIS_USERNAME: artemis
-      ARTEMIS_PASSWORD: artemis
-    networks:
-      - ffc-demo-calculation-test
-    volumes:
-      - message-queue-data:/var/lib/artemis/data
-      - message-queue-tmp:/var/lib/artemis/tmp
-      - message-queue-etc:/var/lib/artemis/etc
-      - message-queue-etc-override:/var/lib/artemis/etc-override
-      - message-queue-lock:/var/lib/artemis/lock
-
-networks:
-  ffc-demo-calculation-test: {}
-
-volumes:
-  message-queue-data: {}
-  message-queue-tmp: {}
-  message-queue-etc: {}
-  message-queue-etc-override: {}
-  message-queue-lock: {}
-  node_modules: {}
+      - ffc-demo-calculation-message-queue

@@ -3,9 +3,8 @@ services:
   ffc-demo-calculation-service:
     build: .
     image: ffc-demo-calculation-service
-    container_name: ffc-demo-calculation-service
     environment:
-      MESSAGE_QUEUE_HOST : ffc-demo-message-queue
+      MESSAGE_QUEUE_HOST : ffc-demo-calculation-message-queue
       MESSAGE_QUEUE_PORT : 5672
       CALCULATION_QUEUE_ADDRESS : calculation
       CALCULATION_QUEUE_USER : artemis
@@ -13,11 +12,26 @@ services:
       PAYMENT_QUEUE_ADDRESS : payment
       PAYMENT_QUEUE_USER : artemis
       PAYMENT_QUEUE_PASSWORD : artemis
-    ports:
-      - "3005:3005"
     volumes:
       - node_modules:/usr/src/app/node_modules
       - .:/usr/src/app
 
+  ffc-demo-calculation-message-queue:
+    image: vromero/activemq-artemis:2.9.0-alpine
+    environment:
+      ARTEMIS_USERNAME: artemis
+      ARTEMIS_PASSWORD: artemis
+    volumes:
+      - message-queue-data:/var/lib/artemis/data
+      - message-queue-tmp:/var/lib/artemis/tmp
+      - message-queue-etc:/var/lib/artemis/etc
+      - message-queue-etc-override:/var/lib/artemis/etc-override
+      - message-queue-lock:/var/lib/artemis/lock
+
 volumes:
   node_modules: {}
+  message-queue-data: {}
+  message-queue-tmp: {}
+  message-queue-etc: {}
+  message-queue-etc-override: {}
+  message-queue-lock: {}

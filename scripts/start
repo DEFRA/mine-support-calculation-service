@@ -6,6 +6,8 @@ projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; p
 # Set Docker/Kubernetes resource names managed by this script
 dockerPrefix="ffc-demo-calculation"
 
+service=""
+
 # show_help: function to show help text
 show_help() {
   echo "
@@ -39,6 +41,7 @@ while :; do
 
     -l|--link)
       link="true"
+      service="ffc-demo-calculation-service"
       ;;
 
     -q|--quick)
@@ -124,5 +127,5 @@ show_conflict_warning() {
   fi
 
   # Start the service, replacing existing containers unless quick flag received
-  compose up --force-recreate $@
+  compose up --force-recreate $@ ${service}
 )

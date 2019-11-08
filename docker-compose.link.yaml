@@ -9,9 +9,11 @@ services:
       sh -c "
         scripts/wait-for/wait-for ffc-demo-message-queue:5672 --
         npm run start:watch"
+    environment:
+      MESSAGE_QUEUE_HOST : ffc-demo-message-queue
     networks:
+      - default
       - ffc-demo
-
 networks:
   ffc-demo:
     external: true
