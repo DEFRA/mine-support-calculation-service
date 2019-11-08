@@ -39,11 +39,6 @@ node {
     stage('Push container image') {
       defraUtils.buildAndPushContainerImage(regCredsId, registry, imageName, containerTag)
     }
-    if (pr != '') {
-      stage('Helm install') {
-        defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
-      }
-    }
     if (pr == '') {
       stage('Publish chart') {
         defraUtils.publishChart(registry, imageName, containerTag)
@@ -55,6 +50,10 @@ node {
         ]) {
           defraUtils.triggerDeploy(jenkinsDeployUrl, 'ffc-demo-calculation-service-deploy', jenkinsToken, ['chartVersion':'1.0.0'])
         }
+      }
+    } else {
+      stage('Helm install') {
+        defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
       }
     }
     if (mergedPrNo != '') {
