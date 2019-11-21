@@ -1,0 +1,34 @@
+def kubeCredsId = 'awskubeconfig002'
+def namespace = 'ffc-demo'
+def chartName = 'ffc-demo-calculation-service'
+def suffix = 'master'
+def registry = '562955126301.dkr.ecr.eu-west-2.amazonaws.com'
+
+def deployChart(namespace, chartName, chartVersion, extraCommands) {
+  sh "helm repo add ffc-demo http://gitlab.ffc.aws-int.defra.cloud/helm/helm-charts/raw/master/"
+  sh "helm repo update"
+  sh "helm fetch --untar ffc-demo/$chartName --version $chartVersion"
+  sh "ls -lr"
+  sh "helm upgrade --install --recreate-pods --wait --atomic $chartName --namespace $namespace -f ./$chartName/jenkins-aws.yaml ./$chartName $extraCommands"
+
+}
+
+properties([
+    parameters(buildParams)
+])
+node {
+  stage('Helm install') {
+    print 'Deploying ffc-demo-calculation-service'
+    withKubeConfig([credentialsId: kubeCredsId]) {
+        withCredentials([
+            string(credentialsId: 'messageQueueHostPR', variable: 'messageQueueHost'),
+            usernamePassword(credentialsId: 'calculationListenPR', usernameVariable: 'calculationQueueUsername', passwordVariable: 'calculationQueuePassword'),
+            usernamePassword(credentialsId: 'paymentSendPR', usernameVariable: 'paymentQueueUsername', passwordVariable: 'paymentQueuePassword')
+          ]) {
+            def extraCommands = "--set image=$registry/ffc-demo-calculation-service:$suffix,container.messageQueueHost=\"$messageQueueHost\",container.paymentQueueUser=\"$paymentQueueUsername\",container.paymentQueuePassword=\"$paymentQueuePassword\",container.calculationQueueUser=\"$calculationQueueUsername\",container.calculationQueuePassword=\"$calculationQueuePassword\""
+            deployChart(namespace, chartName, params.chartVersion, extraCommands)
+            print "ffc-demo-calculation-service deployed"
+        }
+    }
+  }
+}
