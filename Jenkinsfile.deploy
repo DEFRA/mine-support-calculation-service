@@ -13,9 +13,6 @@ def deployChart(namespace, chartName, chartVersion, extraCommands) {
 
 }
 
-properties([
-    parameters(buildParams)
-])
 node {
   stage('Helm install') {
     print 'Deploying ffc-demo-calculation-service'
