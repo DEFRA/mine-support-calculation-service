@@ -15,7 +15,7 @@ def deployChart(namespace, chartName, chartVersion, extraCommands) {
 
 node {
   stage('Helm install') {
-    print 'Deploying $chartname'
+    print 'Deploying $chartName'
     withKubeConfig([credentialsId: credentialsId]) {
         withCredentials([
             string(credentialsId: 'messageQueueHostPR', variable: 'messageQueueHost'),
@@ -24,7 +24,7 @@ node {
           ]) {
             def extraCommands = "--set container.messageQueueHost=\"$messageQueueHost\",container.paymentQueueUser=\"$paymentQueueUsername\",container.paymentQueuePassword=\"$paymentQueuePassword\",container.calculationQueueUser=\"$calculationQueueUsername\",container.calculationQueuePassword=\"$calculationQueuePassword\""
             deployChart(namespace, chartName, params.chartVersion, extraCommands)
-            print "$chartname deployed"
+            print "$chartName deployed"
         }
     }
   }
