@@ -1,4 +1,4 @@
-def kubeCredsId = 'awskubeconfig002'
+def credentialsId = 'awskubeconfig002'
 def namespace = 'ffc-demo'
 def chartName = 'ffc-demo-calculation-service'
 def suffix = 'master'
@@ -15,16 +15,16 @@ def deployChart(namespace, chartName, chartVersion, extraCommands) {
 
 node {
   stage('Helm install') {
-    print 'Deploying ffc-demo-calculation-service'
-    withKubeConfig([credentialsId: kubeCredsId]) {
+    print 'Deploying $chartname'
+    withKubeConfig([credentialsId: credentialsId]) {
         withCredentials([
             string(credentialsId: 'messageQueueHostPR', variable: 'messageQueueHost'),
             usernamePassword(credentialsId: 'calculationListenPR', usernameVariable: 'calculationQueueUsername', passwordVariable: 'calculationQueuePassword'),
             usernamePassword(credentialsId: 'paymentSendPR', usernameVariable: 'paymentQueueUsername', passwordVariable: 'paymentQueuePassword')
           ]) {
-            def extraCommands = "--set image=$registry/ffc-demo-calculation-service:$suffix,container.messageQueueHost=\"$messageQueueHost\",container.paymentQueueUser=\"$paymentQueueUsername\",container.paymentQueuePassword=\"$paymentQueuePassword\",container.calculationQueueUser=\"$calculationQueueUsername\",container.calculationQueuePassword=\"$calculationQueuePassword\""
+            def extraCommands = "--set container.messageQueueHost=\"$messageQueueHost\",container.paymentQueueUser=\"$paymentQueueUsername\",container.paymentQueuePassword=\"$paymentQueuePassword\",container.calculationQueueUser=\"$calculationQueueUsername\",container.calculationQueuePassword=\"$calculationQueuePassword\""
             deployChart(namespace, chartName, params.chartVersion, extraCommands)
-            print "ffc-demo-calculation-service deployed"
+            print "$chartname deployed"
         }
     }
   }
