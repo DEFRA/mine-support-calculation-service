@@ -57,7 +57,7 @@ node {
 
           def extraCommands = [
             "--values ./helm/ffc-demo-calculation-service/jenkins-aws.yaml",
-            "-- set $helmValues"
+            "--set $helmValues"
           ].join(' ')
 
           defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
