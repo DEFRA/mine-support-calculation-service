@@ -6,8 +6,8 @@ metadata:
     app: {{ quote .Values.name }}
     environment: {{ quote .Values.environment }}
 spec:
-  replicas: {{ quote .Values.replicaCount }}
-  minReadySeconds: {{ quote .Values.minReadySeconds }}
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: {{ .Values.minReadySeconds }}
   template:
     metadata:
       labels:
@@ -17,36 +17,36 @@ spec:
         redeployOnChange: {{ quote .Values.container.redeployOnChange }}
     spec:
       restartPolicy: {{ quote .Values.container.restartPolicy }}
-      {{- if quote .Values.imagePullSecret }}
+      {{- if .Values.imagePullSecret }}
       imagePullSecrets:
       - name: {{ quote .Values.imagePullSecret }}
       {{- end }}
       containers:
       - name: {{ quote .Values.name }}
         image: {{ quote .Values.image }}
-        {{- if quote .Values.container.command }}
-        {{- with quote .Values.container.command }}
+        {{- if .Values.container.command }}
+        {{- with .Values.container.command }}
           command:
             {{- toYaml . | nindent 12 }}
         {{- end }}
-        {{- with quote .Values.container.args }}
+        {{- with .Values.container.args }}
           args:
             {{- toYaml . | nindent 12 }}
         {{- end }}
         {{- end }}
         imagePullPolicy: {{ quote .Values.container.imagePullPolicy }}
         securityContext:
-          runAsUser: {{ quote .Values.container.runAsUser }}
-          runAsNonRoot: {{ quote .Values.container.runAsNonRoot }}
-          readOnlyRootFilesystem: {{ quote .Values.container.readOnlyRootFilesystem }}
-          allowPrivilegeEscalation: {{ quote .Values.container.allowPrivilegeEscalation }}
+          runAsUser: {{ .Values.container.runAsUser }}
+          runAsNonRoot: {{ .Values.container.runAsNonRoot }}
+          readOnlyRootFilesystem: {{ .Values.container.readOnlyRootFilesystem }}
+          allowPrivilegeEscalation: {{ .Values.container.allowPrivilegeEscalation }}
         env:                
         - name: NODE_ENV
           value: {{ quote .Values.environment }}
         - name: MESSAGE_QUEUE_HOST
           value: {{ quote .Values.container.messageQueueHost }}
         - name: MESSAGE_QUEUE_PORT
-          value: {{ quote .Values.container.messageQueuePort }}
+          value: {{ .Values.container.messageQueuePort }}
         - name: MESSAGE_QUEUE_TRANSPORT
           value: {{ quote .Values.container.messageQueueTransport }}
         - name: CALCULATION_QUEUE_ADDRESS
@@ -74,9 +74,9 @@ spec:
             - sh
             - -c
             - /usr/src/app/scripts/healthz
-          initialDelaySeconds: {{ quote .Values.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ quote .Values.livenessProbe.periodSeconds }}
-          failureThreshold: {{ quote .Values.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
         volumeMounts:
         - mountPath: /tmp
           name: health-dir
