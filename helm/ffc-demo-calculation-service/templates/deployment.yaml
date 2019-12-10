@@ -1,82 +1,82 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ .Values.name }}
+  name: {{ quote .Values.name }}
   labels:
-    app: {{ .Values.name }}
-    environment: {{ .Values.environment }}
+    app: {{ quote .Values.name }}
+    environment: {{ quote .Values.environment }}
 spec:
-  replicas: {{ .Values.replicaCount }}
-  minReadySeconds: {{ .Values.minReadySeconds }}
+  replicas: {{ quote .Values.replicaCount }}
+  minReadySeconds: {{ quote .Values.minReadySeconds }}
   template:
     metadata:
       labels:
-        app: {{ .Values.name }}
-        environment: {{ .Values.environment }}
+        app: {{ quote .Values.name }}
+        environment: {{ quote .Values.environment }}
       annotations:
-        redeployOnChange: {{ .Values.container.redeployOnChange | quote }}
+        redeployOnChange: {{ quote .Values.container.redeployOnChange }}
     spec:
-      restartPolicy: {{ .Values.container.restartPolicy }}
-      {{- if .Values.imagePullSecret }}
+      restartPolicy: {{ quote .Values.container.restartPolicy }}
+      {{- if quote .Values.imagePullSecret }}
       imagePullSecrets:
-      - name: {{ .Values.imagePullSecret }}
+      - name: {{ quote .Values.imagePullSecret }}
       {{- end }}
       containers:
-      - name: {{ .Values.name }}
-        image: {{ .Values.image }}
-        {{- if .Values.container.command }}
-        {{- with .Values.container.command }}
+      - name: {{ quote .Values.name }}
+        image: {{ quote .Values.image }}
+        {{- if quote .Values.container.command }}
+        {{- with quote .Values.container.command }}
           command:
             {{- toYaml . | nindent 12 }}
         {{- end }}
-        {{- with .Values.container.args }}
+        {{- with quote .Values.container.args }}
           args:
             {{- toYaml . | nindent 12 }}
         {{- end }}
         {{- end }}
-        imagePullPolicy: {{ .Values.container.imagePullPolicy }}
+        imagePullPolicy: {{ quote .Values.container.imagePullPolicy }}
         securityContext:
-          runAsUser: {{ .Values.container.runAsUser }}
-          runAsNonRoot: {{ .Values.container.runAsNonRoot }}
-          readOnlyRootFilesystem: {{ .Values.container.readOnlyRootFilesystem }}
-          allowPrivilegeEscalation: {{ .Values.container.allowPrivilegeEscalation }}
+          runAsUser: {{ quote .Values.container.runAsUser }}
+          runAsNonRoot: {{ quote .Values.container.runAsNonRoot }}
+          readOnlyRootFilesystem: {{ quote .Values.container.readOnlyRootFilesystem }}
+          allowPrivilegeEscalation: {{ quote .Values.container.allowPrivilegeEscalation }}
         env:                
         - name: NODE_ENV
-          value: {{ .Values.environment }}
+          value: {{ quote .Values.environment }}
         - name: MESSAGE_QUEUE_HOST
-          value: {{ .Values.container.messageQueueHost }}
+          value: {{ quote .Values.container.messageQueueHost }}
         - name: MESSAGE_QUEUE_PORT
-          value: {{ .Values.container.messageQueuePort | quote }}
+          value: {{ quote .Values.container.messageQueuePort }}
         - name: MESSAGE_QUEUE_TRANSPORT
-          value: {{ .Values.container.messageQueueTransport }}
+          value: {{ quote .Values.container.messageQueueTransport }}
         - name: CALCULATION_QUEUE_ADDRESS
-          value: {{ .Values.container.calculationQueueAddress }}
+          value: {{ quote .Values.container.calculationQueueAddress }}
         - name: CALCULATION_QUEUE_USER
-          value: {{ .Values.container.calculationQueueUser }}
+          value: {{ quote .Values.container.calculationQueueUser }}
         - name: CALCULATION_QUEUE_PASSWORD
-          value: {{ .Values.container.calculationQueuePassword }}
+          value: {{ quote .Values.container.calculationQueuePassword }}
         - name: PAYMENT_QUEUE_ADDRESS
-          value: {{ .Values.container.paymentQueueAddress }}
+          value: {{ quote .Values.container.paymentQueueAddress }}
         - name: PAYMENT_QUEUE_USER
-          value: {{ .Values.container.paymentQueueUser }}
+          value: {{ quote .Values.container.paymentQueueUser }}
         - name: PAYMENT_QUEUE_PASSWORD
-          value: {{ .Values.container.paymentQueuePassword }}
+          value: {{ quote .Values.container.paymentQueuePassword }}
         resources:
           requests:
-            memory: {{ .Values.container.requestMemory }}
-            cpu: {{ .Values.container.requestCpu }}
+            memory: {{ quote .Values.container.requestMemory }}
+            cpu: {{ quote .Values.container.requestCpu }}
           limits:
-            memory: {{ .Values.container.limitMemory }}
-            cpu: {{ .Values.container.limitCpu }}   
+            memory: {{ quote .Values.container.limitMemory }}
+            cpu: {{ quote .Values.container.limitCpu }}   
         livenessProbe:
           exec:
             command:
             - sh
             - -c
             - /usr/src/app/scripts/healthz
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+          initialDelaySeconds: {{ quote .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ quote .Values.livenessProbe.periodSeconds }}
+          failureThreshold: {{ quote .Values.livenessProbe.failureThreshold }}
         volumeMounts:
         - mountPath: /tmp
           name: health-dir
