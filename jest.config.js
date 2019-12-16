@@ -40,5 +40,6 @@ module.exports = {
   ],
   resetModules: true,
   restoreMocks: true,
-  testEnvironment: 'node'
+  testEnvironment: 'node',
+  verbose: false
 }
