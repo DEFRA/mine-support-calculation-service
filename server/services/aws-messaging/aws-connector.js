@@ -70,8 +70,12 @@ const subscribeToQueue = async (queueArn, callback) => {
   //     });
   //   }
   // })
-  const QueueName = await getQueueUrl(queueArn)
-  createSQS().receiveMessage({ MaxNumberOfMessages: 1, QueueName }, callback)
+  const queueUrl = await getQueueUrl(queueArn)
+  const sqs = createSQS()
+  sqs.receiveMessage({ MaxNumberOfMessages: 1, QueueName: queueUrl }, (err, data) => {
+    sqs.deleteMessage({ QueueUrl: queueUrl, ReceiptHandle: data.Messages[0].ReceiptHandle })
+    callback(err, data)
+  })
 }
 
 module.exports = {

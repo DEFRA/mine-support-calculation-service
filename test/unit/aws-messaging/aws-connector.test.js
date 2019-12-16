@@ -93,7 +93,28 @@ describe('aws-connector tests', () => {
     const callback = jest.fn()
     await subscribeToQueue('calculation-queue-arn', callback)
     const [SQSInst] = mockSQSInstances
-    SQSInst.receiveMessage.mock.calls[0][1]()
+    SQSInst.receiveMessage.mock.calls[0][1](null, getSampleMessagesPayload())
     expect(callback).toHaveBeenCalled()
   })
+
+  it('deletes the message', async () => {
+    const testCases = [
+      { queueArn: 'calculation-queue-arn', QueueUrl: 'calculation-queue-url', ReceiptHandle: 'abc-123' },
+      { queueArn: 'payment-queue-arn', QueueUrl: 'payment-queue-url', ReceiptHandle: 'def-456' }
+    ]
+    for (let x = 0; x < testCases.length; x++) {
+      const { queueArn, QueueUrl, ReceiptHandle } = testCases[x]
+      await subscribeToQueue(queueArn, () => {})
+      const [SQSInst] = mockSQSInstances
+      SQSInst.receiveMessage.mock.calls[x][1](null, { Messages: [{ ReceiptHandle }] })
+      console.log(SQSInst.getQueueUrl.mock.calls)
+      expect(SQSInst.deleteMessage).toHaveBeenCalledWith(
+        expect.objectContaining({ QueueUrl, ReceiptHandle })
+      )  
+    }
+  })
+})
+
+const getSampleMessagesPayload = (receipts = ['abc-123']) => ({
+  Messages: receipts.map(receipt => ({ ReceiptHandle: receipt }))
 })
