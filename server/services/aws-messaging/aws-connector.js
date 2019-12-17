@@ -7,6 +7,8 @@ const QUEUE_ARNS = Object.freeze({
   CALCULATION: 'calculation-queue-arn'
 })
 
+const queueSubscriptions = []
+
 const awsRegion = 'eu-west-2'
 
 const initialiseAWS = () => {
@@ -30,6 +32,7 @@ const createSQS = () => {
 const resetSQS = () => {
   SQSInstance = false
   promisesDependencySet = false
+  queueSubscriptions.length = 0
 }
 
 const getQueueUrl = async queueArn => {
@@ -38,44 +41,17 @@ const getQueueUrl = async queueArn => {
 }
 
 const subscribeToQueue = async (queueArn, callback) => {
-  // var queueURL = "SQS_QUEUE_URL";
-
-  // var params = {
-  //  AttributeNames: [
-  //     "SentTimestamp"
-  //  ],
-  //  MaxNumberOfMessages: 10,
-  //  MessageAttributeNames: [
-  //     "All"
-  //  ],
-  //  QueueUrl: queueURL,
-  //  VisibilityTimeout: 20,
-  //  WaitTimeSeconds: 0
-  // };
-
-  // sqs.receiveMessage(params, function(err, data) {
-  //   if (err) {
-  //     console.log("Receive Error", err);
-  //   } else if (data.Messages) {
-  //     var deleteParams = {
-  //       QueueUrl: queueURL,
-  //       ReceiptHandle: data.Messages[0].ReceiptHandle
-  //     };
-  //     sqs.deleteMessage(deleteParams, function(err, data) {
-  //       if (err) {
-  //         console.log("Delete Error", err);
-  //       } else {
-  //         console.log("Message Deleted", data);
-  //       }
-  //     });
-  //   }
-  // })
-  const queueUrl = await getQueueUrl(queueArn)
-  const sqs = createSQS()
-  sqs.receiveMessage({ MaxNumberOfMessages: 1, QueueName: queueUrl }, (err, data) => {
-    sqs.deleteMessage({ QueueUrl: queueUrl, ReceiptHandle: data.Messages[0].ReceiptHandle })
-    callback(err, data)
-  })
+  if (!queueSubscriptions.includes(queueArn)) {
+    const queueUrl = await getQueueUrl(queueArn)
+    const sqs = createSQS()
+    sqs.receiveMessage({ MaxNumberOfMessages: 1, QueueName: queueUrl }, (err, data) => {
+      sqs.deleteMessage({ QueueUrl: queueUrl, ReceiptHandle: data.Messages[0].ReceiptHandle })
+      callback(err, data)
+    })
+    queueSubscriptions.push(queueArn)
+  } else {
+    throw new Error(`Queue ${queueArn} already has a subscriber`)
+  }
 }
 
 module.exports = {

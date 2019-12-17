@@ -113,6 +113,20 @@ describe('aws-connector tests', () => {
       )  
     }
   })
+
+  it('only permits one subscriber per queue', async () => {
+    const testCases = ['calculation-queue-arn', 'payment-queue-arn']
+    for (const testCase of testCases) {
+      let errorMsg
+      await subscribeToQueue(testCase, () => {})
+      try {
+        await subscribeToQueue(testCase, () => {})
+      } catch (e) {
+        errorMsg = e.message
+      }
+      expect(errorMsg).toBe(`Queue ${testCase} already has a subscriber`)
+    }
+  })
 })
 
 const getSampleMessagesPayload = (receipts = ['abc-123']) => ({
