@@ -56,6 +56,7 @@ const subscribeToQueue = async (queueArn, callback) => {
 
 module.exports = {
   createSQS,
+  QUEUE_ARNS,
   resetSQS,
   subscribeToQueue
 }

@@ -1,6 +1,7 @@
-const { createSQS, subscribeToQueue, resetSQS } = require('../../../server/services/aws-messaging/aws-connector')
+const { createSQS, QUEUE_ARNS, resetSQS, subscribeToQueue } = require('../../../server/services/aws-messaging/aws-connector')
 const AWS = require('aws-sdk')
 const mockSQSInstances = [] // mock prefix on name is important, so Jest will allow it to be used
+const mock_QUEUE_ARNS = QUEUE_ARNS // same here...
 
 jest.mock('aws-sdk', () => ({
   config: {
@@ -14,7 +15,7 @@ jest.mock('aws-sdk', () => ({
     this.getQueueUrl = jest.fn(({ QueueName }) => ({
       promise: jest.fn(() => Promise.resolve({
         // these have to be hard-coded due to the way jest mocks things...
-        QueueUrl: QueueName === 'calculation-queue-arn'
+        QueueUrl: QueueName === mock_QUEUE_ARNS.CALCULATION
           ? 'calculation-queue-url' : 'payment-queue-url'
       }))
     }))
@@ -55,15 +56,15 @@ describe('aws-connector tests', () => {
 
   it('only instantiates one instance of SQS for multiple calls to subscribeToQueue', () => {
     for (let x = 0; x < 10; x++) {
-      subscribeToQueue('calculation-queue-arn')
+      subscribeToQueue(QUEUE_ARNS.CALCULATION)
     }
     expect(mockSQSInstances.length).toBe(1)
   })
 
   it('subscribes to queue with correct url', async () => {
     const testCases = [
-      { queueArn: 'calculation-queue-arn', queueUrl: 'calculation-queue-url' },
-      { queueArn: 'payment-queue-arn', queueUrl: 'payment-queue-url' }
+      { queueArn: QUEUE_ARNS.CALCULATION, queueUrl: 'calculation-queue-url' },
+      { queueArn: QUEUE_ARNS.PAYMENT, queueUrl: 'payment-queue-url' }
     ]
     for (const testCase of testCases) {
       const { queueArn, queueUrl } = testCase
@@ -79,7 +80,7 @@ describe('aws-connector tests', () => {
   })
 
   it('sets max messages to 1 when subscribing to queue', async () => {
-    await subscribeToQueue('calculation-queue-arn', () => {})
+    await subscribeToQueue(QUEUE_ARNS.CALCULATION, () => {})
     const [SQSInst] = mockSQSInstances
     expect(SQSInst.receiveMessage).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -91,7 +92,7 @@ describe('aws-connector tests', () => {
 
   it('calls callback when a message is received', async () => {
     const callback = jest.fn()
-    await subscribeToQueue('calculation-queue-arn', callback)
+    await subscribeToQueue(QUEUE_ARNS.CALCULATION, callback)
     const [SQSInst] = mockSQSInstances
     SQSInst.receiveMessage.mock.calls[0][1](null, getSampleMessagesPayload())
     expect(callback).toHaveBeenCalled()
@@ -99,8 +100,8 @@ describe('aws-connector tests', () => {
 
   it('deletes the message', async () => {
     const testCases = [
-      { queueArn: 'calculation-queue-arn', QueueUrl: 'calculation-queue-url', ReceiptHandle: 'abc-123' },
-      { queueArn: 'payment-queue-arn', QueueUrl: 'payment-queue-url', ReceiptHandle: 'def-456' }
+      { queueArn: QUEUE_ARNS.CALCULATION, QueueUrl: 'calculation-queue-url', ReceiptHandle: 'abc-123' },
+      { queueArn: QUEUE_ARNS.PAYMENT, QueueUrl: 'payment-queue-url', ReceiptHandle: 'def-456' }
     ]
     for (let x = 0; x < testCases.length; x++) {
       const { queueArn, QueueUrl, ReceiptHandle } = testCases[x]
@@ -115,7 +116,7 @@ describe('aws-connector tests', () => {
   })
 
   it('only permits one subscriber per queue', async () => {
-    const testCases = ['calculation-queue-arn', 'payment-queue-arn']
+    const testCases = [QUEUE_ARNS.CALCULATION, QUEUE_ARNS.PAYMENT]
     for (const testCase of testCases) {
       let errorMsg
       await subscribeToQueue(testCase, () => {})
