@@ -1,7 +1,12 @@
-const { createSQS, QUEUE_ARNS, resetSQS, subscribeToQueue } = require('../../../server/services/aws-messaging/aws-connector')
+const { createSQS, resetSQS, subscribeToQueue } = require('../../../server/services/aws-messaging/aws-connector')
 const AWS = require('aws-sdk')
 const mockSQSInstances = [] // mock prefix on name is important, so Jest will allow it to be used
-const mock_QUEUE_ARNS = QUEUE_ARNS // same here...
+const mockQueueArns = {
+  PAYMENT: 'payment-queue-arn',
+  CALCULATION: 'calculation-queue-arn'
+} // same here...
+
+jest.useFakeTimers()
 
 jest.mock('aws-sdk', () => ({
   config: {
@@ -15,7 +20,7 @@ jest.mock('aws-sdk', () => ({
     this.getQueueUrl = jest.fn(({ QueueName }) => ({
       promise: jest.fn(() => Promise.resolve({
         // these have to be hard-coded due to the way jest mocks things...
-        QueueUrl: QueueName === mock_QUEUE_ARNS.CALCULATION
+        QueueUrl: QueueName === mockQueueArns.CALCULATION
           ? 'calculation-queue-url' : 'payment-queue-url'
       }))
     }))
@@ -26,6 +31,7 @@ jest.mock('aws-sdk', () => ({
 describe('aws-connector tests', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    jest.clearAllTimers()
     mockSQSInstances.length = 0
     resetSQS()
   })
@@ -56,15 +62,15 @@ describe('aws-connector tests', () => {
 
   it('only instantiates one instance of SQS for multiple calls to subscribeToQueue', () => {
     for (let x = 0; x < 10; x++) {
-      subscribeToQueue(QUEUE_ARNS.CALCULATION)
+      subscribeToQueue(mockQueueArns.CALCULATION)
     }
     expect(mockSQSInstances.length).toBe(1)
   })
 
   it('subscribes to queue with correct url', async () => {
     const testCases = [
-      { queueArn: QUEUE_ARNS.CALCULATION, queueUrl: 'calculation-queue-url' },
-      { queueArn: QUEUE_ARNS.PAYMENT, queueUrl: 'payment-queue-url' }
+      { queueArn: mockQueueArns.CALCULATION, queueUrl: 'calculation-queue-url' },
+      { queueArn: mockQueueArns.PAYMENT, queueUrl: 'payment-queue-url' }
     ]
     for (const testCase of testCases) {
       const { queueArn, queueUrl } = testCase
@@ -80,7 +86,7 @@ describe('aws-connector tests', () => {
   })
 
   it('sets max messages to 1 when subscribing to queue', async () => {
-    await subscribeToQueue(QUEUE_ARNS.CALCULATION, () => {})
+    await subscribeToQueue(mockQueueArns.CALCULATION, () => {})
     const [SQSInst] = mockSQSInstances
     expect(SQSInst.receiveMessage).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -92,23 +98,39 @@ describe('aws-connector tests', () => {
 
   it('calls callback when a message is received', async () => {
     const callback = jest.fn()
-    await subscribeToQueue(QUEUE_ARNS.CALCULATION, callback)
+    await subscribeToQueue(mockQueueArns.CALCULATION, callback)
     const [SQSInst] = mockSQSInstances
     SQSInst.receiveMessage.mock.calls[0][1](null, getSampleMessagesPayload())
     expect(callback).toHaveBeenCalled()
   })
 
+  it('doesn\'t throw error if messages payload is empty', async () => {
+    const callback = jest.fn()
+    await subscribeToQueue(mockQueueArns.CALCULATION, callback)
+    const [SQSInst] = mockSQSInstances
+    expect(
+      () => SQSInst.receiveMessage.mock.calls[0][1](null, getEmptyMessagesPayload())
+    ).not.toThrow()
+  })
+
+  it('doesn\'t call callback if messages payload is empty', async () => {
+    const callback = jest.fn()
+    await subscribeToQueue(mockQueueArns.CALCULATION, callback)
+    const [SQSInst] = mockSQSInstances
+    SQSInst.receiveMessage.mock.calls[0][1](null, getEmptyMessagesPayload())
+    expect(callback).not.toHaveBeenCalled()
+  })
+
   it('deletes the message', async () => {
     const testCases = [
-      { queueArn: QUEUE_ARNS.CALCULATION, QueueUrl: 'calculation-queue-url', ReceiptHandle: 'abc-123' },
-      { queueArn: QUEUE_ARNS.PAYMENT, QueueUrl: 'payment-queue-url', ReceiptHandle: 'def-456' }
+      { queueArn: mockQueueArns.CALCULATION, QueueUrl: 'calculation-queue-url', ReceiptHandle: 'abc-123' },
+      { queueArn: mockQueueArns.PAYMENT, QueueUrl: 'payment-queue-url', ReceiptHandle: 'def-456' }
     ]
     for (let x = 0; x < testCases.length; x++) {
       const { queueArn, QueueUrl, ReceiptHandle } = testCases[x]
       await subscribeToQueue(queueArn, () => {})
       const [SQSInst] = mockSQSInstances
-      SQSInst.receiveMessage.mock.calls[x][1](null, { Messages: [{ ReceiptHandle }] })
-      console.log(SQSInst.getQueueUrl.mock.calls)
+      SQSInst.receiveMessage.mock.calls[x][1](null, getSampleMessagesPayload([ReceiptHandle]))
       expect(SQSInst.deleteMessage).toHaveBeenCalledWith(
         expect.objectContaining({ QueueUrl, ReceiptHandle })
       )  
@@ -116,7 +138,7 @@ describe('aws-connector tests', () => {
   })
 
   it('only permits one subscriber per queue', async () => {
-    const testCases = [QUEUE_ARNS.CALCULATION, QUEUE_ARNS.PAYMENT]
+    const testCases = [mockQueueArns.CALCULATION, mockQueueArns.PAYMENT]
     for (const testCase of testCases) {
       let errorMsg
       await subscribeToQueue(testCase, () => {})
@@ -128,8 +150,50 @@ describe('aws-connector tests', () => {
       expect(errorMsg).toBe(`Queue ${testCase} already has a subscriber`)
     }
   })
+
+  it('polls for messages immediately if a message is received', async () => {
+    await subscribeToQueue(mockQueueArns.CALCULATION, () => {})
+    const [SQSInst] = mockSQSInstances
+    SQSInst.receiveMessage.mock.calls[0][1](null, getSampleMessagesPayload())
+    expect(SQSInst.receiveMessage).toHaveBeenCalledTimes(1)
+    jest.advanceTimersByTime(0)
+    expect(SQSInst.receiveMessage).toHaveBeenCalledTimes(2)
+  })
+
+  it('doesn\'t poll for messages immediately if a message isn\'t received', async () => {
+    await subscribeToQueue(mockQueueArns.CALCULATION, () => {})
+    const [SQSInst] = mockSQSInstances
+    SQSInst.receiveMessage.mock.calls[0][1](null, getEmptyMessagesPayload())
+    jest.advanceTimersByTime(0)
+    expect(SQSInst.receiveMessage).toHaveBeenCalledTimes(1)
+  })
+
+  it('polls for messages, incrementing up to 10 seconds, if no message is received', async () => {
+    const increments = [500, 1000, 5000, 10000, 10000]
+    await subscribeToQueue(mockQueueArns.CALCULATION, () => {})
+    const [SQSInst] = mockSQSInstances
+    for (let x = 0; x < increments.length; x++) {
+      SQSInst.receiveMessage.mock.calls[x][1](null, getEmptyMessagesPayload())
+      jest.advanceTimersByTime(increments[x])
+      expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), increments[x])
+      expect(SQSInst.receiveMessage).toHaveBeenCalledTimes(x + 2)
+    }
+  })
+
+  it('polls immediately again after a message received', async () => {
+    const increments = [500, 1000, 5000, 10000, 0]
+    await subscribeToQueue(mockQueueArns.CALCULATION, () => {})
+    const [SQSInst] = mockSQSInstances
+    for (let x = 0; x < increments.length; x++) {
+      const messagePayload = increments[x] === 0 ? getSampleMessagesPayload() : getEmptyMessagesPayload()
+      SQSInst.receiveMessage.mock.calls[0][1](null, messagePayload)
+      jest.advanceTimersByTime(increments[x])
+    }
+    expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 0)
+  })
 })
 
 const getSampleMessagesPayload = (receipts = ['abc-123']) => ({
   Messages: receipts.map(receipt => ({ ReceiptHandle: receipt }))
 })
+const getEmptyMessagesPayload = () => ({ Messages: [] })
