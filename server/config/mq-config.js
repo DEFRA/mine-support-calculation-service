@@ -29,6 +29,11 @@ const mqConfig = {
     reconnect_Limit: process.env.MESSAGE_QUEUE_RECONNECT_LIMIT,
     transport: process.env.MESSAGE_QUEUE_TRANSPORT
   },
+  sqsCalculationQueue: {
+    arn: process.env.SQS_CALCULATION_QUEUE_ARN,
+    accessKey: process.env.SQS_CALCULATION_QUEUE_ACCESS_KEY,
+    secretKey: process.env.SQS_CALCULATION_QUEUE_SECRET_KEY
+  },
   calculationQueue: {
     address: process.env.CALCULATION_QUEUE_ADDRESS,
     username: process.env.CALCULATION_QUEUE_USER,
