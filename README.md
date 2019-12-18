@@ -1,4 +1,3 @@
-[![Build Status](https://defradev.visualstudio.com/DEFRA_FutureFarming/_apis/build/status/defra-ffc-demo-calculation-service?branchName=master)](https://defradev.visualstudio.com/DEFRA_FutureFarming/_build/latest?definitionId=612&branchName=master)
 [![Known Vulnerabilities](https://snyk.io//test/github/DEFRA/ffc-demo-calculation-service/badge.svg?targetFile=package.json)](https://snyk.io//test/github/DEFRA/ffc-demo-calculation-service?targetFile=package.json)
 
 # FFC Demo Calculation Service
