@@ -8,6 +8,11 @@ const mqSchema = joi.object({
     reconnect_Limit: joi.number().default(10),
     transport: joi.string().default('tcp')
   },
+  sqsCalculationQueue: {
+    arn: joi.string().default('calculation'),
+    accessKey: joi.string().default('access-key'),
+    secretKey: joi.string().default('secret-squirrel')
+  },
   calculationQueue: {
     address: joi.string().default('calculation'),
     username: joi.string(),
@@ -58,5 +63,6 @@ if (mqResult.error) {
 
 const paymentQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.paymentQueue }
 const calculationQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.calculationQueue }
+const sqsCalculationQueueConfig = { ...mqResult.value.sqsCalculationQueue, ...mqResult.value.sqsCalculationQueue }
 
-module.exports = { paymentQueueConfig, calculationQueueConfig }
+module.exports = { paymentQueueConfig, calculationQueueConfig, sqsCalculationQueueConfig }
