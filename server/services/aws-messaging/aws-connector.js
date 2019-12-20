@@ -66,7 +66,6 @@ const subscribeToQueue = async (QueueUrl, callback) => {
       }
       const timeout = payloadContainsMessages(data) ? 0 : getPollTimeout()
       console.log(`Polling again in ${timeout}`)
-      // something's going wrong here - seems to poll every 10 seconds, no matter what
       setTimeout(() => sqs.receiveMessage(receiveMessageParams, receivedMessage), timeout)
     }
     sqs.receiveMessage(receiveMessageParams, receivedMessage)
