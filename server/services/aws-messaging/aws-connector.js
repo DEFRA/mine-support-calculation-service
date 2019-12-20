@@ -14,7 +14,12 @@ const initialiseAWS = () => {
   }
 }
 
-const createSQS = () => {
+const updateCredentials = credentials => {
+  const { accessKeyId, secretAccessKey } = credentials
+  AWS.config.update({ accessKeyId, secretAccessKey })
+}
+
+const createSQS = (config) => {
   if (SQSInstance === false) {
     initialiseAWS()
     SQSInstance = new AWS.SQS()
@@ -27,11 +32,6 @@ const resetSQS = () => {
   promisesDependencySet = false
   queueSubscriptions.length = 0
   resetPollTimeout()
-}
-
-const getQueueUrl = async queueArn => {
-  const { QueueUrl } = await createSQS().getQueueUrl({ QueueName: queueArn }).promise()
-  return QueueUrl
 }
 
 let pollTimeout
@@ -48,29 +48,30 @@ const getPollTimeout = () => {
   return pollTimeout
 }
 
-const subscribeToQueue = async (queueArn, callback) => {
-  if (!queueSubscriptions.includes(queueArn)) {
-    const queueUrl = await getQueueUrl(queueArn)
+const subscribeToQueue = async (QueueUrl, callback) => {
+  if (!queueSubscriptions.includes(QueueUrl)) {
     const sqs = createSQS()
-    const receiveMessageParams = { MaxNumberOfMessages: 1, QueueName: queueUrl }
+    const receiveMessageParams = { MaxNumberOfMessages: 1, QueueUrl }
     const receivedMessage = (err, data) => {
-      if (data.Messages.length) {
+      if (data && data.Messages.length) {
         resetPollTimeout()
-        sqs.deleteMessage({ QueueUrl: queueUrl, ReceiptHandle: data.Messages[0].ReceiptHandle })
+        sqs.deleteMessage({ QueueUrl, ReceiptHandle: data.Messages[0].ReceiptHandle })
         callback(err, data)
+      } else {
       }
-      const timeout = data.Messages.length ? 0 : getPollTimeout()
+      const timeout = data && data.Messages.length ? 0 : getPollTimeout()
       setTimeout(() => sqs.receiveMessage(receiveMessageParams, receivedMessage), timeout)
     }
     sqs.receiveMessage(receiveMessageParams, receivedMessage)
-    queueSubscriptions.push(queueArn)
+    queueSubscriptions.push(QueueUrl)
   } else {
-    throw new Error(`Queue ${queueArn} already has a subscriber`)
+    throw new Error(`Queue ${QueueUrl} already has a subscriber`)
   }
 }
 
 module.exports = {
   createSQS,
   resetSQS,
-  subscribeToQueue
+  subscribeToQueue,
+  updateCredentials
 }
