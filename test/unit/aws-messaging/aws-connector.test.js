@@ -42,7 +42,7 @@ describe('aws-connector tests', () => {
   })
 
   it('updateCredentials sets the access key and secret access key', () => {
-    const creds = {accessKeyId: "abc-123", secretAccessKey: "zyx-098"}
+    const creds = { accessKeyId: 'abc-123', secretAccessKey: 'zyx-098' }
     updateCredentials(creds)
     expect(AWS.config.update).toHaveBeenLastCalledWith(
       expect.objectContaining(creds)
@@ -62,7 +62,7 @@ describe('aws-connector tests', () => {
   })
 
   it('only instantiates one instance of SQS for multiple calls to subscribeToQueue', () => {
-    const urls = ['url1', 'url2', 'url3', 'url4', 'url5', 'url6', 'url7', 'url8', 'url9', 'url10'] 
+    const urls = ['url1', 'url2', 'url3', 'url4', 'url5', 'url6', 'url7', 'url8', 'url9', 'url10']
     for (let x = 0; x < 10; x++) {
       subscribeToQueue(urls[x])
     }
@@ -147,7 +147,7 @@ describe('aws-connector tests', () => {
       SQSInst.receiveMessage.mock.calls[x][1](null, getSampleMessagesPayload([ReceiptHandle]))
       expect(SQSInst.deleteMessage).toHaveBeenCalledWith(
         expect.objectContaining({ QueueUrl, ReceiptHandle })
-      )  
+      )
     }
   })
 

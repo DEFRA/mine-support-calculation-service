@@ -49,7 +49,8 @@ const getPollTimeout = () => {
 }
 
 const payloadContainsMessages = (payload) => {
-  return payload && payload.Messages && payload.Messages.length > 0 || false
+  const payloadHasMessages = payload && payload.Messages && payload.Messages.length > 0
+  return payloadHasMessages || false
 }
 
 const subscribeToQueue = async (QueueUrl, callback) => {
