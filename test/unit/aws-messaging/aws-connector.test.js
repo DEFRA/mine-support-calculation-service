@@ -29,19 +29,19 @@ describe('aws-connector tests', () => {
     resetSQS()
   })
 
-  it('sets the AWS sdk to use promises', () => {
+  test('sets the AWS sdk to use promises', () => {
     createSQS()
     expect(AWS.config.setPromisesDependency).toHaveBeenCalledWith(Promise)
   })
 
-  it('sets the region the first time we create an SQS object', () => {
+  test('sets the region the first time we create an SQS object', () => {
     createSQS()
     expect(AWS.config.update).toHaveBeenCalledWith(
       expect.objectContaining({ region: 'eu-west-2' })
     )
   })
 
-  it('updateCredentials sets the access key and secret access key', () => {
+  test('updateCredentials sets the access key and secret access key', () => {
     const creds = { accessKeyId: 'abc-123', secretAccessKey: 'zyx-098' }
     updateCredentials(creds)
     expect(AWS.config.update).toHaveBeenLastCalledWith(
@@ -49,19 +49,19 @@ describe('aws-connector tests', () => {
     )
   })
 
-  it('only updates the region if it isn\'t the expected value', () => {
+  test('only updates the region if it isn\'t the expected value', () => {
     createSQS()
     AWS.config.region = 'eu-west-2'
     createSQS()
     expect(AWS.config.update).toHaveBeenCalledTimes(1)
   })
 
-  it('returns expected instance', () => {
+  test('returns expected instance', () => {
     const sqs = createSQS()
     expect(sqs instanceof AWS.SQS).toBeTruthy()
   })
 
-  it('only instantiates one instance of SQS for multiple calls to subscribeToQueue', () => {
+  test('only instantiates one instance of SQS for multiple calls to subscribeToQueue', () => {
     const urls = ['url1', 'url2', 'url3', 'url4', 'url5', 'url6', 'url7', 'url8', 'url9', 'url10']
     for (let x = 0; x < 10; x++) {
       subscribeToQueue(urls[x])
@@ -69,7 +69,7 @@ describe('aws-connector tests', () => {
     expect(mockSQSInstances.length).toBe(1)
   })
 
-  it('subscribes to queue with correct url', async () => {
+  test('subscribes to queue with correct url', async () => {
     const testCases = [
       { QueueUrl: mockQueueUrls.CALCULATION },
       { QueueUrl: mockQueueUrls.PAYMENT }
@@ -85,7 +85,7 @@ describe('aws-connector tests', () => {
     }
   })
 
-  it('sets max messages to 1 when subscribing to queue', async () => {
+  test('sets max messages to 1 when subscribing to queue', async () => {
     await subscribeToQueue(mockQueueUrls.CALCULATION, () => {})
     const [SQSInst] = mockSQSInstances
     expect(SQSInst.receiveMessage).toHaveBeenCalledWith(
@@ -96,7 +96,7 @@ describe('aws-connector tests', () => {
     )
   })
 
-  it('sets wait time to 0 when subscribing to queue, enabling short polling', async () => {
+  test('sets wait time to 0 when subscribing to queue, enabling short polling', async () => {
     await subscribeToQueue(mockQueueUrls.CALCULATION, () => {})
     const [SQSInst] = mockSQSInstances
     expect(SQSInst.receiveMessage).toHaveBeenCalledWith(
@@ -107,7 +107,7 @@ describe('aws-connector tests', () => {
     )
   })
 
-  it('calls callback when a message is received', async () => {
+  test('calls callback when a message is received', async () => {
     const callback = jest.fn()
     await subscribeToQueue(mockQueueUrls.CALCULATION, callback)
     const [SQSInst] = mockSQSInstances
@@ -115,7 +115,7 @@ describe('aws-connector tests', () => {
     expect(callback).toHaveBeenCalled()
   })
 
-  it('doesn\'t throw error if messages payload is empty', async () => {
+  test('doesn\'t throw error if messages payload is empty', async () => {
     const possiblePayloads = [null, { ResponseMetadata: { RequestId: 'abc-123' } }]
     await subscribeToQueue(mockQueueUrls.CALCULATION, () => {})
     const [SQSInst] = mockSQSInstances
@@ -127,7 +127,7 @@ describe('aws-connector tests', () => {
     }
   })
 
-  it('doesn\'t call callback if messages payload is empty', async () => {
+  test('doesn\'t call callback if messages payload is empty', async () => {
     const callback = jest.fn()
     await subscribeToQueue(mockQueueUrls.CALCULATION, callback)
     const [SQSInst] = mockSQSInstances
@@ -135,7 +135,7 @@ describe('aws-connector tests', () => {
     expect(callback).not.toHaveBeenCalled()
   })
 
-  it('deletes the message', async () => {
+  test('deletes the message', async () => {
     const testCases = [
       { QueueUrl: 'calculation-queue-url', ReceiptHandle: 'abc-123' },
       { QueueUrl: 'payment-queue-url', ReceiptHandle: 'def-456' }
@@ -151,7 +151,7 @@ describe('aws-connector tests', () => {
     }
   })
 
-  it('only permits one subscriber per queue', async () => {
+  test('only permits one subscriber per queue', async () => {
     const testCases = [mockQueueUrls.CALCULATION, mockQueueUrls.PAYMENT]
     for (const testCase of testCases) {
       let errorMsg
@@ -165,7 +165,7 @@ describe('aws-connector tests', () => {
     }
   })
 
-  it('polls for messages immediately if a message is received', async () => {
+  test('polls for messages immediately if a message is received', async () => {
     await subscribeToQueue(mockQueueUrls.CALCULATION, () => {})
     const [SQSInst] = mockSQSInstances
     SQSInst.receiveMessage.mock.calls[0][1](null, getSampleMessagesPayload())
@@ -174,7 +174,7 @@ describe('aws-connector tests', () => {
     expect(SQSInst.receiveMessage).toHaveBeenCalledTimes(2)
   })
 
-  it('doesn\'t poll for messages immediately if a message isn\'t received', async () => {
+  test('doesn\'t poll for messages immediately if a message isn\'t received', async () => {
     await subscribeToQueue(mockQueueUrls.CALCULATION, () => {})
     const [SQSInst] = mockSQSInstances
     SQSInst.receiveMessage.mock.calls[0][1](null, getEmptyMessagesPayload())
@@ -182,7 +182,7 @@ describe('aws-connector tests', () => {
     expect(SQSInst.receiveMessage).toHaveBeenCalledTimes(1)
   })
 
-  it('polls for messages, incrementing up to 10 seconds, if no message is received', async () => {
+  test('polls for messages, incrementing up to 10 seconds, if no message is received', async () => {
     const increments = [500, 1000, 5000, 10000, 10000]
     await subscribeToQueue(mockQueueUrls.CALCULATION, () => {})
     const [SQSInst] = mockSQSInstances
@@ -194,7 +194,7 @@ describe('aws-connector tests', () => {
     }
   })
 
-  it('polls immediately again after a message received', async () => {
+  test('polls immediately again after a message received', async () => {
     const increments = [500, 1000, 5000, 10000, 0]
     await subscribeToQueue(mockQueueUrls.CALCULATION, () => {})
     const [SQSInst] = mockSQSInstances
