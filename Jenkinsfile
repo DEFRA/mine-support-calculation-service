@@ -1,4 +1,4 @@
-@Library('defra-library@0.0.5')
+@Library('defra-library@0.0.7')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
@@ -10,6 +10,12 @@ def repoName = 'ffc-demo-calculation-service'
 def pr = ''
 def mergedPrNo = ''
 def containerTag = ''
+def sonarQubeEnv = 'SonarQube'
+def sonarScanner = 'SonarScanner'
+def containerSrcFolder = '\\/usr\\/src\\/app'
+def localSrcFolder = '.'
+def lcovFile = './test-output/lcov.info'
+def timeoutInMinutes = 5
 
 node {
   checkout scm
@@ -26,6 +32,15 @@ node {
     }
     stage('Run tests') {
       defraUtils.runTests(imageName, BUILD_NUMBER)
+    }
+    stage('Fix absolute paths in lcov file') {
+      defraUtils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
+    }
+    stage('SonarQube analysis') {
+      defraUtils.analyseCode(sonarQubeEnv, sonarScanner, ['sonar.projectKey' : repoName, 'sonar.sources' : '.'])
+    }
+    stage("Code quality gate") {
+      defraUtils.waitForQualityGateResult(timeoutInMinutes)
     }
     stage('Push container image') {
       defraUtils.buildAndPushContainerImage(regCredsId, registry, imageName, containerTag)
@@ -76,5 +91,7 @@ node {
   } catch(e) {
     defraUtils.setGithubStatusFailure(e.message)
     throw e
+  } finally {
+    defraUtils.deleteTestOutput(imageName)
   }
 }
