@@ -1,5 +1,5 @@
 const calculationService = require('./calculation-service')
-async function messageAction (claim, sender) {
+const messageAction = async (claim, sender) => {
   try {
     const value = calculationService.calculate(claim)
     await sender.sendMessage({ claimId: claim.claimId, value })
@@ -7,4 +7,8 @@ async function messageAction (claim, sender) {
     console.log('error sending message', error)
   }
 }
-module.exports = messageAction
+const sqsMessageAction = (message) => {
+  console.log('sqs message received')
+  console.log(message)
+}
+module.exports = { messageAction, sqsMessageAction }
