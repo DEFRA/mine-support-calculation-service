@@ -9,9 +9,11 @@ const mqSchema = joi.object({
     transport: joi.string().default('tcp')
   },
   sqsCalculationQueue: {
-    arn: joi.string().default('calculation'),
-    accessKey: joi.string().default('access-key'),
-    secretKey: joi.string().default('secret-squirrel')
+    url: joi.string().default(''),
+    listenCredentials: {
+      accessKeyId: joi.string().default(''),
+      secretAccessKey: joi.string().default('')
+    }
   },
   calculationQueue: {
     address: joi.string().default('calculation'),
@@ -35,9 +37,11 @@ const mqConfig = {
     transport: process.env.MESSAGE_QUEUE_TRANSPORT
   },
   sqsCalculationQueue: {
-    arn: process.env.SQS_CALCULATION_QUEUE_ARN,
-    accessKey: process.env.SQS_CALCULATION_QUEUE_ACCESS_KEY,
-    secretKey: process.env.SQS_CALCULATION_QUEUE_SECRET_KEY
+    url: process.env.SQS_CALCULATION_QUEUE_URL,
+    listenCredentials: {
+      accessKeyId: process.env.SQS_CALCULATION_QUEUE_LISTEN_ACCESS_KEY_ID,
+      secretAccessKey: process.env.SQS_CALCULATION_QUEUE_LISTEN_SECRET_ACCESS_KEY
+    }
   },
   calculationQueue: {
     address: process.env.CALCULATION_QUEUE_ADDRESS,
@@ -61,8 +65,8 @@ if (mqResult.error) {
   throw new Error(`The message queue config is invalid. ${mqResult.error.message}`)
 }
 
-const paymentQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.paymentQueue }
 const calculationQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.calculationQueue }
+const paymentQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.paymentQueue }
 const sqsCalculationQueueConfig = { ...mqResult.value.sqsCalculationQueue, ...mqResult.value.sqsCalculationQueue }
 
-module.exports = { paymentQueueConfig, calculationQueueConfig, sqsCalculationQueueConfig }
+module.exports = { calculationQueueConfig, paymentQueueConfig, sqsCalculationQueueConfig }

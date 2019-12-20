@@ -48,18 +48,25 @@ const getPollTimeout = () => {
   return pollTimeout
 }
 
+const payloadContainsMessages = (payload) => {
+  return payload && payload.Messages && payload.Messages.length > 0 || false
+}
+
 const subscribeToQueue = async (QueueUrl, callback) => {
   if (!queueSubscriptions.includes(QueueUrl)) {
     const sqs = createSQS()
-    const receiveMessageParams = { MaxNumberOfMessages: 1, QueueUrl }
+    const receiveMessageParams = { MaxNumberOfMessages: 1, QueueUrl, WaitTimeSeconds: 0 }
     const receivedMessage = (err, data) => {
-      if (data && data.Messages.length) {
+      console.log(`Polling SQS queue ${QueueUrl}`)
+      if (payloadContainsMessages(data)) {
+        console.log('Message found')
         resetPollTimeout()
         sqs.deleteMessage({ QueueUrl, ReceiptHandle: data.Messages[0].ReceiptHandle })
         callback(err, data)
-      } else {
       }
-      const timeout = data && data.Messages.length ? 0 : getPollTimeout()
+      const timeout = payloadContainsMessages(data) ? 0 : getPollTimeout()
+      console.log(`Polling again in ${timeout}`)
+      // something's going wrong here - seems to poll every 10 seconds, no matter what
       setTimeout(() => sqs.receiveMessage(receiveMessageParams, receivedMessage), timeout)
     }
     sqs.receiveMessage(receiveMessageParams, receivedMessage)

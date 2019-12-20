@@ -96,6 +96,17 @@ describe('aws-connector tests', () => {
     )
   })
 
+  it('sets wait time to 0 when subscribing to queue, enabling short polling', async () => {
+    await subscribeToQueue(mockQueueUrls.CALCULATION, () => {})
+    const [SQSInst] = mockSQSInstances
+    expect(SQSInst.receiveMessage).toHaveBeenCalledWith(
+      expect.objectContaining({
+        WaitTimeSeconds: 0
+      }),
+      expect.any(Function)
+    )
+  })
+
   it('calls callback when a message is received', async () => {
     const callback = jest.fn()
     await subscribeToQueue(mockQueueUrls.CALCULATION, callback)
@@ -105,12 +116,15 @@ describe('aws-connector tests', () => {
   })
 
   it('doesn\'t throw error if messages payload is empty', async () => {
-    const callback = jest.fn()
-    await subscribeToQueue(mockQueueUrls.CALCULATION, callback)
+    const possiblePayloads = [null, { ResponseMetadata: { RequestId: 'abc-123' } }]
+    await subscribeToQueue(mockQueueUrls.CALCULATION, () => {})
     const [SQSInst] = mockSQSInstances
-    expect(
-      () => SQSInst.receiveMessage.mock.calls[0][1](null, null)
-    ).not.toThrow()
+
+    for (const payload of possiblePayloads) {
+      expect(
+        () => SQSInst.receiveMessage.mock.calls[0][1](null, payload)
+      ).not.toThrow()
+    }
   })
 
   it('doesn\'t call callback if messages payload is empty', async () => {
