@@ -7,11 +7,19 @@ const { subscribeToQueue, updateCredentials } = require('./aws-messaging/aws-con
 const messageSender = new MessageSender('payment-queue-sender', config.paymentQueueConfig)
 const messageReceiver = new MessageReceiver('calculation-queue-receiver', config.calculationQueueConfig)
 
+const sqsCalculationQueueConfigured = queueConfig => {
+  return queueConfig.url !== '' &&
+    queueConfig.listenCredentials.accessKeyId !== '' &&
+    queueConfig.listenCredentials.secretAccessKey !== ''
+}
+
 async function registerQueues () {
   await openConnections()
   await messageReceiver.setupReceiver((message) => messageAction(message, messageSender))
-  updateCredentials(config.sqsCalculationQueueConfig.listenCredentials)
-  await subscribeToQueue(config.sqsCalculationQueueConfig.url, sqsMessageAction)
+  if (sqsCalculationQueueConfigured(config.sqsCalculationQueueConfig)) {
+    updateCredentials(config.sqsCalculationQueueConfig.listenCredentials)
+    await subscribeToQueue(config.sqsCalculationQueueConfig.url, sqsMessageAction)
+  }
 }
 
 process.on('SIGTERM', async function () {
