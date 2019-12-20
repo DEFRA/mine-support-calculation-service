@@ -142,20 +142,13 @@ The service has a command based liveness probe.  The probe will write a file con
 
 Dependencies should be managed within a container using the development image for the app. This will ensure that any packages with environment-specific variants are installed with the correct variant for the contained environment, rather than the host system which may differ between development and production.
 
-The [`exec`](./scripts/exec) script is provided to run arbitrary commands, such as npm, in a running service container. If the service is not running when this script is called, it will be started for the duration of the command and then removed.
+In development, the `node_modules` folder is mounted to a named volume. This volume must be removed in order for dependency changes to propagate from the rebuilt image into future instances of the app container.
 
-Since dependencies are installed into the container image, a full build should always be run immediately after any dependency change.
-
-In development, the `node_modules` folder is mounted to a named volume. This volume must be removed in order for dependency changes to propagate from the rebuilt image into future instances of the app container. The [`start`](./scripts/start) script has a `--clean` (or `-c`) option  which will achieve this.
-
-The following example will update all npm dependencies, rebuild the container image and replace running containers and volumes:
-
+The following example will remove existing containers & volumes, rebuild the container image and then bring them back up again:
 ```
-# Run the NPM update
-scripts/exec npm update
-
-# Rebuild and restart the service
-scripts/start --clean
+docker-compose down -v
+docker-compose build --no-cache ffc-demo-calculation-service
+docker-compose up --force-recreate ffc-demo-calculation-service
 ```
 
 ## Build pipeline
