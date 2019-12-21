@@ -38,12 +38,12 @@ describe('message-service tests', () => {
     await registerQueues()
     const {
       sqsCalculationQueueConfig: {
-        url,
+        url: queueUrl,
         listenCredentials: { accessKeyId, secretAccessKey }
       }
     } = mockConfig
     expect(SqsConsumerFactory.create).toHaveBeenCalledWith(
-      expect.objectContaining({ url, accessKeyId, secretAccessKey })
+      expect.objectContaining({ queueUrl, accessKeyId, secretAccessKey })
     )
   })
 
