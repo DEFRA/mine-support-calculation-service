@@ -8,6 +8,13 @@ const mqSchema = joi.object({
     reconnect_Limit: joi.number().default(10),
     transport: joi.string().default('tcp')
   },
+  sqsCalculationQueue: {
+    url: joi.string().default(''),
+    listenCredentials: {
+      accessKeyId: joi.string().default(''),
+      secretAccessKey: joi.string().default('')
+    }
+  },
   calculationQueue: {
     address: joi.string().default('calculation'),
     username: joi.string(),
@@ -28,6 +35,13 @@ const mqConfig = {
     port: process.env.MESSAGE_QUEUE_PORT,
     reconnect_Limit: process.env.MESSAGE_QUEUE_RECONNECT_LIMIT,
     transport: process.env.MESSAGE_QUEUE_TRANSPORT
+  },
+  sqsCalculationQueue: {
+    url: process.env.SQS_CALCULATION_QUEUE_URL,
+    listenCredentials: {
+      accessKeyId: process.env.SQS_CALCULATION_QUEUE_LISTEN_ACCESS_KEY_ID,
+      secretAccessKey: process.env.SQS_CALCULATION_QUEUE_LISTEN_SECRET_ACCESS_KEY
+    }
   },
   calculationQueue: {
     address: process.env.CALCULATION_QUEUE_ADDRESS,
@@ -53,5 +67,6 @@ if (mqResult.error) {
 
 const paymentQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.paymentQueue }
 const calculationQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.calculationQueue }
+const sqsCalculationQueueConfig = { ...mqResult.value.sqsCalculationQueue, ...mqResult.value.sqsCalculationQueue }
 
-module.exports = { paymentQueueConfig, calculationQueueConfig }
+module.exports = { paymentQueueConfig, calculationQueueConfig, sqsCalculationQueueConfig }
