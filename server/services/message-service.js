@@ -10,7 +10,7 @@ const messageReceiver = new MessageReceiver('calculation-queue-receiver', config
 async function registerQueues () {
   const {
     sqsCalculationQueueConfig: {
-      url,
+      url: queueUrl,
       listenCredentials: { accessKeyId, secretAccessKey }
     }
   } = config
@@ -22,8 +22,8 @@ async function registerQueues () {
     handleMessage: message => {
       console.log('received a message!', message)
     },
-    secretAccessKey,
-    url
+    queueUrl,
+    secretAccessKey
   })
   sqsConsumer.start()
   console.log('consumer polling started')
