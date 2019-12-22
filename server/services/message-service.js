@@ -6,27 +6,12 @@ const { SqsConsumerFactory } = require('./sqs-messaging/sqs-consumer-factory')
 
 const messageSender = new MessageSender('payment-queue-sender', config.paymentQueueConfig)
 const messageReceiver = new MessageReceiver('calculation-queue-receiver', config.calculationQueueConfig)
+let sqsConsumer
 
 async function registerQueues () {
-  const {
-    sqsCalculationQueueConfig: {
-      url: queueUrl,
-      listenCredentials: { accessKeyId, secretAccessKey }
-    }
-  } = config
   await openConnections()
   await messageReceiver.setupReceiver((message) => messageAction(message, messageSender))
-  console.log('setting up sqs consumer')
-  const sqsConsumer = SqsConsumerFactory.create({
-    accessKeyId,
-    handleMessage: message => {
-      console.log('received a message!', message)
-    },
-    queueUrl,
-    secretAccessKey
-  })
-  sqsConsumer.start()
-  console.log('consumer polling started')
+  startPollingSQSCalculationQueue()
 }
 
 process.on('SIGTERM', async function () {
@@ -39,9 +24,31 @@ process.on('SIGINT', async function () {
   process.exit(0)
 })
 
+function startPollingSQSCalculationQueue () {
+  const {
+    sqsCalculationQueueConfig: {
+      url: queueUrl,
+      listenCredentials: { accessKeyId, secretAccessKey }
+    }
+  } = config
+
+  console.log('setting up sqs calculation queue')
+  sqsConsumer = SqsConsumerFactory.create({
+    accessKeyId,
+    handleMessage: message => {
+      console.log('received a message!', message)
+    },
+    queueUrl,
+    secretAccessKey
+  })
+  sqsConsumer.start()
+  console.log('sqs calculation queue polling started')
+}
+
 async function closeConnections () {
   await messageSender.closeConnection()
   await messageReceiver.closeConnection()
+  sqsConsumer.stop()
 }
 
 async function openConnections () {

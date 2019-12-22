@@ -6,14 +6,12 @@ const mockQueueUrls = {
   CALCULATION: 'calculation-queue-url'
 }
 
-jest.useFakeTimers()
 jest.mock('aws-sdk')
 jest.mock('sqs-consumer')
 
 describe('SqsConsumerFactory tests', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    jest.clearAllTimers()
   })
 
   test('returns created Consumer', () => {

@@ -10,20 +10,23 @@ const mockConfig = {
 require('../../server/config')
 require('../../server/services/messaging/message-sender')
 require('../../server/services/messaging/message-receiver')
-const { registerQueues } = require('../../server/services/message-service')
+const { registerQueues, closeConnections } = require('../../server/services/message-service')
 const { SqsConsumerFactory } = require('../../server/services/sqs-messaging/sqs-consumer-factory')
 
 jest.mock('../../server/services/messaging/message-sender', () => jest.fn(() => ({
-  openConnection: jest.fn().mockImplementation(() => Promise.resolve())
+  openConnection: jest.fn(() => Promise.resolve()),
+  closeConnection: jest.fn(() => Promise.resolve())
 })))
 jest.mock('../../server/services/messaging/message-receiver', () => jest.fn(() => ({
   openConnection: jest.fn(() => Promise.resolve()),
-  setupReceiver: jest.fn(() => Promise.resolve())
+  setupReceiver: jest.fn(() => Promise.resolve()),
+  closeConnection: jest.fn(() => Promise.resolve())
 })))
 jest.mock('../../server/services/sqs-messaging/sqs-consumer-factory', () => ({
   SqsConsumerFactory: {
     create: jest.fn(() => ({
-      start: jest.fn()
+      start: jest.fn(),
+      stop: jest.fn()
     }))
   }
 }))
@@ -59,5 +62,11 @@ describe('message-service tests', () => {
         handleMessage: expect.any(Function)
       })
     )
+  })
+
+  test('closeConnections stops polling', async () => {
+    await registerQueues()
+    await closeConnections()
+    expect(SqsConsumerFactory.create.mock.results[0].value.stop).toHaveBeenCalled()
   })
 })
