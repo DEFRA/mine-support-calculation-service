@@ -32,5 +32,6 @@ value.isProd = value.env === 'production'
 value.paymentQueueConfig = mqConfig.paymentQueueConfig
 value.calculationQueueConfig = mqConfig.calculationQueueConfig
 value.sqsCalculationQueueConfig = mqConfig.sqsCalculationQueueConfig
+value.sqsPaymentQueueConfig = mqConfig.sqsPaymentQueueConfig
 
 module.exports = value
