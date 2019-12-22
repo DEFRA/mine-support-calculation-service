@@ -15,6 +15,13 @@ const mqSchema = joi.object({
       secretAccessKey: joi.string().default('')
     }
   },
+  sqsPaymentQueue: {
+    url: joi.string().default(''),
+    publishCredentials: {
+      accessKeyId: joi.string().default(''),
+      secretAccessKey: joi.string().default('')
+    }
+  },
   calculationQueue: {
     address: joi.string().default('calculation'),
     username: joi.string(),
@@ -43,6 +50,13 @@ const mqConfig = {
       secretAccessKey: process.env.SQS_CALCULATION_QUEUE_LISTEN_SECRET_ACCESS_KEY
     }
   },
+  sqsPaymentQueue: {
+    url: process.env.SQS_PAYMENT_QUEUE_URL,
+    publishCredentials: {
+      accessKeyId: process.env.SQS_PAYMENT_QUEUE_PUBLISH_ACCESS_KEY_ID,
+      secretAccessKey: process.env.SQS_PAYMENT_QUEUE_PUBLISH_SECRET_ACCESS_KEY
+    }
+  },
   calculationQueue: {
     address: process.env.CALCULATION_QUEUE_ADDRESS,
     username: process.env.CALCULATION_QUEUE_USER,
@@ -68,5 +82,6 @@ if (mqResult.error) {
 const paymentQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.paymentQueue }
 const calculationQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.calculationQueue }
 const sqsCalculationQueueConfig = { ...mqResult.value.sqsCalculationQueue, ...mqResult.value.sqsCalculationQueue }
+const sqsPaymentQueueConfig = { ...mqResult.value.sqsPaymentQueue, ...mqResult.value.sqsPaymentQueue }
 
-module.exports = { paymentQueueConfig, calculationQueueConfig, sqsCalculationQueueConfig }
+module.exports = { paymentQueueConfig, calculationQueueConfig, sqsCalculationQueueConfig, sqsPaymentQueueConfig }
