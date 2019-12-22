@@ -31,18 +31,19 @@ function startPollingSQSCalculationQueue () {
       listenCredentials: { accessKeyId, secretAccessKey }
     }
   } = config
-
-  console.log('setting up sqs calculation queue')
-  sqsConsumer = SqsConsumerFactory.create({
-    accessKeyId,
-    handleMessage: message => {
-      console.log('received a message!', message)
-    },
-    queueUrl,
-    secretAccessKey
-  })
-  sqsConsumer.start()
-  console.log('sqs calculation queue polling started')
+  if (queueUrl !== '' && accessKeyId !== '' && secretAccessKey !== '') {
+    console.log('setting up sqs calculation queue')
+    sqsConsumer = SqsConsumerFactory.create({
+      accessKeyId,
+      handleMessage: message => {
+        console.log('received a message!', message)
+      },
+      queueUrl,
+      secretAccessKey
+    })
+    sqsConsumer.start()
+    console.log('sqs calculation queue polling started')
+  }
 }
 
 async function closeConnections () {
