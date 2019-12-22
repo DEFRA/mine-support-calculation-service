@@ -50,6 +50,30 @@ describe('message-service tests', () => {
     )
   })
 
+  test('omits consumer creation if url isn\'t set', async () => {
+    const { sqsCalculationQueueConfig: url } = mockConfig
+    mockConfig.sqsCalculationQueueConfig.url = ''
+    await registerQueues()
+    expect(SqsConsumerFactory.create).not.toHaveBeenCalled()
+    mockConfig.sqsCalculationQueueConfig.url = url
+  })
+
+  test('omits consumer creation if access key id isn\'t set', async () => {
+    const { sqsCalculationQueueConfig: { listenCredentials: { accessKeyId } } } = mockConfig
+    mockConfig.sqsCalculationQueueConfig.listenCredentials.accessKeyId = ''
+    await registerQueues()
+    expect(SqsConsumerFactory.create).not.toHaveBeenCalled()
+    mockConfig.sqsCalculationQueueConfig.listenCredentials.accessKeyId = accessKeyId
+  })
+
+  test('omits consumer creation if secret access key isn\'t set', async () => {
+    const { sqsCalculationQueueConfig: { listenCredentials: { secretAccessKey } } } = mockConfig
+    mockConfig.sqsCalculationQueueConfig.listenCredentials.secretAccessKey = ''
+    await registerQueues()
+    expect(SqsConsumerFactory.create).not.toHaveBeenCalled()
+    mockConfig.sqsCalculationQueueConfig.listenCredentials.secretAccessKey = secretAccessKey
+  })
+
   test('starts polling', async () => {
     await registerQueues()
     expect(SqsConsumerFactory.create.mock.results[0].value.start).toHaveBeenCalled()
