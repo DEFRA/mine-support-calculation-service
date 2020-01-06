@@ -1,6 +1,6 @@
 const MessageSender = require('./messaging/message-sender')
 const MessageReceiver = require('./messaging/message-receiver')
-const messageAction = require('./message-action')
+const { messageAction } = require('./message-action')
 const config = require('../config')
 const { SqsConsumerFactory } = require('./sqs-messaging/sqs-consumer-factory')
 
@@ -37,12 +37,16 @@ function startPollingSQSCalculationQueue () {
       accessKeyId,
       handleMessage: message => {
         console.log('received a message!', message)
+        // const value = calculationService.calculate(claim)
+        // await sender.sendMessage({ claimId: claim.claimId, value })
       },
       queueUrl,
       secretAccessKey
     })
     sqsConsumer.start()
     console.log('sqs calculation queue polling started')
+  } else {
+    console.log('sqs calculation queue polling skipped as env vars not present')
   }
 }
 

@@ -121,6 +121,30 @@ describe('sqs calculation message action', () => {
       expect.objectContaining({ secretAccessKey })
     )
   })
+
+  test('doesn\'t send a message if queue url is empty', () => {
+    const url = mockConfig.sqsPaymentQueueConfig.url
+    mockConfig.sqsPaymentQueueConfig.url = ''
+    sqsCalculationMessageAction(mockClaim())
+    expect(sendMessage).not.toHaveBeenCalled()
+    mockConfig.sqsPaymentQueueConfig.url = url
+  })
+
+  test('doesn\'t send a message if access key id is empty', () => {
+    const accessKeyId = mockConfig.sqsPaymentQueueConfig.publishCredentials.accessKeyId
+    mockConfig.sqsPaymentQueueConfig.publishCredentials.accessKeyId = ''
+    sqsCalculationMessageAction(mockClaim())
+    expect(sendMessage).not.toHaveBeenCalled()
+    mockConfig.sqsPaymentQueueConfig.publishCredentials.accessKeyId = accessKeyId
+  })
+
+  test('doesn\'t send a message if secret access key is empty', () => {
+    const secretAccessKey = mockConfig.sqsPaymentQueueConfig.publishCredentials.secretAccessKey
+    mockConfig.sqsPaymentQueueConfig.publishCredentials.secretAccessKey = ''
+    sqsCalculationMessageAction(mockClaim())
+    expect(sendMessage).not.toHaveBeenCalled()
+    mockConfig.sqsPaymentQueueConfig.publishCredentials.secretAccessKey = secretAccessKey
+  })
 })
 
 const mockClaim = (claimId = 'MINE123') => ({
