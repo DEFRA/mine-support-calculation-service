@@ -35,6 +35,11 @@ const mqSchema = joi.object({
   }
 })
 
+// if env vars are undefined, they're defaulted to zero-length strings, but joi doesn't like
+// this and will throw an error if it gets zero-length strings. Therefore, wrap any env vars
+// that might not be provided in this function for a 'hapi-er' experience...
+const substituteUndefinedForZeroLengthString = str => str === '' ? undefined : str
+
 const mqConfig = {
   messageQueue: {
     host: process.env.MESSAGE_QUEUE_HOST,
@@ -44,17 +49,17 @@ const mqConfig = {
     transport: process.env.MESSAGE_QUEUE_TRANSPORT
   },
   sqsCalculationQueue: {
-    url: process.env.SQS_CALCULATION_QUEUE_URL,
+    url: substituteUndefinedForZeroLengthString(process.env.SQS_CALCULATION_QUEUE_URL),
     listenCredentials: {
-      accessKeyId: process.env.SQS_CALCULATION_QUEUE_LISTEN_ACCESS_KEY_ID,
-      secretAccessKey: process.env.SQS_CALCULATION_QUEUE_LISTEN_SECRET_ACCESS_KEY
+      accessKeyId: substituteUndefinedForZeroLengthString(process.env.SQS_CALCULATION_QUEUE_LISTEN_ACCESS_KEY_ID),
+      secretAccessKey: substituteUndefinedForZeroLengthString(process.env.SQS_CALCULATION_QUEUE_LISTEN_SECRET_ACCESS_KEY)
     }
   },
   sqsPaymentQueue: {
-    url: process.env.SQS_PAYMENT_QUEUE_URL,
+    url: substituteUndefinedForZeroLengthString(process.env.SQS_PAYMENT_QUEUE_URL),
     publishCredentials: {
-      accessKeyId: process.env.SQS_PAYMENT_QUEUE_PUBLISH_ACCESS_KEY_ID,
-      secretAccessKey: process.env.SQS_PAYMENT_QUEUE_PUBLISH_SECRET_ACCESS_KEY
+      accessKeyId: substituteUndefinedForZeroLengthString(process.env.SQS_PAYMENT_QUEUE_PUBLISH_ACCESS_KEY_ID),
+      secretAccessKey: substituteUndefinedForZeroLengthString(process.env.SQS_PAYMENT_QUEUE_PUBLISH_SECRET_ACCESS_KEY)
     }
   },
   calculationQueue: {

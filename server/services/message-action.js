@@ -21,11 +21,16 @@ const sqsCalculationMessageAction = async (message) => {
     }
   } = config
   const value = calculationService.calculate(message)
-  sendMessage({
-    accessKeyId,
-    messageBody: JSON.stringify({ claimId: message.claimId, value }),
-    queueUrl,
-    secretAccessKey
-  })
+  if (queueUrl !== '' && accessKeyId !== '' && secretAccessKey !== '') {
+    sendMessage({
+      accessKeyId,
+      messageBody: JSON.stringify({ claimId: message.claimId, value }),
+      queueUrl,
+      secretAccessKey
+    })
+  } else {
+    console.log('No SQS message sent as env vars aren\'t set up')
+  }
 }
-module.exports = { messageAction, sqsCalculationMessageAction }
+const paymentQueueConfig = () => config.sqsPaymentQueueConfig
+module.exports = { messageAction, sqsCalculationMessageAction, paymentQueueConfig }
