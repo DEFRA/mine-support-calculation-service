@@ -2,7 +2,7 @@ const AWS = require('aws-sdk')
 
 const getInitialisationAttributes = config => ({
   accessKeyId: config.accessKeyId,
-  region: 'eu-west-2',
+  region: config.region,
   secretAccessKey: config.secretAccessKey
 })
 const getMessageAttributes = config => ({

@@ -1,6 +1,7 @@
 const mockConfig = {
   sqsCalculationQueueConfig: {
     url: 'calculation-queue-url',
+    region: 'narnia-12',
     listenCredentials: {
       accessKeyId: 'abc-123',
       secretAccessKey: 'zyx-098'
@@ -44,11 +45,12 @@ describe('message-service tests', () => {
     const {
       sqsCalculationQueueConfig: {
         url: queueUrl,
+        region,
         listenCredentials: { accessKeyId, secretAccessKey }
       }
     } = mockConfig
     expect(SqsConsumerFactory.create).toHaveBeenCalledWith(
-      expect.objectContaining({ queueUrl, accessKeyId, secretAccessKey })
+      expect.objectContaining({ queueUrl, accessKeyId, region, secretAccessKey })
     )
   })
 
@@ -58,6 +60,14 @@ describe('message-service tests', () => {
     await registerQueues()
     expect(SqsConsumerFactory.create).not.toHaveBeenCalled()
     mockConfig.sqsCalculationQueueConfig.url = url
+  })
+
+  test('omits consumer creation if region isn\'t set', async () => {
+    const { sqsCalculationQueueConfig: region } = mockConfig
+    mockConfig.sqsCalculationQueueConfig.region = ''
+    await registerQueues()
+    expect(SqsConsumerFactory.create).not.toHaveBeenCalled()
+    mockConfig.sqsCalculationQueueConfig.region = region
   })
 
   test('omits consumer creation if access key id isn\'t set', async () => {

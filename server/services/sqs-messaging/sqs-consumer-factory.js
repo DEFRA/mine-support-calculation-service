@@ -7,14 +7,12 @@ class SqsConsumerFactory {
   }
 
   static parseConfig (config) {
-    const region = 'eu-west-2'
     const parsedConfig = {
-      region,
       waitTimeSeconds: 10,
       ...config
     }
     if (this.configureSQS(config)) {
-      const { accessKeyId, secretAccessKey } = config
+      const { accessKeyId, region, secretAccessKey } = config
       parsedConfig.sqs = new AWS.SQS({ accessKeyId, region, secretAccessKey })
     }
     return parsedConfig

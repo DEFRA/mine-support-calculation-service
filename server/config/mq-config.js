@@ -10,6 +10,7 @@ const mqSchema = joi.object({
   },
   sqsCalculationQueue: {
     url: joi.string().allow(''),
+    region: joi.string().allow(''),
     listenCredentials: {
       accessKeyId: joi.string().allow(''),
       secretAccessKey: joi.string().allow('')
@@ -17,6 +18,7 @@ const mqSchema = joi.object({
   },
   sqsPaymentQueue: {
     url: joi.string().allow(''),
+    region: joi.string().allow(''),
     publishCredentials: {
       accessKeyId: joi.string().allow(''),
       secretAccessKey: joi.string().allow('')
@@ -45,6 +47,7 @@ const mqConfig = {
   },
   sqsCalculationQueue: {
     url: process.env.SQS_CALCULATION_QUEUE_URL,
+    region: process.env.SQS_CALCULATION_QUEUE_REGION,
     listenCredentials: {
       accessKeyId: process.env.SQS_CALCULATION_QUEUE_LISTEN_ACCESS_KEY_ID,
       secretAccessKey: process.env.SQS_CALCULATION_QUEUE_LISTEN_SECRET_ACCESS_KEY
@@ -52,6 +55,7 @@ const mqConfig = {
   },
   sqsPaymentQueue: {
     url: process.env.SQS_PAYMENT_QUEUE_URL,
+    region: process.env.SQS_PAYMENT_QUEUE_REGION,
     publishCredentials: {
       accessKeyId: process.env.SQS_PAYMENT_QUEUE_PUBLISH_ACCESS_KEY_ID,
       secretAccessKey: process.env.SQS_PAYMENT_QUEUE_PUBLISH_SECRET_ACCESS_KEY

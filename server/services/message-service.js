@@ -28,15 +28,17 @@ function startPollingSQSCalculationQueue () {
   const {
     sqsCalculationQueueConfig: {
       url: queueUrl,
+      region,
       listenCredentials: { accessKeyId, secretAccessKey }
     }
   } = config
-  if (queueUrl !== '' && accessKeyId !== '' && secretAccessKey !== '') {
+  if ([queueUrl, accessKeyId, region, secretAccessKey].every(param => param !== '')) {
     console.log('setting up sqs calculation queue')
     sqsConsumer = SqsConsumerFactory.create({
       accessKeyId,
       handleMessage: sqsCalculationMessageAction,
       queueUrl,
+      region,
       secretAccessKey
     })
     sqsConsumer.start()

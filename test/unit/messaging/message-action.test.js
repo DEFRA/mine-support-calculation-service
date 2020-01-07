@@ -1,6 +1,7 @@
 const mockConfig = {
   sqsPaymentQueueConfig: {
     url: 'payment-queue-url',
+    region: 'faerun-3',
     publishCredentials: {
       accessKeyId: 'abc-123',
       secretAccessKey: 'zyx-098'
@@ -116,6 +117,14 @@ describe('sqs calculation message action', () => {
     )
   })
 
+  test('sends message via given region', () => {
+    const { sqsPaymentQueueConfig: { region } } = mockConfig
+    sqsCalculationMessageAction(mockMessage())
+    expect(sendMessage).toHaveBeenCalledWith(
+      expect.objectContaining({ region })
+    )
+  })
+
   test('sends message with given secret access key', () => {
     const { sqsPaymentQueueConfig: { publishCredentials: { secretAccessKey } } } = mockConfig
     sqsCalculationMessageAction(mockMessage())
@@ -138,6 +147,14 @@ describe('sqs calculation message action', () => {
     sqsCalculationMessageAction(mockMessage())
     expect(sendMessage).not.toHaveBeenCalled()
     mockConfig.sqsPaymentQueueConfig.publishCredentials.accessKeyId = accessKeyId
+  })
+
+  test('doesn\'t send a message if region is empty', () => {
+    const region = mockConfig.sqsPaymentQueueConfig.region
+    mockConfig.sqsPaymentQueueConfig.region = ''
+    sqsCalculationMessageAction(mockMessage())
+    expect(sendMessage).not.toHaveBeenCalled()
+    mockConfig.sqsPaymentQueueConfig.url = region
   })
 
   test('doesn\'t send a message if secret access key is empty', () => {

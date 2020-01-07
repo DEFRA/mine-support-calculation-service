@@ -16,10 +16,11 @@ describe('SQS send message tests', () => {
     mockSQSInstances.length = 0
   })
 
-  test('creates SQS object with region set to eu-west-2', async () => {
-    await sendMessage(getSampleConfig())
+  test('creates SQS object with region set to provided value', async () => {
+    const region = 'genertela-5'
+    await sendMessage({ ...getSampleConfig(), region })
     expect(AWS.SQS).toHaveBeenCalledWith(
-      expect.objectContaining({ region: 'eu-west-2' })
+      expect.objectContaining({ region })
     )
   })
 
@@ -34,6 +35,7 @@ describe('SQS send message tests', () => {
   test('only provides initialisation attributes to SQS constructor', async () => {
     const initialisationAttributes = {
       accessKeyId: 'abc-123',
+      region: 'glorantha-south-1',
       secretAccessKey: 'zyx-098'
     }
     const messageAttributes = {

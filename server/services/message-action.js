@@ -14,6 +14,7 @@ const sqsCalculationMessageAction = async message => {
   const {
     sqsPaymentQueueConfig: {
       url: queueUrl,
+      region,
       publishCredentials: {
         accessKeyId,
         secretAccessKey
@@ -23,12 +24,13 @@ const sqsCalculationMessageAction = async message => {
   const claim = JSON.parse(message.Body)
   const value = calculationService.calculate(claim)
 
-  if (queueUrl !== '' && accessKeyId !== '' && secretAccessKey !== '') {
+  if ([queueUrl, accessKeyId, region, secretAccessKey].every(param => param !== '')) {
     console.log('sending a message')
     sendMessage({
       accessKeyId,
       messageBody: JSON.stringify({ claimId: claim.claimId, value }),
       queueUrl,
+      region,
       secretAccessKey
     })
   } else {

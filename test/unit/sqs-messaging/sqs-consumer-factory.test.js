@@ -29,10 +29,12 @@ describe('SqsConsumerFactory tests', () => {
     )
   })
 
-  test('Defaults region to eu-west-2', () => {
-    SqsConsumerFactory.create()
+  test('Creates consumer against provided region', () => {
+    const params = { region: 'lap-land-29' }
+    SqsConsumerFactory.create(params)
+    console.log(sqsConsumer.Consumer.create.mock.calls[0])
     expect(sqsConsumer.Consumer.create).toHaveBeenCalledWith(
-      expect.objectContaining({ region: 'eu-west-2' })
+      expect.objectContaining(params)
     )
   })
 
@@ -64,10 +66,11 @@ describe('SqsConsumerFactory tests', () => {
   })
 
   test('sets region when configuring sqs object', () => {
-    const config = { accessKeyId: 'abc-123', secretAccessKey: 'zyx-098' }
+    const region = 'seven-kingdoms-8'
+    const config = { accessKeyId: 'abc-123', region, secretAccessKey: 'zyx-098' }
     SqsConsumerFactory.create(config)
     expect(AWS.SQS).toHaveBeenCalledWith(
-      expect.objectContaining({ region: 'eu-west-2' })
+      expect.objectContaining({ region })
     )
   })
 })
