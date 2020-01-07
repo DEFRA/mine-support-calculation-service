@@ -76,24 +76,25 @@ describe('sqs calculation message action', () => {
   })
 
   test('uses calculation service to calculate claim', () => {
-    const claim = mockClaim()
-    sqsCalculationMessageAction(claim)
+    const message = mockMessage()
+    sqsCalculationMessageAction(message)
     expect(calculationService.calculate).toHaveBeenCalledWith(
-      expect.objectContaining(claim)
+      expect.objectContaining(JSON.parse(message.Body))
     )
   })
 
   test('sends message with claim id on payment queue', () => {
-    const claim = mockClaim('SHAFT999')
-    sqsCalculationMessageAction(claim)
+    const message = mockMessage('SHAFT999')
+    const { claimId } = JSON.parse(message.Body)
+    sqsCalculationMessageAction(message)
     expect(JSON.parse(sendMessage.mock.calls[0][0].messageBody)).toStrictEqual(
-      expect.objectContaining({ claimId: claim.claimId })
+      expect.objectContaining({ claimId })
     )
   })
 
   test('sends message with calculation value on payment queue', () => {
-    const claim = mockClaim()
-    sqsCalculationMessageAction(claim)
+    const message = mockMessage()
+    sqsCalculationMessageAction(message)
     expect(JSON.parse(sendMessage.mock.calls[0][0].messageBody)).toStrictEqual(
       expect.objectContaining({ value: 190.96 })
     )
@@ -101,7 +102,7 @@ describe('sqs calculation message action', () => {
 
   test('sends message on given url', () => {
     const { sqsPaymentQueueConfig: { url: queueUrl } } = mockConfig
-    sqsCalculationMessageAction(mockClaim())
+    sqsCalculationMessageAction(mockMessage())
     expect(sendMessage).toHaveBeenCalledWith(
       expect.objectContaining({ queueUrl })
     )
@@ -109,7 +110,7 @@ describe('sqs calculation message action', () => {
 
   test('sends message with given access key id', () => {
     const { sqsPaymentQueueConfig: { publishCredentials: { accessKeyId } } } = mockConfig
-    sqsCalculationMessageAction(mockClaim())
+    sqsCalculationMessageAction(mockMessage())
     expect(sendMessage).toHaveBeenCalledWith(
       expect.objectContaining({ accessKeyId })
     )
@@ -117,7 +118,7 @@ describe('sqs calculation message action', () => {
 
   test('sends message with given secret access key', () => {
     const { sqsPaymentQueueConfig: { publishCredentials: { secretAccessKey } } } = mockConfig
-    sqsCalculationMessageAction(mockClaim())
+    sqsCalculationMessageAction(mockMessage())
     expect(sendMessage).toHaveBeenCalledWith(
       expect.objectContaining({ secretAccessKey })
     )
@@ -126,7 +127,7 @@ describe('sqs calculation message action', () => {
   test('doesn\'t send a message if queue url is empty', () => {
     const url = mockConfig.sqsPaymentQueueConfig.url
     mockConfig.sqsPaymentQueueConfig.url = ''
-    sqsCalculationMessageAction(mockClaim())
+    sqsCalculationMessageAction(mockMessage())
     expect(sendMessage).not.toHaveBeenCalled()
     mockConfig.sqsPaymentQueueConfig.url = url
   })
@@ -134,7 +135,7 @@ describe('sqs calculation message action', () => {
   test('doesn\'t send a message if access key id is empty', () => {
     const accessKeyId = mockConfig.sqsPaymentQueueConfig.publishCredentials.accessKeyId
     mockConfig.sqsPaymentQueueConfig.publishCredentials.accessKeyId = ''
-    sqsCalculationMessageAction(mockClaim())
+    sqsCalculationMessageAction(mockMessage())
     expect(sendMessage).not.toHaveBeenCalled()
     mockConfig.sqsPaymentQueueConfig.publishCredentials.accessKeyId = accessKeyId
   })
@@ -142,17 +143,19 @@ describe('sqs calculation message action', () => {
   test('doesn\'t send a message if secret access key is empty', () => {
     const secretAccessKey = mockConfig.sqsPaymentQueueConfig.publishCredentials.secretAccessKey
     mockConfig.sqsPaymentQueueConfig.publishCredentials.secretAccessKey = ''
-    sqsCalculationMessageAction(mockClaim())
+    sqsCalculationMessageAction(mockMessage())
     expect(sendMessage).not.toHaveBeenCalled()
     mockConfig.sqsPaymentQueueConfig.publishCredentials.secretAccessKey = secretAccessKey
   })
 })
 
-const mockClaim = (claimId = 'MINE123') => ({
-  claimId,
-  propertyType: 'business',
-  accessible: false,
-  dateOfSubsidence: '2019-07-26T09:54:19.622Z',
-  mineType: ['gold'],
-  email: 'test@email.com'
+const mockMessage = (claimId = 'MINE123') => ({
+  Body: JSON.stringify({
+    claimId,
+    propertyType: 'business',
+    accessible: false,
+    dateOfSubsidence: '2019-07-26T09:54:19.622Z',
+    mineType: ['gold'],
+    email: 'test@email.com'
+  })
 })

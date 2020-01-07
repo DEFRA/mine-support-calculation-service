@@ -20,12 +20,14 @@ const sqsCalculationMessageAction = async message => {
       }
     }
   } = config
-  const value = calculationService.calculate(message)
+  const claim = JSON.parse(message.Body)
+  const value = calculationService.calculate(claim)
+
   if (queueUrl !== '' && accessKeyId !== '' && secretAccessKey !== '') {
     console.log('sending a message')
     sendMessage({
       accessKeyId,
-      messageBody: JSON.stringify({ claimId: message.claimId, value }),
+      messageBody: JSON.stringify({ claimId: claim.claimId, value }),
       queueUrl,
       secretAccessKey
     })
