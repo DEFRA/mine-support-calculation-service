@@ -9,17 +9,17 @@ const mqSchema = joi.object({
     transport: joi.string().default('tcp')
   },
   sqsCalculationQueue: {
-    url: joi.string().default(''),
+    url: joi.string().allow(''),
     listenCredentials: {
-      accessKeyId: joi.string().default(''),
-      secretAccessKey: joi.string().default('')
+      accessKeyId: joi.string().allow(''),
+      secretAccessKey: joi.string().allow('')
     }
   },
   sqsPaymentQueue: {
-    url: joi.string().default(''),
+    url: joi.string().allow(''),
     publishCredentials: {
-      accessKeyId: joi.string().default(''),
-      secretAccessKey: joi.string().default('')
+      accessKeyId: joi.string().allow(''),
+      secretAccessKey: joi.string().allow('')
     }
   },
   calculationQueue: {
@@ -35,11 +35,6 @@ const mqSchema = joi.object({
   }
 })
 
-// if env vars are undefined, they're defaulted to zero-length strings, but joi doesn't like
-// this and will throw an error if it gets zero-length strings. Therefore, wrap any env vars
-// that might not be provided in this function for a 'hapi-er' experience...
-const substituteUndefinedForZeroLengthString = str => str === '' ? undefined : str
-
 const mqConfig = {
   messageQueue: {
     host: process.env.MESSAGE_QUEUE_HOST,
@@ -49,17 +44,17 @@ const mqConfig = {
     transport: process.env.MESSAGE_QUEUE_TRANSPORT
   },
   sqsCalculationQueue: {
-    url: substituteUndefinedForZeroLengthString(process.env.SQS_CALCULATION_QUEUE_URL),
+    url: process.env.SQS_CALCULATION_QUEUE_URL,
     listenCredentials: {
-      accessKeyId: substituteUndefinedForZeroLengthString(process.env.SQS_CALCULATION_QUEUE_LISTEN_ACCESS_KEY_ID),
-      secretAccessKey: substituteUndefinedForZeroLengthString(process.env.SQS_CALCULATION_QUEUE_LISTEN_SECRET_ACCESS_KEY)
+      accessKeyId: process.env.SQS_CALCULATION_QUEUE_LISTEN_ACCESS_KEY_ID,
+      secretAccessKey: process.env.SQS_CALCULATION_QUEUE_LISTEN_SECRET_ACCESS_KEY
     }
   },
   sqsPaymentQueue: {
-    url: substituteUndefinedForZeroLengthString(process.env.SQS_PAYMENT_QUEUE_URL),
+    url: process.env.SQS_PAYMENT_QUEUE_URL,
     publishCredentials: {
-      accessKeyId: substituteUndefinedForZeroLengthString(process.env.SQS_PAYMENT_QUEUE_PUBLISH_ACCESS_KEY_ID),
-      secretAccessKey: substituteUndefinedForZeroLengthString(process.env.SQS_PAYMENT_QUEUE_PUBLISH_SECRET_ACCESS_KEY)
+      accessKeyId: process.env.SQS_PAYMENT_QUEUE_PUBLISH_ACCESS_KEY_ID,
+      secretAccessKey: process.env.SQS_PAYMENT_QUEUE_PUBLISH_SECRET_ACCESS_KEY
     }
   },
   calculationQueue: {
