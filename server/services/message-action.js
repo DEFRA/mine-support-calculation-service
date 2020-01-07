@@ -10,7 +10,7 @@ async function messageAction (claim, sender) {
     console.log('error sending message', error)
   }
 }
-const sqsCalculationMessageAction = async (message) => {
+const sqsCalculationMessageAction = async message => {
   const {
     sqsPaymentQueueConfig: {
       url: queueUrl,
@@ -22,6 +22,7 @@ const sqsCalculationMessageAction = async (message) => {
   } = config
   const value = calculationService.calculate(message)
   if (queueUrl !== '' && accessKeyId !== '' && secretAccessKey !== '') {
+    console.log('sending a message')
     sendMessage({
       accessKeyId,
       messageBody: JSON.stringify({ claimId: message.claimId, value }),
@@ -32,5 +33,5 @@ const sqsCalculationMessageAction = async (message) => {
     console.log('No SQS message sent as env vars aren\'t set up')
   }
 }
-const paymentQueueConfig = () => config.sqsPaymentQueueConfig
-module.exports = { messageAction, sqsCalculationMessageAction, paymentQueueConfig }
+
+module.exports = { messageAction, sqsCalculationMessageAction }

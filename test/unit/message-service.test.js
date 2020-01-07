@@ -12,6 +12,7 @@ require('../../server/services/messaging/message-sender')
 require('../../server/services/messaging/message-receiver')
 const { registerQueues, closeConnections } = require('../../server/services/message-service')
 const { SqsConsumerFactory } = require('../../server/services/sqs-messaging/sqs-consumer-factory')
+const { sqsCalculationMessageAction } = require('../../server/services/message-action')
 
 jest.mock('../../server/services/messaging/message-sender', () => jest.fn(() => ({
   openConnection: jest.fn(() => Promise.resolve()),
@@ -31,6 +32,7 @@ jest.mock('../../server/services/sqs-messaging/sqs-consumer-factory', () => ({
   }
 }))
 jest.mock('../../server/config', () => mockConfig)
+jest.mock('../../server/services/message-action')
 
 describe('message-service tests', () => {
   beforeEach(() => {
@@ -79,13 +81,20 @@ describe('message-service tests', () => {
     expect(SqsConsumerFactory.create.mock.results[0].value.start).toHaveBeenCalled()
   })
 
-  test('passes message hander', async () => {
+  test('passes message handler', async () => {
     await registerQueues()
     expect(SqsConsumerFactory.create).toHaveBeenCalledWith(
       expect.objectContaining({
         handleMessage: expect.any(Function)
       })
     )
+  })
+
+  test('message handler calls sqsCalculationMessageAction', async () => {
+    await registerQueues()
+    const { handleMessage } = SqsConsumerFactory.create.mock.calls[0][0]
+    handleMessage({})
+    expect(sqsCalculationMessageAction).toHaveBeenCalled()
   })
 
   test('closeConnections stops polling', async () => {

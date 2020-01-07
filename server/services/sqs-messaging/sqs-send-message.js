@@ -12,7 +12,7 @@ const getMessageAttributes = config => ({
 
 const sendMessage = async (config) => {
   const sqs = new AWS.SQS(getInitialisationAttributes(config))
-  sqs.sendMessage(getMessageAttributes(config))
+  await sqs.sendMessage(getMessageAttributes(config)).promise()
 }
 
 module.exports = { sendMessage }

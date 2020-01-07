@@ -69,6 +69,7 @@ describe('message action', () => {
     await messageAction(claim, mockSender)
   })
 })
+
 describe('sqs calculation message action', () => {
   beforeEach(() => {
     jest.clearAllMocks()
