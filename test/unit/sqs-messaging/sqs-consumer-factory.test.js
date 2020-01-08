@@ -17,7 +17,7 @@ describe('SqsConsumerFactory tests', () => {
   test('returns created Consumer', () => {
     const sampleConsumer = Symbol('sampleConsumer')
     sqsConsumer.Consumer.create = jest.fn(() => sampleConsumer)
-    const consumer = SqsConsumerFactory.create()
+    const consumer = SqsConsumerFactory.create(generateConfig())
     expect(consumer).toBe(sampleConsumer)
   })
 
@@ -29,48 +29,50 @@ describe('SqsConsumerFactory tests', () => {
     )
   })
 
-  test('Creates consumer against provided region', () => {
-    const params = { region: 'lap-land-29' }
-    SqsConsumerFactory.create(params)
-    console.log(sqsConsumer.Consumer.create.mock.calls[0])
-    expect(sqsConsumer.Consumer.create).toHaveBeenCalledWith(
-      expect.objectContaining(params)
-    )
-  })
-
-  test('Defaults waitTimeSeconds to 10', () => {
-    SqsConsumerFactory.create()
-    expect(sqsConsumer.Consumer.create).toHaveBeenCalledWith(
-      expect.objectContaining({ waitTimeSeconds: 10 })
-    )
-  })
-
-  test('Configures sqs object if access key id and secret access key are provided', () => {
-    const config = { accessKeyId: 'abc-123', secretAccessKey: 'zyx-098' }
+  test('Configures sqs object', () => {
+    const config = generateConfig()
     SqsConsumerFactory.create(config)
     expect(AWS.SQS).toHaveBeenCalledWith(
-      expect.objectContaining(config)
+      expect.objectContaining({
+        accessKeyId: config.accessKeyId,
+        region: config.region,
+        secretAccessKey: config.secretAccessKey
+      })
     )
   })
 
-  test('provides pre-configured sqs object if access key id and secret access key are provided', () => {
-    let mockSQSInstance
-    AWS.SQS = jest.fn(() => {
-      mockSQSInstance = this
-    })
-    const config = { accessKeyId: 'abc-123', secretAccessKey: 'zyx-098' }
+  test('sets accessKeyId when configuring sqs object', () => {
+    const accessKeyId = 'abcd-1234'
+    const config = generateConfig({ accessKeyId })
     SqsConsumerFactory.create(config)
-    expect(sqsConsumer.Consumer.create).toHaveBeenCalledWith(
-      expect.objectContaining({ sqs: mockSQSInstance })
+    expect(AWS.SQS).toHaveBeenCalledWith(
+      expect.objectContaining({ accessKeyId })
+    )
+  })
+
+  test('sets secretAccessKey when configuring sqs object', () => {
+    const secretAccessKey = 'secret-ninja-99'
+    const config = generateConfig({ secretAccessKey })
+    SqsConsumerFactory.create(config)
+    expect(AWS.SQS).toHaveBeenCalledWith(
+      expect.objectContaining({ secretAccessKey })
     )
   })
 
   test('sets region when configuring sqs object', () => {
     const region = 'seven-kingdoms-8'
-    const config = { accessKeyId: 'abc-123', region, secretAccessKey: 'zyx-098' }
+    const config = generateConfig({ region })
     SqsConsumerFactory.create(config)
     expect(AWS.SQS).toHaveBeenCalledWith(
       expect.objectContaining({ region })
     )
+  })
+
+  const generateConfig = config => ({
+    accessKeyId: 'abc-123',
+    queueUrl: 'sample-queue-url',
+    region: 'eu-west-2',
+    secretAccessKey: 'zyx-098',
+    ...config
   })
 })

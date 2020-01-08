@@ -8,13 +8,10 @@ class SqsConsumerFactory {
 
   static parseConfig (config) {
     const parsedConfig = {
-      waitTimeSeconds: 10,
-      ...config
+      queueUrl: config.queueUrl
     }
-    if (this.configureSQS(config)) {
-      const { accessKeyId, region, secretAccessKey } = config
-      parsedConfig.sqs = new AWS.SQS({ accessKeyId, region, secretAccessKey })
-    }
+    const { accessKeyId, region, secretAccessKey } = config
+    parsedConfig.sqs = new AWS.SQS({ accessKeyId, region, secretAccessKey })
     return parsedConfig
   }
 
