@@ -1,44 +1,40 @@
 const joi = require('@hapi/joi')
 
 const mqSchema = joi.object({
-  messageQueue: {
-    host: joi.string().default('localhost'),
-    hostname: joi.string().default('localhost'),
-    port: joi.number().default(5672),
-    reconnect_Limit: joi.number().default(10),
-    transport: joi.string().default('tcp')
-  },
   calculationQueue: {
-    address: joi.string().default('calculation'),
-    username: joi.string(),
-    password: joi.string()
+    url: joi.string().allow(''),
+    region: joi.string().allow(''),
+    listenCredentials: {
+      accessKeyId: joi.string().allow(''),
+      secretAccessKey: joi.string().allow('')
+    }
   },
   paymentQueue: {
-    address: joi.string().default('payment'),
-    username: joi.string(),
-    password: joi.string(),
-    sendTimeoutInSeconds: joi.number().default(10)
+    url: joi.string().allow(''),
+    region: joi.string().allow(''),
+    publishCredentials: {
+      accessKeyId: joi.string().allow(''),
+      secretAccessKey: joi.string().allow('')
+    }
   }
 })
 
 const mqConfig = {
-  messageQueue: {
-    host: process.env.MESSAGE_QUEUE_HOST,
-    hostname: process.env.MESSAGE_QUEUE_HOST,
-    port: process.env.MESSAGE_QUEUE_PORT,
-    reconnect_Limit: process.env.MESSAGE_QUEUE_RECONNECT_LIMIT,
-    transport: process.env.MESSAGE_QUEUE_TRANSPORT
-  },
   calculationQueue: {
-    address: process.env.CALCULATION_QUEUE_ADDRESS,
-    username: process.env.CALCULATION_QUEUE_USER,
-    password: process.env.CALCULATION_QUEUE_PASSWORD
+    url: process.env.CALCULATION_QUEUE_URL,
+    region: process.env.CALCULATION_QUEUE_REGION,
+    publishCredentials: {
+      accessKeyId: process.env.CALCULATION_QUEUE_ACCESS_KEY_ID,
+      secretAccessKey: process.env.CALCULATION_QUEUE_ACCESS_KEY
+    }
   },
   paymentQueue: {
-    address: process.env.PAYMENT_QUEUE_ADDRESS,
-    username: process.env.PAYMENT_QUEUE_USER,
-    password: process.env.PAYMENT_QUEUE_PASSWORD,
-    sendTimeoutInSeconds: process.env.SEND_TIMEOUT_IN_SECONDS
+    url: process.env.PAYMENT_QUEUE_URL,
+    region: process.env.PAYMENT_QUEUE_REGION,
+    publishCredentials: {
+      accessKeyId: process.env.PAYMENT_QUEUE_ACCESS_KEY_ID,
+      secretAccessKey: process.env.PAYMENT_QUEUE_ACCESS_KEY
+    }
   }
 }
 

@@ -1,26 +1,18 @@
-const { getSenderConfig } = require('./config-helper')
-const MessageBase = require('./message-base')
+const AWS = require('aws-sdk')
 
-class MessageSender extends MessageBase {
-  constructor (name, config) {
-    super(name, config)
-    this.senderConfig = getSenderConfig(this.name, config)
-  }
+const getInitialisationAttributes = config => ({
+  accessKeyId: config.accessKeyId,
+  region: config.region,
+  secretAccessKey: config.secretAccessKey
+})
+const getMessageAttributes = config => ({
+  QueueUrl: config.queueUrl,
+  MessageBody: config.messageBody
+})
 
-  async sendMessage (message) {
-    const data = JSON.stringify(message)
-    const sender = await this.connection.createAwaitableSender(this.senderConfig)
-    try {
-      console.log(`${this.name} sending message`, data)
-      const delivery = await sender.send({ body: data })
-      console.log(`message sent ${this.name}`)
-      return delivery
-    } catch (error) {
-      console.error('failed to send message', error)
-    } finally {
-      await sender.close()
-    }
-  }
+const sendMessage = async (config) => {
+  const sqs = new AWS.SQS(getInitialisationAttributes(config))
+  await sqs.sendMessage(getMessageAttributes(config)).promise()
 }
 
-module.exports = MessageSender
+module.exports = { sendMessage }

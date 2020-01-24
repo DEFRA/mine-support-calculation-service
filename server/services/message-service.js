@@ -1,14 +1,35 @@
-const MessageSender = require('./messaging/message-sender')
-const MessageReceiver = require('./messaging/message-receiver')
-const messageAction = require('./message-action')
+const { messageAction } = require('./message-action')
+const { SqsConsumerFactory } = require('./messaging/sqs-consumer-factory')
 const config = require('../config')
-
-const messageSender = new MessageSender('payment-queue-sender', config.paymentQueueConfig)
-const messageReceiver = new MessageReceiver('calculation-queue-receiver', config.calculationQueueConfig)
+let sqsConsumer
 
 async function registerQueues () {
-  await openConnections()
-  await messageReceiver.setupReceiver((message) => messageAction(message, messageSender))
+  startPollingSQSCalculationQueue()
+}
+
+function startPollingSQSCalculationQueue () {
+  const {
+    sqsCalculationQueueConfig: {
+      url: queueUrl,
+      region,
+      listenCredentials: { accessKeyId, secretAccessKey }
+    }
+  } = config
+
+  if ([queueUrl, accessKeyId, region, secretAccessKey].every(param => param !== '')) {
+    console.log('setting up sqs calculation queue')
+    sqsConsumer = SqsConsumerFactory.create({
+      accessKeyId,
+      handleMessage: messageAction,
+      queueUrl,
+      region,
+      secretAccessKey
+    })
+    sqsConsumer.start()
+    console.log('sqs calculation queue polling started')
+  } else {
+    console.log('sqs calculation queue polling skipped as env vars not present')
+  }
 }
 
 process.on('SIGTERM', async function () {
@@ -22,13 +43,7 @@ process.on('SIGINT', async function () {
 })
 
 async function closeConnections () {
-  await messageSender.closeConnection()
-  await messageReceiver.closeConnection()
-}
-
-async function openConnections () {
-  await messageSender.openConnection()
-  await messageReceiver.openConnection()
+  sqsConsumer.stop()
 }
 
 module.exports = {
