@@ -14,15 +14,20 @@ container:
   allowPrivilegeEscalation: false
   restartPolicy: Always
   redeployOnChange: update this field to force a change
-  messageQueueHost: amq
-  messageQueuePort: 5672
-  messageQueueTransport: tcp
-  calculationQueueAddress: calculation
-  calculationQueueUser: artemis
-  calculationQueuePassword: artemis
-  paymentQueueAddress: payment
-  paymentQueueUser: artemis
-  paymentQueuePassword: artemis
+  calculationQueueName: calculation
+  calculationQueueEndpoint: http://ffc-demo-calculation-message-queue:9324
+  calculationQueueUrl: http://ffc-demo-calculation-message-queue:9324/queue/calculation
+  calculationQueueRegion: eu-west-2
+  calculationQueueAccessKeyId: elasticmq
+  calculationQueueSecretAccessKey: elasticmq
+  calculationCreateQueue: true
+  paymentQueueName: payment
+  paymentQueueEndpoint: http://ffc-demo-calculation-message-queue:9324
+  paymentQueueUrl: http://ffc-demo-calculation-message-queue:9324/queue/payment
+  paymentQueueRegion: eu-west-2
+  paymentQueueAccessKeyId: elasticmq
+  paymentQueueSecretAccessKey: elasticmq
+  paymentCreateQueue: true
 replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1
