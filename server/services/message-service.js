@@ -4,32 +4,20 @@ const config = require('../config')
 let sqsConsumer
 
 async function registerQueues () {
-  startPollingSQSCalculationQueue()
+  registerCalculationQueue()
 }
 
-function startPollingSQSCalculationQueue () {
-  const {
-    sqsCalculationQueueConfig: {
-      url: queueUrl,
-      region,
-      listenCredentials: { accessKeyId, secretAccessKey }
-    }
-  } = config
-
-  if ([queueUrl, accessKeyId, region, secretAccessKey].every(param => param !== '')) {
-    console.log('setting up sqs calculation queue')
-    sqsConsumer = SqsConsumerFactory.create({
-      accessKeyId,
-      handleMessage: messageAction,
-      queueUrl,
-      region,
-      secretAccessKey
-    })
-    sqsConsumer.start()
-    console.log('sqs calculation queue polling started')
-  } else {
-    console.log('sqs calculation queue polling skipped as env vars not present')
-  }
+function registerCalculationQueue () {
+  console.log('configuring calculation queue')
+  sqsConsumer = SqsConsumerFactory.create({
+    queueUrl: config.calculationQueueConfig.queueUrl,
+    region: config.calculationQueueConfig.region,
+    handleMessage: messageAction,
+    accessKeyId: config.calculationQueueConfig.credentials.accessKeyId,
+    secretAccessKey: config.calculationQueueConfig.credentials.secretAccessKey
+  })
+  sqsConsumer.start()
+  console.log('calculation queue polling started')
 }
 
 process.on('SIGTERM', async function () {
