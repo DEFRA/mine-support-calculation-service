@@ -63,7 +63,7 @@ node {
     } else {
       stage('Helm install') {
         withCredentials([
-          string(credentialsId: 'sqsQueueEndPoint', variable: 'sqsQueueEndPoint'),
+          string(credentialsId: 'sqsQueueEndpoint', variable: 'sqsQueueEndpoint'),
           string(credentialsId: 'calculationQueueUrlPR', variable: 'calculationQueueUrl'),
           string(credentialsId: 'calculationQueueAccessKeyIdListen', variable: 'calculationQueueAccessKeyId'),
           string(credentialsId: 'calculationQueueSecretAccessKeyListen', variable: 'calculationQueueSecretAccessKey'),
@@ -72,7 +72,7 @@ node {
           string(credentialsId: 'paymentQueueSecretAccessKeySend', variable: 'paymentQueueSecretAccessKey')
         ]) {
           def helmValues = [
-            /container.calculationQueueEndpoint="$sqsQueueEndPoint"/,
+            /container.calculationQueueEndpoint="$sqsQueueEndpoint"/,
             /container.calculationQueueUrl="$calculationQueueUrl"/,
             /container.calculationQueueAccessKeyId="$calculationQueueAccessKeyId"/,
             /container.calculationQueueSecretAccessKey="$calculationQueueSecretAccessKey"/,
