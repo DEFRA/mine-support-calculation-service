@@ -68,11 +68,14 @@ node {
           usernamePassword(credentialsId: 'paymentSendPR', usernameVariable: 'paymentQueueUsername', passwordVariable: 'paymentQueuePassword')
         ]) {
           def helmValues = [
-            /container.calculationQueuePassword="$calculationQueuePassword"/,
-            /container.calculationQueueUser="$calculationQueueUsername"/,
-            /container.messageQueueHost="$messageQueueHost"/,
-            /container.paymentQueuePassword="$paymentQueuePassword"/,
-            /container.paymentQueueUser="$paymentQueueUsername"/,
+            /container.calculationQueueEndpoint="$calculationQueueEndpoint"/,
+            /container.calculationQueueUrl="$calculationQueueUrl"/,
+            /container.calculationQueueAccessKeyId="$calculationQueueAccessKeyId"/,
+            /container.calculationQueueSecretAccessKey="$calculationQueueSecretAccessKey"/,
+            /container.paymentQueueEndpoint="$paymentQueueEndpoint"/,
+            /container.paymentQueueUrl="$paymentQueueUrl"/,
+            /container.paymentQueueAccessKeyId="$paymentQueueAccessKeyId"/,
+            /container.paymentQueueSecretAccessKey="$paymentQueueSecretAccessKey"/,
             /container.redeployOnChange="$pr-$BUILD_NUMBER"/
           ].join(',')
 
