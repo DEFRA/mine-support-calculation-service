@@ -16,7 +16,7 @@ Or:
 
 Or:
 - Node 10
-- AMQP 1.0 message queue
+- AWS SQS compatible message queue
 
 ## Environment variables
 
@@ -25,15 +25,20 @@ The following environment variables are required by the application container. V
  | Name                       | Description                 | Required | Default     | Valid                               | Notes |
  |----------------------------|-----------------------------|:--------:|-------------|-------------------------------------|-------|
  | NODE_ENV                   | Node environment            | no       | development | development,test,production         |       |
- | MESSAGE_QUEUE_HOST         | Message queue host          | no       |             | myservicebus.servicebus.windows.net |       |
- | MESSAGE_QUEUE_PORT         | Message queue port          | no       |             | 5671,5672                           |       |
- | MESSAGE_QUEUE_TRANSPORT    | Message queue transport     | yes      | tcp         | tcp,ssl                             | standard port is 5671 for ssl, 5672 for tcp |
- | CALCULATION_QUEUE_ADDRESS  | calculation queue name      | no       |             | calculation                         |       |
- | CALCULATION_QUEUE_USER     | calculation queue user name | no       |             |                                     |       |
- | CALCULATION_QUEUE_PASSWORD | calculation queue password  | no       |             |                                     |       |
- | PAYMENT_QUEUE_ADDRESS      | payment queue name          | no       |             | payment                             |       |
- | PAYMENT_QUEUE_USER         | payment queue user name     | no       |             |                                     |       |
- | PAYMENT_QUEUE_PASSWORD     | payment queue password      | no       |             |                                     |       |
+ | CALCULATION_QUEUE_NAME     | Message queue name          | no       | calculation |                                     |       |
+ | CALCULATION_ENDPOINT       | Message base url            | no       | http://localhost:9324 |                           |       |
+ | CALCULATION_QUEUE_URL      | Message queue url           | no       | http://localhost:9324/queue/calculation |         |or tcp |
+ | CALCULATION_QUEUE_REGION   | AWS region                  | no       | eu-west-2   |                                     |Ignored in local dev |
+ | CALCULATION_QUEUE_ACCESS_KEY_ID | Message access key Id  | no       |             |                                     |       |
+ | CALCULATION_QUEUE_ACCESS_KEY | Message access key        | no       |             |                                     |       |
+ | CREATE_CALCULATION_QUEUE   | Create queue before connection | no    | true        | For AWS deployments must be set to false|   |
+ | PAYMENT_QUEUE_NAME         | Message queue name          | no       | payment     |                                     |       |
+ | PAYMENT_ENDPOINT           | Message base url            | no       | http://localhost:9324 |                           |       |
+ | PAYMENT_QUEUE_URL          | Message queue url           | no       | http://localhost:9324/queue/payment |         |or tcp |
+ | PAYMENT_QUEUE_REGION       | AWS region                  | no       | eu-west-2   |                                     |Ignored in local dev |
+ | PAYMENT_QUEUE_ACCESS_KEY_ID | Message access key Id      | no       |             |                                     |       |
+ | PAYMENT_QUEUE_ACCESS_KEY   | Message access key          | no       |             |                                     |       |
+ | CREATE_PAYMENT_QUEUE       | Create queue before connection | no    | true        | For AWS deployments must be set to false|   |
  | HEALTHZ_FILE_INTERVAL_IN_MILLIS | Interval for creation of healthz file | no | 10000 |                                  | Maximum value 30000  |
 
 ## How to run tests
@@ -56,9 +61,6 @@ Alternatively, the same tests may be run locally via npm:
 # Run tests without Docker
 npm run test
 ```
-
-Running the integration tests locally requires a message bus that supports AMQP 1.0 and the following environment variables setting:
-`MESSAGE_QUEUE_HOST`, `MESSAGE_QUEUE_PORT`, `CALCULATION_QUEUE_USER`, `CALCULATION_QUEUE_PASSWORD`, `PAYMENT_QUEUE_ADDRESS`, `PAYMENT_QUEUE_USER`, `PAYMENT_QUEUE_PASSWORD`
 
 ## Running the application
 
@@ -88,30 +90,6 @@ Additional Docker Compose files are provided for scenarios such as linking to ot
 Link to other services:
 ```
 docker-compose -f docker-compose.yaml -f docker-compose.link.yaml up
-```
-
-### Test the service
-
-This service reacts to messages retrieved from an AMQP 1.0 message broker so manual testing involves pushing messages into the appropriate message queue. The [start](./scripts/start) script runs [ActiveMQ Artemis](https://activemq.apache.org/components/artemis) alongside the application to provide the required message bus and broker.
-
-The [send-test-mesage](./scripts/send-test-message) script will push a valid message into one of the Artemis queues which the app subscribes to. The container logs should show the message being picked up and processed automatically when the following command is executed.
-
-```
-# Send a sample message to the Artemis message queue
-scripts/send-test-message
-```
-
-For more detailed testing, messages can be pushed into queues via the Artemis console UI hosted at http://localhost:8161/console/login (username: artemis, password: artemis). Messages should match the format of the sample JSON below.
-
-```
-{
-  "claimId": "MINE123",
-  "propertyType": "business",
-  "accessible": false,
-  "dateOfSubsidence": "2019-07-26T09:54:19.622Z",
-  "mineType": ["gold"],
-  "email": "test@email.com"
-}
 ```
 
 ### Link to sibling services
