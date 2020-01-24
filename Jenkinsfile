@@ -76,10 +76,12 @@ node {
             /container.calculationQueueUrl="$calculationQueueUrl"/,
             /container.calculationQueueAccessKeyId="$calculationQueueAccessKeyId"/,
             /container.calculationQueueSecretAccessKey="$calculationQueueSecretAccessKey"/,
+            /container.calculationCreateQueue="false"/,
             /container.paymentQueueEndpoint="$sqsQueueEndPoint"/,
             /container.paymentQueueUrl="$paymentQueueUrl"/,
             /container.paymentQueueAccessKeyId="$paymentQueueAccessKeyId"/,
             /container.paymentQueueSecretAccessKey="$paymentQueueSecretAccessKey"/,
+            /container.paymentCreateQueue="false"/,
             /container.redeployOnChange="$pr-$BUILD_NUMBER"/
           ].join(',')
 
