@@ -1,22 +1,23 @@
 const { messageAction } = require('./message-action')
-const { SqsConsumerFactory } = require('./messaging/sqs-consumer-factory')
+const MessageConsumer = require('./messaging/message-consumer')
+const createQueue = require('./messaging/create-queue')
 const config = require('../config')
-let sqsConsumer
+let consumer
 
-async function registerQueues () {
-  registerCalculationQueue()
+async function registerService () {
+  if (config.calculationQueueConfig.createQueue) {
+    await createQueue(config.calculationQueueConfig.name, config.calculationQueueConfig)
+  }
+  if (config.paymentQueueConfig.createQueue) {
+    await createQueue(config.paymentQueueConfig.name, config.paymentQueueConfig)
+  }
+  registerCalculationConsumer()
 }
 
-function registerCalculationQueue () {
+function registerCalculationConsumer () {
   console.log('configuring calculation queue')
-  sqsConsumer = SqsConsumerFactory.create({
-    queueUrl: config.calculationQueueConfig.queueUrl,
-    region: config.calculationQueueConfig.region,
-    handleMessage: messageAction,
-    accessKeyId: config.calculationQueueConfig.credentials.accessKeyId,
-    secretAccessKey: config.calculationQueueConfig.credentials.secretAccessKey
-  })
-  sqsConsumer.start()
+  consumer = new MessageConsumer(config.calculationQueueConfig, config.calculationQueueConfig.queueUrl, messageAction)
+  consumer.start()
   console.log('calculation queue polling started')
 }
 
@@ -31,10 +32,10 @@ process.on('SIGINT', async function () {
 })
 
 async function closeConnections () {
-  sqsConsumer.stop()
+  consumer.stop()
 }
 
 module.exports = {
-  registerQueues,
+  registerService,
   closeConnections
 }

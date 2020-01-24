@@ -1,20 +1,17 @@
 const calculationService = require('./calculation-service')
-const { sendMessage } = require('./messaging/message-sender')
+const MessageSender = require('./messaging/message-sender')
 const config = require('../config')
 
-const messageAction = async message => {
-  console.log('received message')
+async function messageAction (message) {
   const claim = JSON.parse(message.Body)
+  console.log('received message ', claim)
+
   const value = calculationService.calculate(claim)
 
-  console.log('sending a message')
-  sendMessage({
-    queueUrl: config.paymentQueueConfig.queueUrl,
-    region: config.paymentQueueConfig.region,
-    messageBody: JSON.stringify({ claimId: claim.claimId, value }),
-    accessKeyId: config.paymentQueueConfig.credentials.accessKeyId,
-    secretAccessKey: config.secretAccessKey.credentials.secretAccessKey
-  })
+  const sender = new MessageSender(config.paymentQueueConfig, config.paymentQueueConfig.queueUrl)
+  const messageBody = { claimId: claim.claimId, value }
+  console.log('sending message ', messageBody)
+  await sender.sendMessage(messageBody)
 }
 
 module.exports = { messageAction }
