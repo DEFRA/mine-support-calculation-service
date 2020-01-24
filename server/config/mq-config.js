@@ -2,19 +2,21 @@ const joi = require('@hapi/joi')
 
 const mqSchema = joi.object({
   calculationQueue: {
-    url: joi.string().allow(''),
+    url: joi.string().default('http://localhost:9324'),
     region: joi.string().allow(''),
+    queue: joi.string().default('calculation'),
     listenCredentials: {
-      accessKeyId: joi.string().allow(''),
-      secretAccessKey: joi.string().allow('')
+      accessKeyId: joi.string(),
+      secretAccessKey: joi.string()
     }
   },
   paymentQueue: {
-    url: joi.string().allow(''),
+    url: joi.string().default('http://localhost:9324'),
     region: joi.string().allow(''),
+    queue: joi.string().default('payment'),
     publishCredentials: {
-      accessKeyId: joi.string().allow(''),
-      secretAccessKey: joi.string().allow('')
+      accessKeyId: joi.string(),
+      secretAccessKey: joi.string()
     }
   }
 })
@@ -23,6 +25,7 @@ const mqConfig = {
   calculationQueue: {
     url: process.env.CALCULATION_QUEUE_URL,
     region: process.env.CALCULATION_QUEUE_REGION,
+    queue: process.env.CALCULATION_QUEUE,
     publishCredentials: {
       accessKeyId: process.env.CALCULATION_QUEUE_ACCESS_KEY_ID,
       secretAccessKey: process.env.CALCULATION_QUEUE_ACCESS_KEY
@@ -31,6 +34,7 @@ const mqConfig = {
   paymentQueue: {
     url: process.env.PAYMENT_QUEUE_URL,
     region: process.env.PAYMENT_QUEUE_REGION,
+    queue: process.env.PAYMENT_QUEUE,
     publishCredentials: {
       accessKeyId: process.env.PAYMENT_QUEUE_ACCESS_KEY_ID,
       secretAccessKey: process.env.PAYMENT_QUEUE_ACCESS_KEY

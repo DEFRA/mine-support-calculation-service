@@ -7,7 +7,7 @@ services:
   ffc-demo-calculation-service:
     command: >
       sh -c "
-        scripts/wait-for/wait-for ffc-demo-calculation-message-queue:5672 --
+        scripts/wait-for/wait-for ffc-demo-calculation-message-queue:9324 --
         npm run start:watch"
     ports:
       - "3005:3005"
@@ -16,5 +16,5 @@ services:
       
   ffc-demo-calculation-message-queue:
     ports:
-      - "8161:8161"
-      - "5672:5672"
+      - "9324:9324"
+      - "9325:9325"

@@ -7,7 +7,7 @@ services:
   ffc-demo-calculation-service:
     command: >
       sh -c "
-        scripts/wait-for/wait-for ffc-demo-calculation-test-message-queue:5672 --
+        scripts/wait-for/wait-for ffc-demo-calculation-test-message-queue:9324 --
         npm run test"
     depends_on:
       - ffc-demo-calculation-message-queue
