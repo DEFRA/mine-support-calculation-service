@@ -15,10 +15,8 @@ async function registerService () {
 }
 
 function registerCalculationConsumer () {
-  console.log('configuring calculation queue')
   consumer = new MessageConsumer(config.calculationQueueConfig, config.calculationQueueConfig.queueUrl, messageAction)
   consumer.start()
-  console.log('calculation queue polling started')
 }
 
 process.on('SIGTERM', async function () {

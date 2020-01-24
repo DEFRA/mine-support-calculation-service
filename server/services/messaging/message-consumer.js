@@ -36,6 +36,7 @@ class MessageConsumer {
 
   start () {
     this.app.start()
+    console.log('message polling started')
   }
 
   stop () {
