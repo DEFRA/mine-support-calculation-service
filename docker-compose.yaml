@@ -13,8 +13,10 @@ services:
       PAYMENT_QUEUE_USER : artemis
       PAYMENT_QUEUE_PASSWORD : artemis
     volumes:
-      - node_modules:/usr/src/app/node_modules
-      - .:/usr/src/app
+      - ./server/:/usr/src/app/server/
+      - ./scripts/:/usr/src/app/scripts/
+      - ./index.js:/usr/src/app/index.js
+      - ./package.json:/usr/src/app/package.json
 
   ffc-demo-calculation-message-queue:
     image: vromero/activemq-artemis:2.9.0-alpine
