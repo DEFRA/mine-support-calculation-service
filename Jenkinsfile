@@ -1,4 +1,4 @@
-@Library('defra-library@0.0.9')
+@Library('defra-library@feature/PSD-492-create-sqs-queue')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
@@ -93,9 +93,9 @@ node {
           defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
         }
       }
-      /* stage('Provision resources') {
+      /*stage('Provision resources') {
         defraUtils.provisionInfrastructure('aws', 'sqs', [pr_code: pr])
-      } */
+      }*/
     }
     if (mergedPrNo != '') {
       stage('Remove merged PR') {
