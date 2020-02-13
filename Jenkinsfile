@@ -93,9 +93,9 @@ node {
           defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
         }
       }
-      /*stage('Provision resources') {
+      stage('Provision resources') {
         defraUtils.provisionInfrastructure('aws', 'sqs', [pr_code: pr])
-      }*/
+      }
     }
     if (mergedPrNo != '') {
       stage('Remove merged PR') {
