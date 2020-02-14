@@ -20,9 +20,11 @@ def timeoutInMinutes = 5
 node {
   checkout scm
   try {
-    stage('Set branch, PR, and containerTag variables') {
-      (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName)
+    stage('Set GitHub status as pending'){
       defraUtils.setGithubStatusPending()
+    }
+    stage('Set branch, PR, and containerTag variables') {
+      (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName, defraUtils.getPackageJsonVersion())
     }
     stage('Helm lint') {
       defraUtils.lintHelm(imageName)
@@ -52,15 +54,25 @@ node {
       stage('Publish chart') {
         defraUtils.publishChart(registry, imageName, containerTag)
       }
+      stage('Trigger GitHub release') {
+        withCredentials([
+          string(credentialsId: 'github_ffc_platform_repo', variable: 'gitToken') 
+        ]) {
+          defraUtils.triggerRelease(containerTag, repoName, containerTag, gitToken)
+        }
+      }
       stage('Trigger Deployment') {
         withCredentials([
           string(credentialsId: 'JenkinsDeployUrl', variable: 'jenkinsDeployUrl'),
           string(credentialsId: 'ffc-demo-calculation-service-deploy-token', variable: 'jenkinsToken')
         ]) {
-          defraUtils.triggerDeploy(jenkinsDeployUrl, 'ffc-demo-calculation-service-deploy', jenkinsToken, ['chartVersion':'1.0.0'])
+          defraUtils.triggerDeploy(jenkinsDeployUrl, 'ffc-demo-calculation-service-deploy', jenkinsToken, ['chartVersion':containerTag])
         }
       }
     } else {
+      stage('Verify version incremented') {
+        defraUtils.verifyPackageJsonVersionIncremented()
+      }
       stage('Helm install') {
         withCredentials([
           string(credentialsId: 'sqsQueueEndpoint', variable: 'sqsQueueEndpoint'),
@@ -99,9 +111,12 @@ node {
         defraUtils.undeployChart(kubeCredsId, imageName, mergedPrNo)
       }
     }
-    defraUtils.setGithubStatusSuccess()
+    stage('Set GitHub status as success'){
+      defraUtils.setGithubStatusSuccess()
+    } 
   } catch(e) {
     defraUtils.setGithubStatusFailure(e.message)
+    defraUtils.notifySlackBuildFailure(e.message, "#generalbuildfailures")
     throw e
   } finally {
     defraUtils.deleteTestOutput(imageName)
