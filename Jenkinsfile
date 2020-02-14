@@ -24,10 +24,10 @@ node {
       (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName, defraUtils.getPackageJsonVersion())
       defraUtils.setGithubStatusPending()
     }
-    stage('Helm lint') {
+    /*stage('Helm lint') {
       defraUtils.lintHelm(imageName)
     }
-    stage('Build test image') {
+     stage('Build test image') {
       defraUtils.buildTestImage(imageName, BUILD_NUMBER)
     }
     stage('Run tests') {
@@ -47,7 +47,7 @@ node {
     }
     stage('Push container image') {
       defraUtils.buildAndPushContainerImage(regCredsId, registry, imageName, containerTag)
-    }
+    }*/
     if (pr == '') {
       stage('Publish chart') {
         defraUtils.publishChart(registry, imageName, containerTag)
@@ -61,7 +61,7 @@ node {
         }
       }
     } else {
-      stage('Helm install') {
+      /*stage('Helm install') {
         withCredentials([
           string(credentialsId: 'sqsQueueEndpoint', variable: 'sqsQueueEndpoint'),
           string(credentialsId: 'calculationQueueUrlPR', variable: 'calculationQueueUrl'),
@@ -92,7 +92,7 @@ node {
 
           defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
         }
-      }
+      }*/
       stage('Provision resources') {
         defraUtils.provisionInfrastructure('aws', 'sqs', [pr_code: pr])
       }
