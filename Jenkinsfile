@@ -96,9 +96,9 @@ node {
       // stage('Provision resources') {
       //   defraUtils.provisionInfrastructure('aws', 'sqs', [pr_code: pr])
       // }
-      stage('Destroy resources') {
-        defraUtils.destroyInfrastructure('aws', 'sqs', [pr_code: pr])
-      }
+      // stage('Destroy resources') {
+      //   defraUtils.destroyInfrastructure('aws', 'sqs', [pr_code: pr])
+      // }
     }
     if (mergedPrNo != '') {
       stage('Remove merged PR') {
