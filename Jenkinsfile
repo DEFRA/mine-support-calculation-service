@@ -93,12 +93,12 @@ node {
           defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, extraCommands)
         }
       }*/
-      stage('Provision resources') {
-        defraUtils.provisionInfrastructure('aws', 'sqs', [pr_code: pr])
-      }
-      // stage('Destroy resources') {
-      //   defraUtils.destroyInfrastructure('aws', 'sqs', [pr_code: pr])
+      // stage('Provision resources') {
+      //   defraUtils.provisionInfrastructure('aws', 'sqs', [pr_code: pr])
       // }
+      stage('Destroy resources') {
+        defraUtils.destroyInfrastructure('aws', 'sqs', [pr_code: pr])
+      }
     }
     if (mergedPrNo != '') {
       stage('Remove merged PR') {
