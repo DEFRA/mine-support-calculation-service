@@ -1,4 +1,4 @@
-@Library('defra-library@0.0.17')
+@Library('defra-library@0.0.16')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
