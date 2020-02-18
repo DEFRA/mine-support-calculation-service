@@ -5,13 +5,16 @@ version: '3.7'
 
 services:
   ffc-demo-calculation-service:
+    build: 
+      context: .
+      target: development
     command: >
       sh -c "
-        scripts/wait-for/wait-for ffc-demo-calculation-test-message-queue:9324 --
+        scripts/wait-for/wait-for ffc-demo-calculation-message-queue:9324 --
         npm run test"
     depends_on:
       - ffc-demo-calculation-message-queue
     volumes:
-      - ./test/:/usr/src/app/test/
-      - ./test-output/:/usr/src/app/test-output/
-      - ./jest.config.js:/usr/src/app/jest.config.js
+      - ./test/:/home/node/test/
+      - ./test-output/:/home/node/test-output/
+      - ./jest.config.js:/home/node/jest.config.js
