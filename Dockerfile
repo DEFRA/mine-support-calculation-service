@@ -20,6 +20,7 @@ ARG PARENT_VERSION
 ARG REGISTRY
 LABEL uk.gov.defra.ffc.parent-image=${REGISTRY}/ffc-node:${PARENT_VERSION}
 COPY --from=development /home/node/index.js /home/node/package*.json /home/node/
+COPY --from=development /home/node/scripts/healthz  /home/node/scripts/healthz
 COPY --from=development /home/node/server  /home/node/server
 RUN npm ci
-CMD [ "node", "index.js" ]
+CMD [ "node", "index" ]
