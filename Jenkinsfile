@@ -1,4 +1,4 @@
-@Library('defra-library@customise-output-mount-path')
+@Library('defra-library@1.0.0')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
@@ -30,7 +30,7 @@ node {
       defraUtils.lintHelm(imageName)
     }
     stage('Build test image') {
-      defraUtils.buildTestImage(imageName, imageName, BUILD_NUMBER)
+      defraUtils.buildTestImage(imageName, BUILD_NUMBER)
     }
     stage('Run tests') {
       defraUtils.runTests(imageName, imageName, BUILD_NUMBER)
