@@ -119,6 +119,6 @@ node {
     defraUtils.notifySlackBuildFailure(e.message, "#generalbuildfailures")
     throw e
   } finally {
-    defraUtils.deleteTestOutput(imageName)
+    defraUtils.deleteTestOutput(imageName, containerSrcFolder)
   }
 }
