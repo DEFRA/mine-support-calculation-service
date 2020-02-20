@@ -95,7 +95,7 @@ node {
       }*/
       stage('Provision resources') {
         // [['service': ['code', 'name', 'type']], 'pr_code', 'queue_purpose', 'repo_name']
-        defraUtils.provisionInfrastructure('aws', 'sqs', [[service: [code: "FFC", name: "Future Farming Services", type: "FFC"]], pr_code: pr, queue_purpose: "post-office", repo_name: "calc-service"])
+        defraUtils.provisionInfrastructure('aws', 'sqs', [service: [code: "FFC", name: "Future Farming Services", type: "FFC"], pr_code: pr, queue_purpose: "post-office", repo_name: "calc-service"])
       }
       // stage('Destroy resources') {
       //   defraUtils.destroyInfrastructure('aws', 'sqs', [pr_code: pr])
