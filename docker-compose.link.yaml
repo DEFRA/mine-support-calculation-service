@@ -5,6 +5,9 @@ version: '3.7'
 
 services:
   ffc-demo-calculation-service:
+    build: 
+      context: .
+      target: development  
     command: >
       sh -c "
         scripts/wait-for/wait-for ffc-demo-message-queue:9324 --
