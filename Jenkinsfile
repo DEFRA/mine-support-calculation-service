@@ -30,7 +30,9 @@ node {
       defraUtils.lintHelm(imageName)
     }
     stage('Build test image') {
-      defraUtils.buildTestImage(imageName, BUILD_NUMBER)
+      docker.withRegistry("https://$registry", regCredsId) {
+        defraUtils.buildTestImage(imageName, BUILD_NUMBER)
+      }
     }
     stage('Run tests') {
       defraUtils.runTests(imageName, imageName, BUILD_NUMBER)
