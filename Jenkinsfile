@@ -1,4 +1,4 @@
-@Library('defra-library@feature/PSD-493-destroy-infrastructure')
+@Library('defra-library@feature/PSD-493-destroy-sqs-queue')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
