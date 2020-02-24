@@ -12,7 +12,7 @@ def mergedPrNo = ''
 def containerTag = ''
 def sonarQubeEnv = 'SonarQube'
 def sonarScanner = 'SonarScanner'
-def containerSrcFolder = '\\/usr\\/src\\/app'
+def containerSrcFolder = '\\/home\\/node'
 def localSrcFolder = '.'
 def lcovFile = './test-output/lcov.info'
 def timeoutInMinutes = 5
@@ -20,9 +20,11 @@ def timeoutInMinutes = 5
 node {
   checkout scm
   try {
+    stage('Set GitHub status as pending'){
+      defraUtils.setGithubStatusPending()
+    }
     stage('Set branch, PR, and containerTag variables') {
       (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName, defraUtils.getPackageJsonVersion())
-      defraUtils.setGithubStatusPending()
     }
     /*stage('Helm lint') {
       defraUtils.lintHelm(imageName)
@@ -31,7 +33,7 @@ node {
       defraUtils.buildTestImage(imageName, BUILD_NUMBER)
     }
     stage('Run tests') {
-      defraUtils.runTests(imageName, BUILD_NUMBER)
+      defraUtils.runTests(imageName, imageName, BUILD_NUMBER)
     }
      stage('Create Test Report JUnit'){
       defraUtils.createTestReportJUnit()
@@ -52,16 +54,26 @@ node {
       stage('Publish chart') {
         defraUtils.publishChart(registry, imageName, containerTag)
       }
+      stage('Trigger GitHub release') {
+        withCredentials([
+          string(credentialsId: 'github_ffc_platform_repo', variable: 'gitToken') 
+        ]) {
+          defraUtils.triggerRelease(containerTag, repoName, containerTag, gitToken)
+        }
+      }
       stage('Trigger Deployment') {
         withCredentials([
           string(credentialsId: 'JenkinsDeployUrl', variable: 'jenkinsDeployUrl'),
           string(credentialsId: 'ffc-demo-calculation-service-deploy-token', variable: 'jenkinsToken')
         ]) {
-          defraUtils.triggerDeploy(jenkinsDeployUrl, 'ffc-demo-calculation-service-deploy', jenkinsToken, ['chartVersion':'1.0.0'])
+          defraUtils.triggerDeploy(jenkinsDeployUrl, 'ffc-demo-calculation-service-deploy', jenkinsToken, ['chartVersion':containerTag])
         }
       }
     } else {
-      /*stage('Helm install') {
+      /*stage('Verify version incremented') {
+        defraUtils.verifyPackageJsonVersionIncremented()
+      }
+      stage('Helm install') {
         withCredentials([
           string(credentialsId: 'sqsQueueEndpoint', variable: 'sqsQueueEndpoint'),
           string(credentialsId: 'calculationQueueUrlPR', variable: 'calculationQueueUrl'),
@@ -107,11 +119,14 @@ node {
         defraUtils.undeployChart(kubeCredsId, imageName, mergedPrNo)
       }
     }
-    defraUtils.setGithubStatusSuccess()
+    stage('Set GitHub status as success'){
+      defraUtils.setGithubStatusSuccess()
+    } 
   } catch(e) {
     defraUtils.setGithubStatusFailure(e.message)
+    defraUtils.notifySlackBuildFailure(e.message, "#generalbuildfailures")
     throw e
   } finally {
-    defraUtils.deleteTestOutput(imageName)
+    defraUtils.deleteTestOutput(imageName, containerSrcFolder)
   }
 }
