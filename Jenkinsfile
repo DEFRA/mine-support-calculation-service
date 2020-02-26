@@ -52,17 +52,17 @@ node {
       }
       stage('Trigger GitHub release') {
         withCredentials([
-          string(credentialsId: 'github_ffc_platform_repo', variable: 'gitToken') 
+          string(credentialsId: 'github-auth-token', variable: 'gitToken') 
         ]) {
           defraUtils.triggerRelease(containerTag, serviceName, containerTag, gitToken)
         }
       }
       stage('Trigger Deployment') {
         withCredentials([
-          string(credentialsId: 'JenkinsDeployUrl', variable: 'jenkinsDeployUrl'),
-          string(credentialsId: 'ffc-demo-calculation-service-deploy-token', variable: 'jenkinsToken')
+          string(credentialsId: 'calculation-service-deploy-token', variable: 'jenkinsToken'),
+          string(credentialsId: 'calculation-service-job-deploy-name', variable: 'deployJobName')
         ]) {
-          defraUtils.triggerDeploy(jenkinsDeployUrl, 'ffc-demo-calculation-service-deploy', jenkinsToken, ['chartVersion':containerTag])
+          defraUtils.triggerDeploy(JENKINS_DEPLOY_SITE_ROOT, deployJobName, jenkinsToken, ['chartVersion':containerTag])
         }
       }
     } else {
@@ -71,13 +71,13 @@ node {
       }
       stage('Helm install') {
         withCredentials([
-          string(credentialsId: 'sqsQueueEndpoint', variable: 'sqsQueueEndpoint'),
-          string(credentialsId: 'calculationQueueUrlPR', variable: 'calculationQueueUrl'),
-          string(credentialsId: 'calculationQueueAccessKeyIdListen', variable: 'calculationQueueAccessKeyId'),
-          string(credentialsId: 'calculationQueueSecretAccessKeyListen', variable: 'calculationQueueSecretAccessKey'),
-          string(credentialsId: 'paymentQueueUrlPR', variable: 'paymentQueueUrl'),
-          string(credentialsId: 'paymentQueueAccessKeyIdSend', variable: 'paymentQueueAccessKeyId'),
-          string(credentialsId: 'paymentQueueSecretAccessKeySend', variable: 'paymentQueueSecretAccessKey')
+          string(credentialsId: 'sqs-queue-endpoint', variable: 'sqsQueueEndpoint'),
+          string(credentialsId: 'calculation-queue-url-pr', variable: 'calculationQueueUrl'),
+          string(credentialsId: 'calculation-queue-access-key-id-listen', variable: 'calculationQueueAccessKeyId'),
+          string(credentialsId: 'calculation-queue-secret-access-key-listen', variable: 'calculationQueueSecretAccessKey'),
+          string(credentialsId: 'payment-queue-url-pr', variable: 'paymentQueueUrl'),
+          string(credentialsId: 'payment-queue-access-key-id-send', variable: 'paymentQueueAccessKeyId'),
+          string(credentialsId: 'payment-queue-secret-access-key-send', variable: 'paymentQueueSecretAccessKey')
         ]) {
           def helmValues = [
             /container.calculationQueueEndpoint="$sqsQueueEndpoint"/,
