@@ -1,5 +1,6 @@
 environment: development
 name: ffc-demo-calculation-service
+namespace: ffc-demo
 image: ffc-demo-calculation-service
 imagePullSecret:
 container:
