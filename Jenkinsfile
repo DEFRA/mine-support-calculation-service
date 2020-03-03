@@ -101,8 +101,14 @@ node {
           defraUtils.deployChart(KUBE_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, containerTag, extraCommands)
         }
       }
+      stage('Provision PR SQS Queues') {
+        defraUtils.provisionInfrastructure('aws', 'sqs', ['service': ['code': 'FFC', 'name': 'Future Farming Services', 'type': 'FFC'], 'pr_code': pr, 'queue_purpose': 'calculationQueue', 'repo_name': serviceName]);
+      }
     }
     if (mergedPrNo != '') {
+      stage('Destroy infrastructure provisioned for the PR') {
+        defraUtils.destroyInfrastructure(serviceName, mergedPrNo)
+      }
       stage('Remove merged PR') {
         defraUtils.undeployChart(KUBE_CREDENTIALS_ID, serviceName, mergedPrNo)
       }
