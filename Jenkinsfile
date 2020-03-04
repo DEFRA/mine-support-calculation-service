@@ -1,4 +1,4 @@
-@Library('defra-library@3.0.0')
+@Library('defra-library@feature/PSD-566-move-sqs-prov-to-non-prod')
 import uk.gov.defra.ffc.DefraUtils
 def defraUtils = new DefraUtils()
 
