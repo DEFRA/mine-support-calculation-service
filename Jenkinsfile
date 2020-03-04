@@ -28,7 +28,7 @@ node {
     stage('Build test image') {
       defraUtils.buildTestImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, BUILD_NUMBER)
     }
-    stage('Run tests') {
+    /*stage('Run tests') {
       defraUtils.runTests(serviceName, serviceName, BUILD_NUMBER)
     }
      stage('Create Test Report JUnit'){
@@ -45,7 +45,7 @@ node {
     }
     stage('Push container image') {
       defraUtils.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, containerTag)
-    }
+    }*/
     if (pr == '') {
       stage('Publish chart') {
         defraUtils.publishChart(DOCKER_REGISTRY, serviceName, containerTag)
@@ -69,7 +69,7 @@ node {
       stage('Verify version incremented') {
         defraUtils.verifyPackageJsonVersionIncremented()
       }
-      stage('Helm install') {
+      /*stage('Helm install') {
         withCredentials([
           string(credentialsId: 'sqs-queue-endpoint', variable: 'sqsQueueEndpoint'),
           string(credentialsId: 'calculation-queue-url-pr', variable: 'calculationQueueUrl'),
@@ -100,7 +100,7 @@ node {
 
           defraUtils.deployChart(KUBE_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, containerTag, extraCommands)
         }
-      }
+      }*/
       stage('Provision PR SQS Queues') {
         defraUtils.provisionPrSqsQueue('FFC', 'FFC', 'Future Farming Services', pr, 'calculationQueue', serviceName);
       }
