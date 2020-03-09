@@ -3,12 +3,12 @@ kind: Deployment
 metadata:
   name: {{ quote .Values.name }}  
   labels:
-    name: {{ quote .Values.labels.name }}
-    instance: {{ quote .Values.labels.instance }}
-    version: {{ quote .Values.labels.version }}
-    component: {{ quote .Values.labels.component }}
-    part-of: {{ quote .Values.labels.part }}
-    managed-by: {{ quote .Values.labels.managed }}
+    app.kubernetes.io/name: {{ quote .Values.name }}
+    app.kubernetes.io/instance: {{ quote .Values.labels.instance }}
+    app.kubernetes.io/version: {{ quote .Values.labels.version }}
+    app.kubernetes.io/component: {{ quote .Values.labels.component }}
+    app.kubernetes.io/part-of: {{ quote .Values.namespace }}
+    app.kubernetes.io/managed-by: {{ quote .Values.labels.managedBy }}
 spec:
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: {{ .Values.minReadySeconds }}

@@ -3,12 +3,10 @@ name: ffc-demo-calculation-service
 image: ffc-demo-calculation-service
 imagePullSecret:
 labels:
-  name: {{ quote .Values.name }}
-  instance: ffc-demo-calculation-service-hssh
-  version: "1.0.0"
+  instance:
+  version: 1.0.0
   component: service
-  part-of: ffc-demo
-  managed-by: helm
+  managedBy: helm
 container:
   imagePullPolicy: IfNotPresent
   requestMemory: 30Mi
