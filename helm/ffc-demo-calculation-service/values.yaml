@@ -2,14 +2,13 @@ environment: development
 name: ffc-demo-calculation-service
 image: ffc-demo-calculation-service
 imagePullSecret:
-metadata:
-  labels:
-    name: {{ quote .Values.name }}
-    instance: ffc-demo-calculation-service-hssh
-    version: "1.0.0"
-    component: service
-    part-of: ffc-demo
-    managed-by: helm
+labels:
+  name: {{ quote .Values.name }}
+  instance: ffc-demo-calculation-service-hssh
+  version: "1.0.0"
+  component: service
+  part-of: ffc-demo
+  managed-by: helm
 container:
   imagePullPolicy: IfNotPresent
   requestMemory: 30Mi
