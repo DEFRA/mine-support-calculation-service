@@ -90,7 +90,8 @@ node {
             /container.paymentQueueAccessKeyId="$paymentQueueAccessKeyId"/,
             /container.paymentQueueSecretAccessKey="$paymentQueueSecretAccessKey"/,
             /container.paymentCreateQueue="false"/,
-            /container.redeployOnChange="$pr-$BUILD_NUMBER"/
+            /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
+            /container.app.kubernetes.io'/'version="$containerTag"
           ].join(',')
 
           def extraCommands = [
