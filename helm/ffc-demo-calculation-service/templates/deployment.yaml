@@ -1,10 +1,14 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ quote .Values.name }}
+  name: {{ quote .Values.name }}  
   labels:
-    app: {{ quote .Values.name }}
-    environment: {{ quote .Values.environment }}
+    name: {{ quote .Values.labels.name }}
+    instance: {{ quote .Values.labels.instance }}
+    version: {{ quote .Values.labels.version }}
+    component: {{ quote .Values.labels.component }}
+    part-of: {{ quote .Values.labels.part }}
+    managed-by: {{ quote .Values.labels.managed }}
 spec:
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: {{ .Values.minReadySeconds }}
