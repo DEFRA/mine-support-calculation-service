@@ -12,6 +12,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     environment: {{ quote .Values.environment }}
+  namespace: {{ quote .Values.namespace }}
 spec:
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: {{ .Values.minReadySeconds }}
@@ -30,6 +31,7 @@ spec:
       annotations:
         redeployOnChange: {{ quote .Values.container.redeployOnChange }}
     spec:
+      priorityClassName: {{ quote .Values.container.priorityClassName }}
       restartPolicy: {{ quote .Values.container.restartPolicy }}
       {{- if .Values.imagePullSecret }}
       imagePullSecrets:

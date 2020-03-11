@@ -1,5 +1,6 @@
 environment: development
 name: ffc-demo-calculation-service
+namespace: ffc-demo
 image: ffc-demo-calculation-service
 imagePullSecret:
 labels:
@@ -7,6 +8,7 @@ labels:
   version: 1.0.0
   component: service
 container:
+  priorityClassName: low
   imagePullPolicy: IfNotPresent
   requestMemory: 30Mi
   requestCpu: 10m
