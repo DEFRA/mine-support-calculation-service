@@ -23,18 +23,12 @@ container:
   redeployOnChange: update this field to force a change
   calculationQueueName: calculation
   calculationQueueEndpoint: http://ffc-demo-calculation-message-queue:9324
-  calculationQueueUrl: http://ffc-demo-calculation-message-queue:9324/queue/calculation
   calculationQueueRegion: eu-west-2
-  calculationQueueAccessKeyId: elasticmq
-  calculationQueueSecretAccessKey: elasticmq
-  calculationCreateQueue: true
+  calculationCreateQueue: false
   paymentQueueName: payment
   paymentQueueEndpoint: http://ffc-demo-calculation-message-queue:9324
-  paymentQueueUrl: http://ffc-demo-calculation-message-queue:9324/queue/payment
   paymentQueueRegion: eu-west-2
-  paymentQueueAccessKeyId: elasticmq
-  paymentQueueSecretAccessKey: elasticmq
-  paymentCreateQueue: true
+  paymentCreateQueue: false
 replicaCount: 1
 minReadySeconds: 10
 maxSurge: 1
@@ -44,3 +38,6 @@ livenessProbe:
   initialDelaySeconds: 70
   periodSeconds: 10
   failureThreshold: 3
+serviceAccount:
+  name: ffc-demo-calculation-service-account
+  roleArn:

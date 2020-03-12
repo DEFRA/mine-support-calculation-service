@@ -1,43 +1,37 @@
 const joi = require('@hapi/joi')
 
+const queueSchema = joi.object({
+  name: joi.string().required(),
+  endpoint: joi.string().required(),
+  queueUrl: joi.string().required(),
+  region: joi.string().default('eu-west-2'),
+  accessKeyId: joi.string().optional(),
+  secretAccessKey: joi.string().optional(),
+  createQueue: joi.bool().default(false)
+})
+
 const mqSchema = joi.object({
-  calculationQueue: {
-    name: joi.string().default('calculation'),
-    endpoint: joi.string().default('http://localhost:9324'),
-    queueUrl: joi.string().default('http://localhost:9324/queue/calculation'),
-    region: joi.string().default('eu-west-2'),
-    accessKeyId: joi.string(),
-    secretAccessKey: joi.string(),
-    createQueue: joi.bool().default(true)
-  },
-  paymentQueue: {
-    name: joi.string().default('payment'),
-    endpoint: joi.string().default('http://localhost:9324'),
-    queueUrl: joi.string().default('http://localhost:9324/queue/payment'),
-    region: joi.string().default('eu-west-2'),
-    accessKeyId: joi.string(),
-    secretAccessKey: joi.string(),
-    createQueue: joi.bool().default(true)
-  }
+  calculationQueueConfig: queueSchema,
+  paymentQueueConfig: queueSchema
 })
 
 const mqConfig = {
-  calculationQueue: {
+  calculationQueueConfig: {
     name: process.env.CALCULATION_QUEUE_NAME,
     endpoint: process.env.CALCULATION_ENDPOINT,
-    queueUrl: process.env.CALCULATION_QUEUE_URL,
+    queueUrl: process.env.CALCULATION_QUEUE_URL || `${process.env.PAYMENT_ENDPOINT}/${process.env.PAYMENT_QUEUE_NAME}`,
     region: process.env.CALCULATION_QUEUE_REGION,
-    accessKeyId: process.env.CALCULATION_QUEUE_ACCESS_KEY_ID,
-    secretAccessKey: process.env.CALCULATION_QUEUE_ACCESS_KEY,
+    accessKeyId: process.env.DEV_ACCESS_KEY_ID,
+    secretAccessKey: process.env.DEV_ACCESS_KEY,
     createQueue: process.env.CREATE_CALCULATION_QUEUE
   },
-  paymentQueue: {
+  paymentQueueConfig: {
     name: process.env.PAYMENT_QUEUE_NAME,
     endpoint: process.env.PAYMENT_ENDPOINT,
-    queueUrl: process.env.PAYMENT_QUEUE_URL,
+    queueUrl: process.env.PAYMENT_QUEUE_URL || `${process.env.PAYMENT_ENDPOINT}/${process.env.PAYMENT_QUEUE_NAME}`,
     region: process.env.PAYMENT_QUEUE_REGION,
-    accessKeyId: process.env.PAYMENT_QUEUE_ACCESS_KEY_ID,
-    secretAccessKey: process.env.PAYMENT_QUEUE_ACCESS_KEY,
+    accessKeyId: process.env.DEV_ACCESS_KEY_ID,
+    secretAccessKey: process.env.DEV_ACCESS_KEY,
     createQueue: process.env.CREATE_PAYMENT_QUEUE
   }
 }
@@ -51,7 +45,4 @@ if (mqResult.error) {
   throw new Error(`The message queue config is invalid. ${mqResult.error.message}`)
 }
 
-const paymentQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.paymentQueue }
-const calculationQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.calculationQueue }
-
-module.exports = { paymentQueueConfig, calculationQueueConfig }
+module.exports = mqResult.value

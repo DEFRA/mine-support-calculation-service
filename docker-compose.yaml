@@ -7,15 +7,17 @@ services:
       args:
         REGISTRY: ${DOCKER_REGISTRY:-562955126301.dkr.ecr.eu-west-2.amazonaws.com}
     image: ffc-demo-calculation-service
-    environment:      
+    environment:
       CALCULATION_ENDPOINT: http://ffc-demo-calculation-message-queue:9324
+      CALCULATION_QUEUE_NAME: calculation
       CALCULATION_QUEUE_URL: http://ffc-demo-calculation-message-queue:9324/queue/calculation
-      CALCULATION_QUEUE_ACCESS_KEY_ID: elasticmq
-      CALCULATION_QUEUE_ACCESS_KEY: elasticmq
+      CREATE_CALCULATION_QUEUE: "true"
       PAYMENT_ENDPOINT: http://ffc-demo-calculation-message-queue:9324
+      PAYMENT_QUEUE_NAME: payment
       PAYMENT_QUEUE_URL: http://ffc-demo-calculation-message-queue:9324/queue/payment
-      PAYMENT_QUEUE_ACCESS_KEY_ID: elasticmq
-      PAYMENT_QUEUE_ACCESS_KEY: elasticmq
+      CREATE_PAYMENT_QUEUE: "true"
+      DEV_ACCESS_KEY_ID: elasticmq
+      DEV_ACCESS_KEY: elasticmq
     volumes:
       - ./server/:/home/node/server/
       - ./scripts/:/home/node/scripts/
@@ -24,8 +26,6 @@ services:
 
   ffc-demo-calculation-message-queue:
     image: softwaremill/elasticmq
-    ports:
-      - "9324:9324"
 
 volumes:
   node_modules: {}

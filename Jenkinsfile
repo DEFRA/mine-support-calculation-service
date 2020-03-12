@@ -13,6 +13,30 @@ def sonarQubeEnv = 'SonarQube'
 def sonarScanner = 'SonarScanner'
 def timeoutInMinutes = 5
 
+def getExtraCommands(pr) {
+  withCredentials([
+    string(credentialsId: 'sqs-queue-endpoint', variable: 'sqsQueueEndpoint'),
+    string(credentialsId: 'calculation-queue-name-pr', variable: 'calculationQueueName'),
+    string(credentialsId: 'payment-queue-name-pr', variable: 'paymentQueueName'),
+    string(credentialsId: 'calculation-service-account-role-arn', variable: 'serviceAccountRoleArn'),
+  ]) {
+    def helmValues = [
+      /container.calculationQueueEndpoint="$sqsQueueEndpoint"/,
+      /container.calculationQueueName="$calculationQueueName"/,
+      /container.calculationCreateQueue="false"/,
+      /container.paymentQueueEndpoint="$sqsQueueEndPoint"/,
+      /container.paymentQueueName="$paymentQueueName"/,
+      /container.paymentCreateQueue="false"/,
+      /container.redeployOnChange="$pr-$BUILD_NUMBER"/
+      /labels.version="$containerTag"/
+    ].join(',')
+
+   return [
+      "--values ./helm/ffc-demo-calculation-service/jenkins-aws.yaml",
+      "--set $helmValues"
+    ].join(' ')
+}
+
 node {
   checkout scm
   try {
@@ -99,7 +123,7 @@ node {
             "--set $helmValues"
           ].join(' ')
 
-          defraUtils.deployChart(KUBE_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, containerTag, extraCommands)
+          defraUtils.deployChart(KUBE_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, containerTag, getExtraCommands(pr, containerTag))
         }
       }
     }
