@@ -22,24 +22,20 @@ Or:
 
 The following environment variables are required by the application container. Values for development are set in the Docker Compose configuration. Default values for production-like deployments are set in the Helm chart and may be overridden by build and release pipelines.
 
- | Name                       | Description                 | Required | Default     | Valid                               | Notes |
- |----------------------------|-----------------------------|:--------:|-------------|-------------------------------------|-------|
- | NODE_ENV                   | Node environment            | no       | development | development,test,production         |       |
- | CALCULATION_QUEUE_NAME     | Message queue name          | no       | calculation |                                     |       |
- | CALCULATION_ENDPOINT       | Message base url            | no       | http://localhost:9324 |                           |       |
- | CALCULATION_QUEUE_URL      | Message queue url           | no       | http://localhost:9324/queue/calculation |         |or tcp |
- | CALCULATION_QUEUE_REGION   | AWS region                  | no       | eu-west-2   |                                     |Ignored in local dev |
- | CALCULATION_QUEUE_ACCESS_KEY_ID | Message access key Id  | no       |             |                                     |       |
- | CALCULATION_QUEUE_ACCESS_KEY | Message access key        | no       |             |                                     |       |
- | CREATE_CALCULATION_QUEUE   | Create queue before connection | no    | true        | For AWS deployments must be set to false|   |
- | PAYMENT_QUEUE_NAME         | Message queue name          | no       | payment     |                                     |       |
- | PAYMENT_ENDPOINT           | Message base url            | no       | http://localhost:9324 |                           |       |
- | PAYMENT_QUEUE_URL          | Message queue url           | no       | http://localhost:9324/queue/payment |         |or tcp |
- | PAYMENT_QUEUE_REGION       | AWS region                  | no       | eu-west-2   |                                     |Ignored in local dev |
- | PAYMENT_QUEUE_ACCESS_KEY_ID | Message access key Id      | no       |             |                                     |       |
- | PAYMENT_QUEUE_ACCESS_KEY   | Message access key          | no       |             |                                     |       |
- | CREATE_PAYMENT_QUEUE       | Create queue before connection | no    | true        | For AWS deployments must be set to false|   |
- | HEALTHZ_FILE_INTERVAL_IN_MILLIS | Interval for creation of healthz file | no | 10000 |                                  | Maximum value 30000  |
+| Name                            | Description                           | Required | Default     | Valid                       | Notes                             |
+|---------------------------------|---------------------------------------|:--------:|-------------|-----------------------------|-----------------------------------|
+| NODE_ENV                        | Node environment                      | no       | development | development,test,production |                                   |
+| CALCULATION_QUEUE_NAME          | Message queue name                    | yes      |             |                             |                                   |
+| CALCULATION_ENDPOINT            | Message base url                      | no       |             |                             |                                   |
+| CALCULATION_QUEUE_URL           | Message queue url                     | yes      |             |                             |                                   |
+| CALCULATION_QUEUE_REGION        | AWS region                            | no       | eu-west-2   |                             |Ignored in local dev               |
+| CREATE_CALCULATION_QUEUE        | Create queue before connection        | no       | false       |                             | For local development set to true |
+| PAYMENT_QUEUE_NAME              | Message queue name                    | yes      |             |                             |                                   |
+| PAYMENT_ENDPOINT                | Message base url                      | yes      |             |                             |                                   |
+| PAYMENT_QUEUE_URL               | Message queue url                     | no       |             |                             |                                   |
+| PAYMENT_QUEUE_REGION            | AWS region                            | no       | eu-west-2   |                             | Ignored in local dev              |
+| CREATE_PAYMENT_QUEUE            | Create queue before connection        | no       | false       |                             | For local development set to true |
+| HEALTHZ_FILE_INTERVAL_IN_MILLIS | Interval for creation of healthz file | no       | 10000       |                             | Maximum value 30000               |
 
 ## How to run tests
 
