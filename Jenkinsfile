@@ -13,7 +13,7 @@ def sonarQubeEnv = 'SonarQube'
 def sonarScanner = 'SonarScanner'
 def timeoutInMinutes = 5
 
-def getExtraCommands(pr) {
+def getExtraCommands(pr, containerTag) {
   withCredentials([
     string(credentialsId: 'sqs-queue-endpoint', variable: 'sqsQueueEndpoint'),
     string(credentialsId: 'calculation-queue-name-pr', variable: 'calculationQueueName'),
@@ -35,6 +35,7 @@ def getExtraCommands(pr) {
       "--values ./helm/ffc-demo-calculation-service/jenkins-aws.yaml",
       "--set $helmValues"
     ].join(' ')
+  }
 }
 
 node {
@@ -94,37 +95,7 @@ node {
         defraUtils.verifyPackageJsonVersionIncremented()
       }
       stage('Helm install') {
-        withCredentials([
-          string(credentialsId: 'sqs-queue-endpoint', variable: 'sqsQueueEndpoint'),
-          string(credentialsId: 'calculation-queue-url-pr', variable: 'calculationQueueUrl'),
-          string(credentialsId: 'calculation-queue-access-key-id-listen', variable: 'calculationQueueAccessKeyId'),
-          string(credentialsId: 'calculation-queue-secret-access-key-listen', variable: 'calculationQueueSecretAccessKey'),
-          string(credentialsId: 'payment-queue-url-pr', variable: 'paymentQueueUrl'),
-          string(credentialsId: 'payment-queue-access-key-id-send', variable: 'paymentQueueAccessKeyId'),
-          string(credentialsId: 'payment-queue-secret-access-key-send', variable: 'paymentQueueSecretAccessKey')
-        ]) {
-          def helmValues = [
-            /container.calculationQueueEndpoint="$sqsQueueEndpoint"/,
-            /container.calculationQueueUrl="$calculationQueueUrl"/,
-            /container.calculationQueueAccessKeyId="$calculationQueueAccessKeyId"/,
-            /container.calculationQueueSecretAccessKey="$calculationQueueSecretAccessKey"/,
-            /container.calculationCreateQueue="false"/,
-            /container.paymentQueueEndpoint="$sqsQueueEndPoint"/,
-            /container.paymentQueueUrl="$paymentQueueUrl"/,
-            /container.paymentQueueAccessKeyId="$paymentQueueAccessKeyId"/,
-            /container.paymentQueueSecretAccessKey="$paymentQueueSecretAccessKey"/,
-            /container.paymentCreateQueue="false"/,
-            /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
-            /labels.version="$containerTag"/
-          ].join(',')
-
-          def extraCommands = [
-            "--values ./helm/ffc-demo-calculation-service/jenkins-aws.yaml",
-            "--set $helmValues"
-          ].join(' ')
-
-          defraUtils.deployChart(KUBE_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, containerTag, getExtraCommands(pr, containerTag))
-        }
+        defraUtils.deployChart(KUBE_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, containerTag, getExtraCommands(pr, containerTag))
       }
     }
     if (mergedPrNo != '') {
