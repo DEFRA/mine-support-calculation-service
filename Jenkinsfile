@@ -101,9 +101,12 @@ node {
           defraUtils.deployChart(KUBE_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, containerTag, extraCommands)
         }
       }*/
-      stage('Provision PR SQS Queues') {
-        defraUtils.provisionPrSqsQueue('FFC', 'FFC', 'Future Farming Services', pr, 'calculationQueue2', serviceName);
+      stage('Destroy PR SQS Queues') {
+        defraUtils.destroyPrSqsQueues('FFC', pr)
       }
+      /*stage('Provision PR SQS Queues') {
+        defraUtils.provisionPrSqsQueue('FFC', 'FFC', 'Future Farming Services', pr, 'calculationQueue2', serviceName);
+      }*/
     }
     if (mergedPrNo != '') {
       stage('Destroy infrastructure provisioned for the PR') {
