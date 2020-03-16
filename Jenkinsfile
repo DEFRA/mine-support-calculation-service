@@ -25,10 +25,10 @@ node {
     stage('Helm lint') {
       defraUtils.lintHelm(serviceName)
     }
-    stage('Build test image') {
+    /*stage('Build test image') {
       defraUtils.buildTestImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, serviceName, BUILD_NUMBER)
     }
-    /*stage('Run tests') {
+    stage('Run tests') {
       defraUtils.runTests(serviceName, serviceName, BUILD_NUMBER)
     }
      stage('Create Test Report JUnit'){
@@ -102,7 +102,7 @@ node {
         }
       }*/
       stage('Provision PR SQS Queues') {
-        defraUtils.provisionPrSqsQueue('FFC', 'FFC', 'Future Farming Services', pr, 'calculationQueue', serviceName);
+        defraUtils.provisionPrSqsQueue('FFC', 'FFC', 'Future Farming Services', pr, 'calculationQueue2', serviceName);
       }
     }
     if (mergedPrNo != '') {
