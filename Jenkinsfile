@@ -27,7 +27,7 @@ def getExtraCommands(pr, containerTag) {
       /container.paymentQueueEndpoint="$sqsQueueEndPoint"/,
       /container.paymentQueueName="$paymentQueueName"/,
       /container.paymentCreateQueue="false"/,
-      /container.redeployOnChange="$pr-$BUILD_NUMBER"/
+      /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
       /labels.version="$containerTag"/
     ].join(',')
 
