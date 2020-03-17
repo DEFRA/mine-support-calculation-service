@@ -103,7 +103,7 @@ node {
       }*/
       
       stage('Destroy PR SQS Queues') {
-        defraUtils.destroyPrSqsQueues('FFC', pr)
+        defraUtils.destroyPrSqsQueues(serviceName, pr)
       }
       /*stage('Provision PR SQS Queues') {
         defraUtils.provisionPrSqsQueue('FFC', 'FFC', 'Future Farming Services', pr, 'calculationQueue2', serviceName);
