@@ -7,6 +7,10 @@ metadata:
 spec:
   replicas: {{ .Values.replicaCount }}
   minReadySeconds: {{ .Values.minReadySeconds }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ quote .Values.name }}
+      app: {{ quote .Values.namespace }}
   template:
     metadata:
       namespace: {{ quote .Values.namespace }}
