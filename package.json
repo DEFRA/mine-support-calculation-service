@@ -21,7 +21,7 @@
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
-    "@hapi/joi": "^16.1.4",
+    "@hapi/joi": "^17.1.1",
     "async-polling": "^0.2.1",
     "aws-sdk": "^2.609.0",
     "lodash": "^4.17.15",
