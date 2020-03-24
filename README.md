@@ -1,4 +1,4 @@
-[![Known Vulnerabilities](https://snyk.io//test/github/DEFRA/ffc-demo-calculation-service/badge.svg?targetFile=package.json)](https://snyk.io//test/github/DEFRA/ffc-demo-calculation-service?targetFile=package.json)
+[![Known Vulnerabilities](https://snyk.io/test/github/DEFRA/ffc-demo-calculation-service/badge.svg?targetFile=package.json)](https://snyk.io/test/github/DEFRA/ffc-demo-calculation-service?targetFile=package.json)
 
 # FFC Demo Calculation Service
 
@@ -89,7 +89,7 @@ docker-compose build
 
 ### Start and stop the service
 
-Use Docker Compose to run service locally. 
+Use Docker Compose to run service locally.
 
 `docker-compose up`
 
