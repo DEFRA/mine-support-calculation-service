@@ -24,8 +24,6 @@ spec:
           value: {{ quote .Values.container.paymentQueueRegion }}
         - name: CREATE_PAYMENT_QUEUE
           value: {{ quote .Values.container.paymentCreateQueue }}
-        ports:
-        - containerPort: {{ .Values.container.port }}
         livenessProbe:
           exec:
             command:

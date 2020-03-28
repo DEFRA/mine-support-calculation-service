@@ -30,7 +30,6 @@ container:
   runAsUser: 1000
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
-  port: 3007
   calculationQueueName: calculation
   calculationQueueEndpoint: http://ffc-demo-calculation-message-queue:9324
   calculationQueueRegion: eu-west-2
