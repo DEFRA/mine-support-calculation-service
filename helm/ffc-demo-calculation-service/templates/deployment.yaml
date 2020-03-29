@@ -1,41 +1,10 @@
-{{- include "ffc-helm-library.deployment" (list . "ffc-demo-payment-service.deployment") -}}
-{{- define "ffc-demo-payment-service.deployment" -}}
+{{- template "ffc-helm-library.deployment" (list . "ffc-demo-calculation-service.deployment") -}}
+{{- define "ffc-demo-calculation-service.deployment" -}}
 spec:
   template:
     spec:
       containers:
-      - name: {{ quote .Values.name }}
-        env:                
-        - name: NODE_ENV
-          value: {{ quote .Values.environment }}
-        - name: CALCULATION_QUEUE_NAME
-          value: {{ quote .Values.container.calculationQueueName }}
-        - name: CALCULATION_ENDPOINT
-          value: {{ quote .Values.container.calculationQueueEndpoint }}
-        - name: CALCULATION_QUEUE_REGION
-          value: {{ quote .Values.container.calculationQueueRegion }}
-        - name: CREATE_CALCULATION_QUEUE
-          value: {{ quote .Values.container.calculationCreateQueue }}
-        - name: PAYMENT_QUEUE_NAME
-          value: {{ quote .Values.container.paymentQueueName }}
-        - name: PAYMENT_ENDPOINT
-          value: {{ quote .Values.container.paymentQueueEndpoint }}
-        - name: PAYMENT_QUEUE_REGION
-          value: {{ quote .Values.container.paymentQueueRegion }}
-        - name: CREATE_PAYMENT_QUEUE
-          value: {{ quote .Values.container.paymentCreateQueue }}
-        livenessProbe:
-          exec:
-            command:
-            - sh
-            - -c
-            - /home/node/scripts/healthz
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-        volumeMounts:
-        - mountPath: /tmp
-          name: health-dir
+      - {{ template "ffc-helm-library.container" (list . "ffc-demo-calculation-service.container") }}
       volumes:
       - name: health-dir
         emptyDir: {}
