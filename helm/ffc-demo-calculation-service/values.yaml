@@ -5,7 +5,6 @@ workstream: ffc-demo
 image: ffc-demo-calculation-service
 
 labels:
-  instance:
   version: 1.0.0
 
 serviceAccount:
@@ -19,6 +18,9 @@ deployment:
   minReadySeconds: 5
   redeployOnChange: update this field to force a change
   imagePullSecret:
+  runAsNonRoot: true
+  runAsUser: 1000
+
 
 container:
   imagePullPolicy: IfNotPresent
@@ -26,8 +28,6 @@ container:
   requestCpu: 10m
   limitMemory: 60Mi
   limitCpu: 40m
-  runAsNonRoot: true
-  runAsUser: 1000
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   calculationQueueName: calculation
@@ -43,3 +43,4 @@ livenessProbe:
   initialDelaySeconds: 70
   periodSeconds: 10
   failureThreshold: 3
+  script: /home/node/scripts/healthz

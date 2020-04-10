@@ -1,10 +1,10 @@
-{{- template "ffc-helm-library.deployment" (list . "ffc-demo-calculation-service.deployment") -}}
+{{- include "ffc-helm-library.deployment" (list . "ffc-demo-calculation-service.deployment") -}}
 {{- define "ffc-demo-calculation-service.deployment" -}}
 spec:
   template:
     spec:
       containers:
-      - {{ template "ffc-helm-library.container" (list . "ffc-demo-calculation-service.container") }}
+      - {{ include "ffc-helm-library.container" (list . "ffc-demo-calculation-service.container") }}
       volumes:
       - name: health-dir
         emptyDir: {}

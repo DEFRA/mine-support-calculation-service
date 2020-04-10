@@ -1,6 +1,6 @@
 {{- define "ffc-demo-calculation-service.container" -}}
 name: {{ quote .Values.name }}
-env:                
+env:
 - name: NODE_ENV
   value: {{ quote .Values.environment }}
 - name: CALCULATION_QUEUE_NAME
@@ -19,15 +19,7 @@ env:
   value: {{ quote .Values.container.paymentQueueRegion }}
 - name: CREATE_PAYMENT_QUEUE
   value: {{ quote .Values.container.paymentCreateQueue }}
-livenessProbe:
-  exec:
-    command:
-    - sh
-    - -c
-    - /home/node/scripts/healthz
-  initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-  periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-  failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+livenessProbe: {{ include "ffc-helm-library.exec-probe" (list . .Values.livenessProbe) | nindent 4}}
 volumeMounts:
 - mountPath: /tmp
   name: health-dir
