@@ -21,7 +21,6 @@ deployment:
   runAsNonRoot: true
   runAsUser: 1000
 
-
 container:
   imagePullPolicy: IfNotPresent
   requestMemory: 30Mi
