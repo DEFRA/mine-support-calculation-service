@@ -3,24 +3,30 @@ name: ffc-demo-calculation-service
 namespace: ffc-demo
 workstream: ffc-demo
 image: ffc-demo-calculation-service
-imagePullSecret:
-labels:
-  instance:
-  version: 1.0.0
-  component: service
-container:
+
+labels: {}
+
+serviceAccount:
+  name: ffc-demo-calculation-service-account
+
+deployment:
+  restartPolicy: Always
   priorityClassName: low
+  replicas: 1
+  minReadySeconds: 5
+  redeployOnChange: update this field to force a change
+  imagePullSecret:
+  runAsNonRoot: true
+  runAsUser: 1000
+
+container:
   imagePullPolicy: IfNotPresent
   requestMemory: 30Mi
   requestCpu: 10m
   limitMemory: 60Mi
   limitCpu: 40m
-  runAsNonRoot: true
-  runAsUser: 1000
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
-  restartPolicy: Always
-  redeployOnChange: update this field to force a change
   calculationQueueName: calculation
   calculationQueueEndpoint: http://ffc-demo-calculation-message-queue:9324
   calculationQueueRegion: eu-west-2
@@ -29,15 +35,9 @@ container:
   paymentQueueEndpoint: http://ffc-demo-calculation-message-queue:9324
   paymentQueueRegion: eu-west-2
   paymentCreateQueue: false
-replicaCount: 1
-minReadySeconds: 10
-maxSurge: 1
-maxUnavailable: 1
 
 livenessProbe:
   initialDelaySeconds: 70
   periodSeconds: 10
   failureThreshold: 3
-serviceAccount:
-  name: ffc-demo-calculation-service-account
-  roleArn:
+  script: /home/node/scripts/healthz
