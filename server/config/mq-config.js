@@ -19,7 +19,7 @@ const mqConfig = {
   calculationQueueConfig: {
     name: process.env.CALCULATION_QUEUE_NAME,
     endpoint: process.env.CALCULATION_ENDPOINT,
-    queueUrl: process.env.CALCULATION_QUEUE_URL || `${process.env.PAYMENT_ENDPOINT}/${process.env.PAYMENT_QUEUE_NAME}`,
+    queueUrl: process.env.CALCULATION_QUEUE_URL || `${process.env.CALCULATION_ENDPOINT}/${process.env.CALCULATION_QUEUE_NAME}`,
     region: process.env.CALCULATION_QUEUE_REGION,
     accessKeyId: process.env.DEV_ACCESS_KEY_ID,
     secretAccessKey: process.env.DEV_ACCESS_KEY,
