@@ -4,8 +4,6 @@ services:
     build: 
       context: .
       target: production
-      args:
-        REGISTRY: ${DOCKER_REGISTRY}
     image: ffc-demo-calculation-service
     environment:
       CALCULATION_ENDPOINT: http://ffc-demo-calculation-message-queue:9324
