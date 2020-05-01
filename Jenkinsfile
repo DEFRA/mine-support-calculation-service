@@ -1,3 +1,9 @@
-@Library('defra-library@4') _
+@Library('defra-library@psd-507-use-artifactory') _
 
-buildNodeJs environment: 'dev'
+node {
+    checkout scm
+    stage('publish chart') {
+        helm.publishHelmChart(DOCKER_REGISTRY, 'ffc-demo-calculation-service', '0.0.1')
+    }
+}
+deployToCluster environment: 'dev', namespace: 'ffc-demo-calculation-service-shunt-test', chartName: 'ffc-demo-calculation-service', chartVersion: '0.0.1'
