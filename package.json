@@ -9,7 +9,9 @@
     "test": "npm run test:unit",
     "test:lint": "standard",
     "test:unit": "jest",
-    "test:unit-watch": "jest --coverage=false --onlyChanged --watch"
+    "test:unit-watch": "jest --coverage=false --onlyChanged --watch",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "homepage": "https://github.com/DEFRA/mine-support-calculation-service",
   "author": "Defra DDTS",
@@ -27,7 +29,8 @@
     "lodash": "^4.17.15",
     "rhea": "^1.0.10",
     "rhea-promise": "^1.0.0",
-    "sqs-consumer": "^5.4.0"
+    "sqs-consumer": "^5.4.0",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "jest": "^25.1.0",
@@ -51,5 +54,6 @@
     "ignore": [
       "**/test-output/**"
     ]
-  }
+  },
+  "snyk": true
 }
