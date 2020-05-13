@@ -10,5 +10,21 @@ module.exports = {
 
     console.log(`calculated ${claim.claimId} as ${value}`)
     return value
+  },
+  newFunc: (s) => {
+    switch (s) {
+      case 'a':
+        break
+      case 'b':
+        break
+      case 'c':
+        break
+      case 'd':
+        break
+      case 'e':
+        break
+      default:
+        break
+    }
   }
 }
