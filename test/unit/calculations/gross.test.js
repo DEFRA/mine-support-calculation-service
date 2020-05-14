@@ -14,6 +14,6 @@ describe('gross', () => {
       propertyType: 'home'
     }
     const result = gross(claim)
-    expect(result).toEqual(101)
+    expect(result).toEqual(100)
   })
 })
