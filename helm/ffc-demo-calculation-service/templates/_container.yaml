@@ -1,0 +1,26 @@
+{{- define "ffc-demo-calculation-service.container" -}}
+name: {{ quote .Values.name }}
+env:
+- name: NODE_ENV
+  value: {{ quote .Values.environment }}
+- name: CALCULATION_QUEUE_NAME
+  value: {{ quote .Values.container.calculationQueueName }}
+- name: CALCULATION_ENDPOINT
+  value: {{ quote .Values.container.calculationQueueEndpoint }}
+- name: CALCULATION_QUEUE_REGION
+  value: {{ quote .Values.container.calculationQueueRegion }}
+- name: CREATE_CALCULATION_QUEUE
+  value: {{ quote .Values.container.calculationCreateQueue }}
+- name: PAYMENT_QUEUE_NAME
+  value: {{ quote .Values.container.paymentQueueName }}
+- name: PAYMENT_ENDPOINT
+  value: {{ quote .Values.container.paymentQueueEndpoint }}
+- name: PAYMENT_QUEUE_REGION
+  value: {{ quote .Values.container.paymentQueueRegion }}
+- name: CREATE_PAYMENT_QUEUE
+  value: {{ quote .Values.container.paymentCreateQueue }}
+livenessProbe: {{ include "ffc-helm-library.exec-probe" (list . .Values.livenessProbe) | nindent 4}}
+volumeMounts:
+- mountPath: /tmp
+  name: health-dir
+{{- end -}}

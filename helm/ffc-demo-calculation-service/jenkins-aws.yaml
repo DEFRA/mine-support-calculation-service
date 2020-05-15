@@ -1,5 +1,0 @@
-name: ffc-demo-calculation-service
-imagePullSecret: myregistrykey
-container:
-  allowPrivilegeEscalation: true
-  imagePullPolicy: Always

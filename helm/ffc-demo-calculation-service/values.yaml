@@ -1,39 +1,43 @@
 environment: development
 name: ffc-demo-calculation-service
+namespace: ffc-demo
+workstream: ffc-demo
 image: ffc-demo-calculation-service
-imagePullSecret:
+
+labels: {}
+
+serviceAccount:
+  name: ffc-demo-calculation-service-account
+
+deployment:
+  restartPolicy: Always
+  priorityClassName: low
+  replicas: 1
+  minReadySeconds: 5
+  redeployOnChange: update this field to force a change
+  imagePullSecret:
+  runAsNonRoot: true
+  runAsUser: 1000
+
 container:
   imagePullPolicy: IfNotPresent
   requestMemory: 30Mi
   requestCpu: 10m
   limitMemory: 60Mi
   limitCpu: 40m
-  runAsNonRoot: true
-  runAsUser: 1000
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
-  restartPolicy: Always
-  redeployOnChange: update this field to force a change
   calculationQueueName: calculation
   calculationQueueEndpoint: http://ffc-demo-calculation-message-queue:9324
-  calculationQueueUrl: http://ffc-demo-calculation-message-queue:9324/queue/calculation
   calculationQueueRegion: eu-west-2
-  calculationQueueAccessKeyId: elasticmq
-  calculationQueueSecretAccessKey: elasticmq
-  calculationCreateQueue: true
+  calculationCreateQueue: false
   paymentQueueName: payment
   paymentQueueEndpoint: http://ffc-demo-calculation-message-queue:9324
-  paymentQueueUrl: http://ffc-demo-calculation-message-queue:9324/queue/payment
   paymentQueueRegion: eu-west-2
-  paymentQueueAccessKeyId: elasticmq
-  paymentQueueSecretAccessKey: elasticmq
-  paymentCreateQueue: true
-replicaCount: 1
-minReadySeconds: 10
-maxSurge: 1
-maxUnavailable: 1
+  paymentCreateQueue: false
 
 livenessProbe:
   initialDelaySeconds: 70
   periodSeconds: 10
   failureThreshold: 3
+  script: /home/node/scripts/healthz
