@@ -1,3 +1,3 @@
-@Library('defra-library@v-6') _
+@Library('defra-library@PSD-701-remove-sonarqube') _
 
 buildNodeJs environment: 'dev'
