@@ -1,0 +1,13 @@
+{{- include "ffc-helm-library.config-map" (list . "ffc-demo-calculation-service.config-map") -}}
+{{- define "ffc-demo-calculation-service.config-map" -}}
+data:
+  NODE_ENV: {{ .Values.environment | quote }}
+  CALCULATION_QUEUE_NAME: {{ .Values.container.calculationQueueName | quote}}
+  CALCULATION_ENDPOINT: {{ .Values.container.calculationQueueEndpoint | quote }}
+  CALCULATION_QUEUE_REGION: {{ .Values.container.calculationQueueRegion | quote }}
+  CREATE_CALCULATION_QUEUE: {{ .Values.container.calculationCreateQueue | quote }}
+  PAYMENT_QUEUE_NAME: {{ .Values.container.paymentQueueName | quote }}
+  PAYMENT_ENDPOINT: {{ .Values.container.paymentQueueEndpoint | quote }}
+  PAYMENT_QUEUE_REGION: {{ .Values.container.paymentQueueRegion | quote }}
+  CREATE_PAYMENT_QUEUE: {{ .Values.container.paymentCreateQueue | quote }}
+{{- end -}}
