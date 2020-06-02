@@ -10,7 +10,7 @@ services:
       target: development
     command: >
       sh -c "
-        scripts/wait-for/wait-for ffc-demo-calculation-message-queue:9324 --
+        scripts/wait-for/wait-for ffc-demo-calculation-message-queue:5672 --
         npm run test"
     depends_on:
       - ffc-demo-calculation-message-queue

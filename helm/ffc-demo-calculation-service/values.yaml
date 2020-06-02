@@ -27,14 +27,15 @@ container:
   limitCpu: 40m
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
-  calculationQueueName: calculation
-  calculationQueueEndpoint: http://ffc-demo-calculation-message-queue:9324
-  calculationQueueRegion: eu-west-2
-  calculationCreateQueue: false
-  paymentQueueName: payment
-  paymentQueueEndpoint: http://ffc-demo-calculation-message-queue:9324
-  paymentQueueRegion: eu-west-2
-  paymentCreateQueue: false
+  messageQueueHost: amq
+  messageQueuePort: 5672
+  messageQueueTransport: tcp
+  calculationQueueAddress: calculation
+  calculationQueueUser: artemis
+  calculationQueuePassword: artemis
+  paymentQueueAddress: payment
+  paymentQueueUser: artemis
+  paymentQueuePassword: artemis
 
 livenessProbe:
   initialDelaySeconds: 70

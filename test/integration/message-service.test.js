@@ -6,7 +6,7 @@ describe('message service', () => {
     await messageService.closeConnections()
   })
   test('smoke test', async () => {
-    await messageService.registerService()
+    await messageService.registerQueues()
     await messageService.closeConnections()
   })
 })

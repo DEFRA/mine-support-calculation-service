@@ -1,7 +1,7 @@
 {
   "name": "ffc-demo-calculation-service",
   "description": "Digital service mock to claim public money in the event property subsides into mine shaft.",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "main": "index.js",
   "scripts": {
     "pretest": "npm run test:lint",
@@ -27,8 +27,7 @@
     "aws-sdk": "^2.609.0",
     "lodash": "^4.17.15",
     "rhea": "^1.0.10",
-    "rhea-promise": "^1.0.0",
-    "sqs-consumer": "^5.4.0"
+    "rhea-promise": "^1.0.0"
   },
   "devDependencies": {
     "jest": "^25.1.0",

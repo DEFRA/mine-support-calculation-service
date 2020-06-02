@@ -1,25 +1,21 @@
 const MessageSender = require('../../server/services/messaging/message-sender')
-const createQueue = require('../../server/services/messaging/create-queue')
-const purgeQueue = require('../../server/services/messaging/purge-queue')
-
 const config = require('../../server/config')
-const queueName = 'testq1'
-const queueUrl = `${config.paymentQueueConfig.endpoint}/queue/${queueName}`
 
-beforeAll(async () => {
-  await createQueue(queueName, config.paymentQueueConfig)
-})
+const address = 'test-send'
+const message = {
+  content: 'howdy'
+}
+let messageSender
 
-afterAll(async () => {
-  await purgeQueue(queueUrl, config.paymentQueueConfig)
-})
-
-describe('send message', () => {
-  test('sends a json message', async () => {
-    jest.setTimeout(30000)
-    const sender = new MessageSender(config.paymentQueueConfig, queueUrl)
-    const result = await sender.sendMessage({ greeting: 'test message' })
-    console.log(result)
-    expect(result).toBeDefined()
+describe('message sender', () => {
+  afterEach(async () => {
+    await messageSender.closeConnection()
+  })
+  test('can send messages', async () => {
+    const testConfig = { ...config.paymentQueueConfig, address }
+    messageSender = new MessageSender('test-sender', testConfig)
+    await messageSender.openConnection()
+    const delivery = await messageSender.sendMessage(message)
+    expect(delivery.settled).toBeTruthy()
   })
 })

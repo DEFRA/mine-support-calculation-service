@@ -5,25 +5,29 @@ services:
       context: .
       target: production
     image: ffc-demo-calculation-service
+    depends_on:
+      - ffc-demo-calculation-message-queue  
     environment:
-      CALCULATION_ENDPOINT: http://ffc-demo-calculation-message-queue:9324
-      CALCULATION_QUEUE_NAME: calculation
-      CALCULATION_QUEUE_URL: http://ffc-demo-calculation-message-queue:9324/queue/calculation
-      CREATE_CALCULATION_QUEUE: "true"
-      PAYMENT_ENDPOINT: http://ffc-demo-calculation-message-queue:9324
-      PAYMENT_QUEUE_NAME: payment
-      PAYMENT_QUEUE_URL: http://ffc-demo-calculation-message-queue:9324/queue/payment
-      CREATE_PAYMENT_QUEUE: "true"
-      DEV_ACCESS_KEY_ID: elasticmq
-      DEV_ACCESS_KEY: elasticmq
+      MESSAGE_QUEUE_HOST : ffc-demo-calculation-message-queue
+      MESSAGE_QUEUE_PORT : 5672
+      CALCULATION_QUEUE_ADDRESS : calculation
+      CALCULATION_QUEUE_USER : artemis
+      CALCULATION_QUEUE_PASSWORD : artemis
+      PAYMENT_QUEUE_ADDRESS : payment
+      PAYMENT_QUEUE_USER : artemis
+      PAYMENT_QUEUE_PASSWORD : artemis
     volumes:
       - ./server/:/home/node/server/
+      - ./test/:/home/node/test/
       - ./scripts/:/home/node/scripts/
       - ./index.js:/home/node/index.js
       - ./package.json:/home/node/package.json
 
   ffc-demo-calculation-message-queue:
-    image: softwaremill/elasticmq
+    image: vromero/activemq-artemis:2.9.0-alpine
+    environment:
+      ARTEMIS_USERNAME: artemis
+      ARTEMIS_PASSWORD: artemis
 
 volumes:
   node_modules: {}
