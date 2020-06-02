@@ -19,7 +19,7 @@ class MessageReceiver extends MessageBase {
       }
     })
 
-    receiver.on(rheaPromise.ReceiverEvents.receiverError, (context) => {
+    receiver.on(rheaPromise.ReceiverEvents.receiverError, context => {
       const receiverError = context.receiver && context.receiver.error
       if (receiverError) {
         console.error(`${this.name} receipt error`, receiverError)

@@ -8,7 +8,7 @@ const messageReceiver = new MessageReceiver('calculation-queue-receiver', config
 
 async function registerQueues () {
   await openConnections()
-  await messageReceiver.setupReceiver((message) => messageAction(message, messageSender))
+  await messageReceiver.setupReceiver(message => messageAction(message, messageSender))
 }
 
 process.on('SIGTERM', async function () {

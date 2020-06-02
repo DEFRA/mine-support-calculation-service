@@ -17,6 +17,7 @@ class MessageSender extends MessageBase {
       return delivery
     } catch (error) {
       console.error('failed to send message', error)
+      throw error
     } finally {
       await sender.close()
     }
