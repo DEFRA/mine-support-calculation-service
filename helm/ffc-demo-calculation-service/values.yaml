@@ -6,6 +6,9 @@ image: ffc-demo-calculation-service
 
 labels: {}
 
+configMap:
+  name: my-config-map
+
 serviceAccount:
   name: ffc-demo-calculation-service-account
 
