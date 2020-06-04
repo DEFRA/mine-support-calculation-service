@@ -1,5 +1,4 @@
 {{- define "ffc-demo-calculation-service.container" -}}
-name: {{ quote .Values.name }}
 livenessProbe: {{ include "ffc-helm-library.exec-probe" (list . .Values.livenessProbe) | nindent 4}}
 volumeMounts:
 - mountPath: /tmp
