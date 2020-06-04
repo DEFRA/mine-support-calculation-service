@@ -6,7 +6,7 @@ image: ffc-demo-calculation-service
 
 labels: {}
 
-configMap:
+containerConfigMap:
   name: my-config-map
 
 serviceAccount:
