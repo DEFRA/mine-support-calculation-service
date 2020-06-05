@@ -7,7 +7,7 @@ image: ffc-demo-calculation-service
 labels: {}
 
 containerConfigMap:
-  name: my-config-map
+  name: ffc-demo-calculation-service-config-map
 
 serviceAccount:
   name: ffc-demo-calculation-service-account
