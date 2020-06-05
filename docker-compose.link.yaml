@@ -10,7 +10,7 @@ services:
       target: development  
     command: >
       sh -c "
-        scripts/wait-for/wait-for ffc-demo-message-queue:9324 --
+        scripts/wait-for/wait-for ffc-demo-message-queue:5672 --
         npm run start:watch"
     environment:
       MESSAGE_QUEUE_HOST : ffc-demo-message-queue
