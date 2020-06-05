@@ -3,7 +3,7 @@ const healthService = require('./server/services/health-service')
 const config = require('./server/config/config')
 
 async function startService () {
-  messageService.registerService()
+  await messageService.registerQueues()
   setInterval(healthService, config.healthzFileInterval)
 }
 
