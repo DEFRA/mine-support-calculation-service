@@ -1,3 +1,10 @@
+/**
+ *
+ *   this file is used for manual testing of the service.
+ *   The script './scripts/send-test-message' will execute the code
+ *   in the running container to send a message to the source queue
+ *
+**/
 const MessageSender = require('../server/services/messaging/message-sender')
 const config = require('../server/config')
 
