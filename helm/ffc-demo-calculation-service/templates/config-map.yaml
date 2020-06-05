@@ -2,12 +2,13 @@
 {{- define "ffc-demo-calculation-service.config-map" -}}
 data:
   NODE_ENV: {{ quote .Values.environment }}
-  CALCULATION_QUEUE_NAME: {{ quote .Values.container.calculationQueueName }}
-  CALCULATION_ENDPOINT: {{ quote .Values.container.calculationQueueEndpoint }}
-  CALCULATION_QUEUE_REGION: {{ quote .Values.container.calculationQueueRegion }}
-  CREATE_CALCULATION_QUEUE: {{ quote .Values.container.calculationCreateQueue }}
-  PAYMENT_QUEUE_NAME: {{ quote .Values.container.paymentQueueName }}
-  PAYMENT_ENDPOINT: {{ quote .Values.container.paymentQueueEndpoint }}
-  PAYMENT_QUEUE_REGION: {{ quote .Values.container.paymentQueueRegion }}
-  CREATE_PAYMENT_QUEUE: {{ quote .Values.container.paymentCreateQueue }}
+  MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
+  MESSAGE_QUEUE_PORT: {{ quote .Values.container.messageQueuePort }}
+  MESSAGE_QUEUE_TRANSPORT: {{ quote .Values.container.messageQueueTransport }}
+  CALCULATION_QUEUE_ADDRESS: {{ quote .Values.container.calculationQueueAddress }}
+  CALCULATION_QUEUE_USER: {{ quote .Values.container.calculationQueueUser }}
+  CALCULATION_QUEUE_PASSWORD: {{ quote .Values.container.calculationQueuePassword }}
+  PAYMENT_QUEUE_ADDRESS: {{ quote .Values.container.paymentQueueAddress }}
+  PAYMENT_QUEUE_USER: {{ quote .Values.container.paymentQueueUser }}
+  PAYMENT_QUEUE_PASSWORD: {{ quote .Values.container.paymentQueuePassword }}
 {{- end -}}
