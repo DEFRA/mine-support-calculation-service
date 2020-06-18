@@ -1,3 +1,3 @@
-@Library('defra-library@v-6') _
+@Library('defra-library@psd-776-test-sonarcloud-webhook') _
 
 buildNodeJs environment: 'dev'
