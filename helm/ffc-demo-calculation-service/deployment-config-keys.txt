@@ -1,0 +1,12 @@
+environment
+container.allowPrivilegeEscalation
+container.imagePullPolicy
+container.messageQueueHost
+container.messageQueuePort
+container.messageQueueTransport
+container.calculationQueueAddress
+container.calculationQueueUser
+container.calculationQueuePassword
+container.paymentQueueAddress
+container.paymentQueueUser
+container.paymentQueuePassword

@@ -6,7 +6,6 @@ data:
   MESSAGE_QUEUE_PORT: {{ quote .Values.container.messageQueuePort }}
   MESSAGE_QUEUE_TRANSPORT: {{ quote .Values.container.messageQueueTransport }}
   CALCULATION_QUEUE_ADDRESS: {{ quote .Values.container.calculationQueueAddress }}
-  CALCULATION_QUEUE_USER: {{ quote .Values.container.calculationQueueUser }}
   PAYMENT_QUEUE_ADDRESS: {{ quote .Values.container.paymentQueueAddress }}
   PAYMENT_QUEUE_USER: {{ quote .Values.container.paymentQueueUser }}
 {{- end -}}
