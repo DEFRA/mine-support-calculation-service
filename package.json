@@ -25,7 +25,6 @@
     "@hapi/joi": "^17.1.1",
     "async-polling": "^0.2.1",
     "aws-sdk": "^2.699.0",
-    "lodash": "^4.17.15",
     "rhea": "^1.0.22",
     "rhea-promise": "^1.0.0"
   },
