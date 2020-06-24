@@ -1,5 +1,6 @@
 function round (value, precision) {
-  return Number(Math.round(value + `e${precision}`) + `e-${precision}`)
+  const raw = Math.round(value + `e${precision}`) + `e-${precision}`
+  return Number(raw)
 }
 
 module.exports = round
