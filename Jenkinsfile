@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-@Library('defra-library@v-7') _
-=======
-@Library('defra-library@psd-776-test-sonarcloud-webhook') _
->>>>>>> Jenkinsfile branch updated
+@Library('defra-library@psd-860-add-sonarcloud-ci') _
 
 buildNodeJs environment: 'dev'
