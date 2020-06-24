@@ -1,3 +1,3 @@
-@Library('defra-library@psd-776-test-sonarcloud-webhook') _
+@Library('defra-library@psd-860-add-sonarcloud-ci') _
 
 buildNodeJs environment: 'dev'
