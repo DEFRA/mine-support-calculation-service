@@ -21,11 +21,6 @@ describe('round', () => {
     expect(result).toEqual(1.00)
   })
 
-  test('does no rounding if integer', () => {
-    const result = round(1, 2)
-    expect(result).toEqual(1.00)
-  })
-
   test('handles 0', () => {
     const result = round(0.000, 2)
     expect(result).toEqual(0.00)
