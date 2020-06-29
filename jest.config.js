@@ -15,6 +15,7 @@ module.exports = {
     '<rootDir>/node_modules/',
     '<rootDir>/test-output/',
     '<rootDir>/test/',
+    '.*/app-insights.js',
     '.*/__mocks__/.*'
   ],
   coverageThreshold: {
