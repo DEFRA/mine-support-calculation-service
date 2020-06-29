@@ -22,20 +22,21 @@ Or:
 
 The following environment variables are required by the application container. Values for development are set in the Docker Compose configuration. Default values for production-like deployments are set in the Helm chart and may be overridden by build and release pipelines.
 
-| Name                            | Description                           | Required | Default     | Valid                       | Notes                             |
-|---------------------------------|---------------------------------------|:--------:|-------------|-----------------------------|-----------------------------------|
-| NODE_ENV                       | Node environment                       | no       | development | development,test,production |                                   |
-| MESSAGE_QUEUE_HOST             | Message queue host                     | no       |             | myservicebus.servicebus.windows.net |       |
-| MESSAGE_QUEUE_PORT             | Message queue port                     | no       |             | 5671,5672                           |       |
-| MESSAGE_QUEUE_TRANSPORT        | Message queue transport                | yes      | tcp         | tcp,ssl                             | standard port is 5671 for ssl, 5672 for tcp |
-| CALCULATION_QUEUE_ADDRESS      | calculation queue name                 | no       |             | calculation                         |       |
-| CALCULATION_QUEUE_USER         | calculation queue user name            | no       |             |                                     |       |
-| CALCULATION_QUEUE_PASSWORD     | calculation queue password             | no       |             |                                     |       |
-| PAYMENT_QUEUE_ADDRESS          | payment queue name                     | no       |             | payment                             |       |
-| PAYMENT_QUEUE_USER             | payment queue user name                | no       |             |                                     |       |
-| PAYMENT_QUEUE_PASSWORD         | payment queue password                 | no       |             |                                     |       |
- HEALTHZ_FILE_INTERVAL_IN_MILLIS | Interval for creation of healthz file  | no       | 10000       |                             | Maximum value 30000               |
-
+| Name                            | Description                           | Required | Default     | Valid                               | Notes                             |
+|---------------------------------|---------------------------------------|:--------:|-------------|-------------------------------------|-----------------------------------|
+| NODE_ENV                        | Node environment                       | no      | development | development,test,production         |                                   |
+| MESSAGE_QUEUE_HOST              | Message queue host                     | no      |             | myservicebus.servicebus.windows.net |       |
+| MESSAGE_QUEUE_PORT              | Message queue port                     | no      |             | 5671,5672                           |       |
+| MESSAGE_QUEUE_TRANSPORT         | Message queue transport                | yes     | tcp         | tcp,ssl                             | standard port is 5671 for ssl, 5672 for tcp |
+| CALCULATION_QUEUE_ADDRESS       | calculation queue name                 | no      |             | calculation                         |       |
+| CALCULATION_QUEUE_USER          | calculation queue user name            | no      |             |                                     |       |
+| CALCULATION_QUEUE_PASSWORD      | calculation queue password             | no      |             |                                     |       |
+| PAYMENT_QUEUE_ADDRESS           | payment queue name                     | no      |             | payment                             |       |
+| PAYMENT_QUEUE_USER              | payment queue user name                | no      |             |                                     |       |
+| PAYMENT_QUEUE_PASSWORD          | payment queue password                 | no      |             |                                     |       |
+| HEALTHZ_FILE_INTERVAL_IN_MILLIS | Interval for creation of healthz file  | no      | 10000       |                                     | Maximum value 30000               |
+| APPINSIGHTS_INSTRUMENTATIONKEY  | Key for application insight            | no      |             |                                     | App insights only enabled if key is present. Note: Silently fails for invalid key |
+| APPINSIGHTS_CLOUDROLE           | Role used for filtering metrics        | no      |             |                                     | Set to `ffc-demo-calculation-service-local` in docker compose files               |
 ## How to run tests
 
 A convenience script is provided to run automated tests in a containerised environment. The first time this is run, container images required for testing will be automatically built. An optional `--build` (or `-b`) flag may be used to rebuild these images in future (for example, to apply dependency updates).

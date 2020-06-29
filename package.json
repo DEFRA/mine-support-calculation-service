@@ -23,6 +23,7 @@
   "license": "OGL-UK-3.0",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "applicationinsights": "^1.8.0",
     "async-polling": "^0.2.1",
     "aws-sdk": "^2.699.0",
     "rhea": "^1.0.22",

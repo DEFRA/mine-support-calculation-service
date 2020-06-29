@@ -8,6 +8,8 @@ services:
     depends_on:
       - ffc-demo-calculation-message-queue  
     environment:
+      APPINSIGHTS_CLOUDROLE: ffc-demo-calculation-service-local
+      APPINSIGHTS_INSTRUMENTATIONKEY:
       MESSAGE_QUEUE_HOST : ffc-demo-calculation-message-queue
       MESSAGE_QUEUE_PORT : 5672
       CALCULATION_QUEUE_ADDRESS : calculation

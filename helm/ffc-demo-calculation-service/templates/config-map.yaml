@@ -7,4 +7,5 @@ data:
   MESSAGE_QUEUE_TRANSPORT: {{ quote .Values.container.messageQueueTransport }}
   CALCULATION_QUEUE_ADDRESS: {{ quote .Values.container.calculationQueueAddress }}
   PAYMENT_QUEUE_ADDRESS: {{ quote .Values.container.paymentQueueAddress }}
+  APPINSIGHTS_CLOUDROLE: {{ quote .Values.name }}
 {{- end -}}

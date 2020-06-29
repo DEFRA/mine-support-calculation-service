@@ -6,6 +6,9 @@ image: ffc-demo-calculation-service
 
 labels: {}
 
+appInsights:
+  key:
+
 containerConfigMap:
   name: ffc-demo-calculation-service-config-map
 
