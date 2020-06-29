@@ -12,7 +12,6 @@ module.exports = {
   ],
   coveragePathIgnorePatterns: [
     'jest.config.js',
-    'index.js',
     '<rootDir>/node_modules/',
     '<rootDir>/test-output/',
     '<rootDir>/test/',
