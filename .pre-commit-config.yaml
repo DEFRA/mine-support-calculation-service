@@ -2,4 +2,5 @@
     rev: v0.13.1
     hooks:
     -   id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
         exclude: ^package-lock.json|^.secrets.baseline
