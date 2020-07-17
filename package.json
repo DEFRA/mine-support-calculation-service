@@ -1,7 +1,7 @@
 {
   "name": "ffc-demo-calculation-service",
   "description": "Digital service mock to claim public money in the event property subsides into mine shaft.",
-  "version": "3.5.3",
+  "version": "3.6.0",
   "main": "index.js",
   "scripts": {
     "pretest": "npm run test:lint",
@@ -18,16 +18,14 @@
     "Mark Harrop mark.harrop@defra.gov.uk",
     "Matthew Collins matthew.collins@defra.gov.uk",
     "David Bingham david.bingham@defra.gov.uk",
-    "Paul Andrews paul.andrews@defra.gov.uk"
+    "Paul Andrews paul.andrews@defra.gov.uk",
+    "Steve Hunt steven.hunt@defra.gov.uk"
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
+    "@azure/service-bus": "^1.1.8",
     "@hapi/joi": "^17.1.1",
-    "applicationinsights": "^1.8.0",
-    "async-polling": "^0.2.1",
-    "aws-sdk": "^2.699.0",
-    "rhea": "^1.0.22",
-    "rhea-promise": "^1.0.0"
+    "applicationinsights": "^1.8.0"
   },
   "devDependencies": {
     "jest": "^25.5.4",

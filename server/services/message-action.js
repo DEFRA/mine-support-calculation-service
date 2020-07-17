@@ -1,4 +1,5 @@
 const calculationService = require('./calculation-service')
+
 async function messageAction (claim, sender) {
   try {
     const value = calculationService.calculate(claim)

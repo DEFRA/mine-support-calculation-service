@@ -35,14 +35,12 @@ container:
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   messageQueueHost: amq
-  messageQueuePort: 5672
-  messageQueueTransport: tcp
   calculationQueueAddress: calculation
-  calculationQueueUser: artemis
   calculationQueuePassword: artemis
+  calculationQueueUser: artemis
   paymentQueueAddress: payment
-  paymentQueueUser: artemis
   paymentQueuePassword: artemis
+  paymentQueueUser: artemis
 
 livenessProbe:
   initialDelaySeconds: 70

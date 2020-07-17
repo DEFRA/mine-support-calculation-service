@@ -7,8 +7,9 @@ const messageSender = new MessageSender('payment-queue-sender', config.paymentQu
 const messageReceiver = new MessageReceiver('calculation-queue-receiver', config.calculationQueueConfig)
 
 async function registerQueues () {
-  await openConnections()
-  await messageReceiver.setupReceiver(message => messageAction(message, messageSender))
+  await messageReceiver.setupReceiver(calculation => {
+    messageAction(calculation, messageSender)
+  })
 }
 
 process.on('SIGTERM', async function () {
@@ -26,12 +27,7 @@ async function closeConnections () {
   await messageReceiver.closeConnection()
 }
 
-async function openConnections () {
-  await messageSender.openConnection()
-  await messageReceiver.openConnection()
-}
-
 module.exports = {
-  registerQueues,
-  closeConnections
+  closeConnections,
+  registerQueues
 }

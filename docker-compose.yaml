@@ -1,35 +1,26 @@
 version: '3.7'
 services:
   ffc-demo-calculation-service:
-    build: 
+    build:
       context: .
       target: production
     image: ffc-demo-calculation-service
-    depends_on:
-      - ffc-demo-calculation-message-queue  
     environment:
       APPINSIGHTS_CLOUDROLE: ffc-demo-calculation-service-local
-      APPINSIGHTS_INSTRUMENTATIONKEY:
-      MESSAGE_QUEUE_HOST : ffc-demo-calculation-message-queue
-      MESSAGE_QUEUE_PORT : 5672
-      CALCULATION_QUEUE_ADDRESS : calculation
-      CALCULATION_QUEUE_USER : artemis
-      CALCULATION_QUEUE_PASSWORD : artemis
-      PAYMENT_QUEUE_ADDRESS : payment
-      PAYMENT_QUEUE_USER : artemis
-      PAYMENT_QUEUE_PASSWORD : artemis
+      APPINSIGHTS_INSTRUMENTATIONKEY: ${APPINSIGHTS_INSTRUMENTATIONKEY}
+      CALCULATION_QUEUE_ADDRESS: ffc-demo-calculation-${MESSAGE_QUEUE_SUFFIX}
+      CALCULATION_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD:-notset}
+      CALCULATION_QUEUE_USER: ${MESSAGE_QUEUE_USER:-notset}
+      MESSAGE_QUEUE_HOST: ${MESSAGE_QUEUE_HOST:-notset}
+      PAYMENT_QUEUE_ADDRESS: ffc-demo-payment-${MESSAGE_QUEUE_SUFFIX}
+      PAYMENT_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD:-notset}
+      PAYMENT_QUEUE_USER: ${MESSAGE_QUEUE_USER:-notset}
     volumes:
       - ./server/:/home/node/server/
       - ./test/:/home/node/test/
       - ./scripts/:/home/node/scripts/
       - ./index.js:/home/node/index.js
       - ./package.json:/home/node/package.json
-
-  ffc-demo-calculation-message-queue:
-    image: vromero/activemq-artemis:2.9.0-alpine
-    environment:
-      ARTEMIS_USERNAME: artemis
-      ARTEMIS_PASSWORD: artemis
 
 volumes:
   node_modules: {}

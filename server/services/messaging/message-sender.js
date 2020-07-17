@@ -8,16 +8,13 @@ class MessageSender extends MessageBase {
   }
 
   async sendMessage (message) {
-    const data = JSON.stringify(message)
-    const sender = await this.connection.createAwaitableSender(this.senderConfig)
+    const queueClient = this.sbClient.createQueueClient(this.senderConfig.target.address)
+    const sender = queueClient.createSender()
     try {
-      console.log(`${this.name} sending message`, data)
-      const delivery = await sender.send({ body: data })
+      console.log(`${this.name} sending message`, message)
+
+      await sender.send({ body: message })
       console.log(`message sent ${this.name}`)
-      return delivery
-    } catch (error) {
-      console.error('failed to send message', error)
-      throw error
     } finally {
       await sender.close()
     }

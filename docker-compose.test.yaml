@@ -5,15 +5,10 @@ version: '3.7'
 
 services:
   ffc-demo-calculation-service:
-    build: 
+    build:
       context: .
       target: development
-    command: >
-      sh -c "
-        scripts/wait-for/wait-for ffc-demo-calculation-message-queue:5672 --
-        npm run test"
-    depends_on:
-      - ffc-demo-calculation-message-queue
+    command: npm run test
     volumes:
       - ./test/:/home/node/test/
       - ./test-output/:/home/node/test-output/

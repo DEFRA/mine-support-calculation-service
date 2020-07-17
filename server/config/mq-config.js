@@ -2,11 +2,7 @@ const joi = require('@hapi/joi')
 
 const mqSchema = joi.object({
   messageQueue: {
-    host: joi.string().default('localhost'),
-    hostname: joi.string().default('localhost'),
-    port: joi.number().default(5672),
-    reconnect_Limit: joi.number().default(10),
-    transport: joi.string().default('tcp')
+    host: joi.string().default('localhost')
   },
   calculationQueue: {
     address: joi.string().default('calculation'),
@@ -23,22 +19,18 @@ const mqSchema = joi.object({
 
 const mqConfig = {
   messageQueue: {
-    host: process.env.MESSAGE_QUEUE_HOST,
-    hostname: process.env.MESSAGE_QUEUE_HOST,
-    port: process.env.MESSAGE_QUEUE_PORT,
-    reconnect_Limit: process.env.MESSAGE_QUEUE_RECONNECT_LIMIT,
-    transport: process.env.MESSAGE_QUEUE_TRANSPORT
+    host: process.env.MESSAGE_QUEUE_HOST
   },
   calculationQueue: {
     address: process.env.CALCULATION_QUEUE_ADDRESS,
-    username: process.env.CALCULATION_QUEUE_USER,
-    password: process.env.CALCULATION_QUEUE_PASSWORD
+    password: process.env.CALCULATION_QUEUE_PASSWORD,
+    username: process.env.CALCULATION_QUEUE_USER
   },
   paymentQueue: {
     address: process.env.PAYMENT_QUEUE_ADDRESS,
-    username: process.env.PAYMENT_QUEUE_USER,
+    sendTimeoutInSeconds: process.env.SEND_TIMEOUT_IN_SECONDS,
     password: process.env.PAYMENT_QUEUE_PASSWORD,
-    sendTimeoutInSeconds: process.env.SEND_TIMEOUT_IN_SECONDS
+    username: process.env.PAYMENT_QUEUE_USER
   }
 }
 

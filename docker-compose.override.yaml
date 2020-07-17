@@ -5,19 +5,9 @@ version: '3.7'
 
 services:
   ffc-demo-calculation-service:
-    build: 
+    build:
       context: .
       target: development
-    command: >
-      sh -c "
-        scripts/wait-for/wait-for ffc-demo-calculation-message-queue:5672 --
-        npm run start:watch"
+    command: npm run start:watch
     ports:
       - "3005:3005"
-    depends_on:
-      - ffc-demo-calculation-message-queue
-      
-  ffc-demo-calculation-message-queue:
-    ports:
-      - "8161:8161"
-      - "5672:5672"
