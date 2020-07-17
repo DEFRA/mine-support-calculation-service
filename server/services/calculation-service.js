@@ -8,7 +8,7 @@ module.exports = {
     const net2 = calculations.net2(claim)
     const value = round(gross - net1 - net2, 2)
 
-    console.log(`calculated ${claim.claimId} as ${value}`)
+    console.log(`calculated claimId: '${claim.claimId}' to have value: '${value}'.`)
     return value
   }
 }
