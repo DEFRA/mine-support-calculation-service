@@ -9,6 +9,10 @@ labels: {}
 appInsights:
   key:
 
+azureIdentity:
+  clientID: not-a-real-clientID
+  resourceID: not-a-real-resourceID
+
 containerConfigMap:
   name: ffc-demo-calculation-service-config-map
 
