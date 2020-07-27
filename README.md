@@ -21,17 +21,24 @@ Or:
 - Redis
 
 ### Azure Service Bus
-This service depends on access to an ASB instance, a queue and credentials to
-write to that queue. The following environment variables need to be set in any
-environment before the Docker container is started. The easiest way to do this
-is by adding them to a `.env` file.
 
-| Name                   | Description                                                                                |
-| -----                  | ------------                                                                               |
-| MESSAGE_QUEUE_HOST     | Azure Service Bus host name, e.g. `myservicebus.servicebus.windows.net`                    |
-| MESSAGE_QUEUE_PASSWORD | Azure Service Bus SAS policy key                                                           |
-| MESSAGE_QUEUE_SUFFIX   | Developer specific queue suffix to prevent collisions, only required for local development |
-| MESSAGE_QUEUE_USER     | Azure Service Bus SAS policy name, e.g. `RootManageSharedAccessKey`                        |
+This service depends on a valid Azure Service Bus connection string for
+asynchronous communication.  The following environment variables need to be set
+in any non-production (`!config.isProd`) environment before the Docker
+container is started. When deployed into an appropriately configured AKS
+cluster (where [AAD Pod Identity](https://github.com/Azure/aad-pod-identity) is
+configured) the micro-service will use AAD Pod Identity through the manifests
+for
+[azure-identity](./helm/ffc-demo-claim-service/templates/azure-identity.yaml)
+and
+[azure-identity-binding](./helm/ffc-demo-claim-service/templates/azure-identity-binding.yaml).
+
+| Name                               | Description                                                                                  |
+| ---------------------------------- | -------------------------------------------------------------------------------------------- |
+| MESSAGE_QUEUE_HOST                 | Azure Service Bus hostname, e.g. `myservicebus.servicebus.windows.net`                       |
+| MESSAGE_QUEUE_PASSWORD             | Azure Service Bus SAS policy key                                                             |
+| MESSAGE_QUEUE_SUFFIX               | Developer specific queue suffix to prevent collisions, only required for local development   |
+| MESSAGE_QUEUE_USER                 | Azure Service Bus SAS policy name, e.g. `RootManageSharedAccessKey`                          |
 
 ## Environment variables
 
@@ -39,17 +46,12 @@ The following environment variables are required by the application container. V
 
 | Name                            | Description                           | Required   | Default     | Valid                               | Notes                                                                             |
 | ----                            | ----------                            | :--------: | -----       | ----                                | ----                                                                              |
-| APPINSIGHTS_INSTRUMENTATIONKEY  | Key for application insight           | no         |             |                                     | App insights only enabled if key is present. Note: Silently fails for invalid key |
 | APPINSIGHTS_CLOUDROLE           | Role used for filtering metrics       | no         |             |                                     | Set to `ffc-demo-calculation-service-local` in docker compose files               |
+| APPINSIGHTS_INSTRUMENTATIONKEY  | Key for application insight           | no         |             |                                     | App insights only enabled if key is present. Note: Silently fails for invalid key |
 | CALCULATION_QUEUE_ADDRESS       | calculation queue name                | no         |             | calculation                         |                                                                                   |
-| CALCULATION_QUEUE_USER          | calculation queue user name           | no         |             |                                     |                                                                                   |
-| CALCULATION_QUEUE_PASSWORD      | calculation queue password            | no         |             |                                     |                                                                                   |
 | HEALTHZ_FILE_INTERVAL_IN_MILLIS | Interval for creation of healthz file | no         | 10000       |                                     | Maximum value 30000                                                               |
-| MESSAGE_QUEUE_HOST              | Message queue host                    | no         |             | myservicebus.servicebus.windows.net |                                                                                   |
 | NODE_ENV                        | Node environment                      | no         | development | development,test,production         |                                                                                   |
 | PAYMENT_QUEUE_ADDRESS           | payment queue name                    | no         |             | payment                             |                                                                                   |
-| PAYMENT_QUEUE_USER              | payment queue user name               | no         |             |                                     |                                                                                   |
-| PAYMENT_QUEUE_PASSWORD          | payment queue password                | no         |             |                                     |                                                                                   |
 
 ## How to run tests
 
