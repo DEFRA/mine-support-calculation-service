@@ -41,9 +41,8 @@ class MessageService {
 let messageService
 
 module.exports = (async function createConnections () {
-  if (!messageService) {
-    const credentials = config.isProd ? await auth.loginWithVmMSI({ resource: 'https://servicebus.azure.net' }) : undefined
-    messageService = new MessageService(credentials)
-  }
+  const credentials = config.isProd ? await auth.loginWithVmMSI({ resource: 'https://servicebus.azure.net' }) : undefined
+  console.log('credentials', credentials)
+  messageService = new MessageService(credentials)
   return messageService
 }())

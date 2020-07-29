@@ -28,8 +28,8 @@ const mqConfig = {
   },
   paymentQueue: {
     address: process.env.PAYMENT_QUEUE_ADDRESS,
-    sendTimeoutInSeconds: process.env.SEND_TIMEOUT_IN_SECONDS,
     password: process.env.MESSAGE_QUEUE_PASSWORD,
+    sendTimeoutInSeconds: process.env.SEND_TIMEOUT_IN_SECONDS,
     username: process.env.MESSAGE_QUEUE_USER
   }
 }
