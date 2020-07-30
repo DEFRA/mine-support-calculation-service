@@ -3,7 +3,7 @@ const MessageBase = require('./message-base')
 
 class MessageReceiver extends MessageBase {
   constructor (name, config, credentials, action) {
-    super(name, config)
+    super(name, config, credentials)
     this.receiverHandler = this.receiverHandler.bind(this)
     this.action = action
     const receiver = this.queueClient.createReceiver(ReceiveMode.peekLock)
