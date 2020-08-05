@@ -45,10 +45,5 @@
       "beforeAll",
       "afterAll"
     ]
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "**/test-output/**"
-    ]
   }
 }
