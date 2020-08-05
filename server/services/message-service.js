@@ -4,16 +4,6 @@ const MessageReceiver = require('./messaging/message-receiver')
 const messageAction = require('./message-action')
 const config = require('../config')
 
-process.on('SIGTERM', async () => {
-  await messageService.closeConnections()
-  process.exit(0)
-})
-
-process.on('SIGINT', async () => {
-  await messageService.closeConnections()
-  process.exit(0)
-})
-
 class MessageService {
   constructor (credentials) {
     this.publishPayment = this.publishPayment.bind(this)
@@ -38,11 +28,7 @@ class MessageService {
   }
 }
 
-let messageService
-
-module.exports = (async function createConnections () {
+module.exports = async function () {
   const credentials = config.isProd ? await auth.loginWithVmMSI({ resource: 'https://servicebus.azure.net' }) : undefined
-  console.log('credentials', credentials)
-  messageService = new MessageService(credentials)
-  return messageService
-}())
+  return new MessageService(credentials)
+}
