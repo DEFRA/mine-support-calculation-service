@@ -8,6 +8,15 @@ services:
     build:
       context: .
       target: development
+    depends_on:
+      - kafka
     command: npm run start:watch
     ports:
       - "3005:3005"
+
+  zookeeper:
+    ports:
+      - "2181:2181"
+  kafka:
+    ports:
+      - "9092:9092"

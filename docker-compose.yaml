@@ -20,5 +20,13 @@ services:
       - ./index.js:/home/node/index.js
       - ./package.json:/home/node/package.json
 
-volumes:
-  node_modules: {}
+  zookeeper:
+    image: wurstmeister/zookeeper
+    
+  kafka:
+    image: wurstmeister/kafka
+    hostname: kafka
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_PORT: 9092
