@@ -1,8 +1,9 @@
 const kafka = require('kafka-node')
+const { eventConfig } = require('../../config')
 
-function createConsumer (groupName, topicName) {
+function createConsumer (groupName, topicName, action) {
   const options = {
-    kafkaHost: 'kafka:9092',
+    kafkaHost: eventConfig.host,
     groupId: groupName,
     autoCommit: true,
     autoCommitIntervalMs: 5000,
@@ -15,9 +16,14 @@ function createConsumer (groupName, topicName) {
 
   const consumerGroup = new kafka.ConsumerGroup(options, topicName)
 
-  consumerGroup.on('message', function (message) {
-    const body = JSON.parse(message.value)
-    console.log(body.claimId)
+  consumerGroup.on('message', async function (message) {
+    console.log(`${this.name} received event`, message.value)
+    try {
+      const value = JSON.parse(message.value)
+      await action(value)
+    } catch (err) {
+      console.error(`Unable to handle event: ${err}`)
+    }
   })
 
   consumerGroup.on('error', function onError (error) {

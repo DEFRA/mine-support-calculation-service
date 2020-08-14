@@ -1,7 +1,7 @@
 const auth = require('@azure/ms-rest-nodeauth')
 const MessageSender = require('./messaging/message-sender')
 const MessageReceiver = require('./messaging/message-receiver')
-const messageAction = require('./message-action')
+const messageAction = require('./event-action')
 const config = require('../config')
 
 class MessageService {

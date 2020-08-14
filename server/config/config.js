@@ -1,5 +1,5 @@
 const joi = require('@hapi/joi')
-const mqConfig = require('./mq-config')
+const eventConfig = require('./event-config')
 
 // Define config schema
 const schema = joi.object({
@@ -29,7 +29,6 @@ const value = result.value
 value.isDev = value.env === 'development'
 value.isProd = value.env === 'production'
 
-value.paymentQueueConfig = mqConfig.paymentQueueConfig
-value.calculationQueueConfig = mqConfig.calculationQueueConfig
+value.eventConfig = eventConfig
 
 module.exports = value

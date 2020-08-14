@@ -8,11 +8,7 @@ services:
     environment:
       APPINSIGHTS_CLOUDROLE: ffc-demo-calculation-service-local
       APPINSIGHTS_INSTRUMENTATIONKEY: ${APPINSIGHTS_INSTRUMENTATIONKEY}
-      CALCULATION_QUEUE_ADDRESS: ffc-demo-calculation-${MESSAGE_QUEUE_SUFFIX}
-      MESSAGE_QUEUE_HOST: ${MESSAGE_QUEUE_HOST:-notset}
-      MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD:-notset}
-      MESSAGE_QUEUE_USER: ${MESSAGE_QUEUE_USER:-notset}
-      PAYMENT_QUEUE_ADDRESS: ffc-demo-payment-${MESSAGE_QUEUE_SUFFIX}
+      EVENT_HUB_HOST: kafka:9092
     volumes:
       - ./server/:/home/node/server/
       - ./test/:/home/node/test/
@@ -22,7 +18,7 @@ services:
 
   zookeeper:
     image: wurstmeister/zookeeper
-    
+
   kafka:
     image: wurstmeister/kafka
     hostname: kafka

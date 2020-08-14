@@ -1,6 +1,6 @@
 const MessageSender = require('../../../server/services/messaging/message-sender')
 const config = require('../../../server/config')
-const { paymentQueueConfig } = require('../../../server/config/mq-config')
+const { paymentQueueConfig } = require('../../../server/config/event-config')
 const asbHelper = require('../../asb-helper')
 
 describe('message sender', () => {
