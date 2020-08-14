@@ -1,21 +1,21 @@
 require('./server/services/app-insights').setup()
-const createMessageService = require('./server/services/message-service')
+const createEventConsumer = require('./server/services/events/consumer')
 const healthService = require('./server/services/health-service')
 const config = require('./server/config/config')
-
-let messageService
+const groupName = 'ffc-demo-calculation-service'
+const topicName = 'ffc-demo-claim-valid'
 
 process.on('SIGTERM', async () => {
-  await messageService.closeConnections()
+  // await messageService.closeConnections()
   process.exit(0)
 })
 
 process.on('SIGINT', async () => {
-  await messageService.closeConnections()
+  // await messageService.closeConnections()
   process.exit(0)
 })
 
-module.exports = (async function startService () {
-  messageService = await createMessageService()
+module.exports = (function startService () {
+  createEventConsumer(groupName, topicName)
   setInterval(healthService, config.healthzFileInterval)
 }())

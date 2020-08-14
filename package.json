@@ -26,7 +26,8 @@
     "@azure/ms-rest-nodeauth": "^3.0.5",
     "@azure/service-bus": "^1.1.8",
     "@hapi/joi": "^17.1.1",
-    "applicationinsights": "^1.8.0"
+    "applicationinsights": "^1.8.0",
+    "kafka-node": "^5.0.0"
   },
   "devDependencies": {
     "jest": "^26.1.0",
