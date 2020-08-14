@@ -17,7 +17,7 @@ function createConsumer (groupName, topicName, action) {
   const consumerGroup = new kafka.ConsumerGroup(options, topicName)
 
   consumerGroup.on('message', async function (message) {
-    console.log(`${this.name} received event`, message.value)
+    console.log(`received event ${message.value}`)
     try {
       const value = JSON.parse(message.value)
       await action(value)
