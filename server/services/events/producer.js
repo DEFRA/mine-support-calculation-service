@@ -10,7 +10,7 @@ function sendEvent (topicName, value) {
   const client = new kafka.KafkaClient(options)
   const producer = new HighLevelProducer(client)
   const payloads = [
-    { topic: topicName, messages: value }
+    { topic: topicName, messages: JSON.stringify(value) }
   ]
   producer.on('ready', function () {
     producer.send(payloads, function (err, data) {
