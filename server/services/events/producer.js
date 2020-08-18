@@ -23,6 +23,7 @@ function sendEvent (topicName, value) {
   producer.on('delivery-report', function (err, report) {
     if (err) console.error(err)
     console.log(`delivery-report: ${JSON.stringify(report)}`)
+    producer.disconnect()
   })
 
   producer.setPollInterval(100)
