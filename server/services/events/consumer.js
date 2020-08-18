@@ -14,6 +14,7 @@ function createConsumer (groupName, topicName, action) {
   consumer.connect()
 
   consumer.on('ready', function () {
+    console.log(`started consumer for topic ${topicName} in group ${groupName}`)
     consumer.subscribe([topicName])
     consumer.consume()
   })
@@ -32,9 +33,8 @@ function createConsumer (groupName, topicName, action) {
   consumer.on('event.error', function (err) {
     console.error('error from consumer')
     console.error(err)
+    consumer.consume()
   })
-
-  console.log(`started consumer for topic ${topicName} in group ${groupName}`)
 }
 
 function getConsumerOptions () {
