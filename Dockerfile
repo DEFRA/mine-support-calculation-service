@@ -39,17 +39,23 @@ COPY --from=development /home/node/server  /home/node/server
 # Install node-rdkafka dependencies
 USER root
 RUN apk --no-cache add \
+      bash \
+      g++ \
+      ca-certificates \
       lz4-dev \
       musl-dev \
       cyrus-sasl-dev \
-      openssl-dev
-
+      openssl-dev \
+      make \
+      python
 RUN apk add --no-cache --virtual \
       .build-deps \
-      gcc zlib-dev \
+      gcc \
+      zlib-dev \
       libc-dev \
       bsd-compat-headers \
-      py-setuptools
+      py-setuptools \
+      bash
 USER node
 
 RUN npm ci
