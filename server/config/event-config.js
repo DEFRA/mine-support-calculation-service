@@ -6,7 +6,6 @@ const schema = joi.object({
   calculationGroup: joi.string().default('ffc-demo-calculation-service'),
   calculationTopic: joi.string().default('ffc-demo-claim-valid'),
   paymentTopic: joi.string().default('ffc-demo-claim-calculation')
-
 })
 
 const config = {

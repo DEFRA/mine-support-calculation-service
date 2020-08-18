@@ -38,9 +38,11 @@ container:
   limitCpu: 40m
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
-  messageQueueHost: amq
-  calculationQueueAddress: calculation
-  paymentQueueAddress: payment
+  eventHubHost: kafka:29092
+  eventHubConnectionString:
+  calculationGroup: ffc-demo-calculation-service
+  calculationTopic: ffc-demo-claim-valid
+  paymentTopic: ffc-demo-claim-calculation
 
 livenessProbe:
   initialDelaySeconds: 70
