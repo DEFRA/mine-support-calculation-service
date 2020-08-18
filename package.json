@@ -27,7 +27,7 @@
     "@azure/service-bus": "^1.1.8",
     "@hapi/joi": "^17.1.1",
     "applicationinsights": "^1.8.0",
-    "kafka-node": "^5.0.0"
+    "node-rdkafka": "^2.9.1"
   },
   "devDependencies": {
     "jest": "^26.1.0",

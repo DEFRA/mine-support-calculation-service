@@ -5,7 +5,7 @@ const { eventConfig } = require('../config')
 async function eventAction (claim) {
   try {
     const value = calculationService.calculate(claim)
-    await sendEvent(eventConfig.paymentTopic, { claimId: claim.claimId, value })
+    await sendEvent(eventConfig.paymentTopic, JSON.stringify({ claimId: claim.claimId, value }))
   } catch (err) {
     console.error('error sending event', err)
   }

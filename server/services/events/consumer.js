@@ -1,39 +1,51 @@
-const kafka = require('kafka-node')
-const { eventConfig } = require('../../config')
+const Kafka = require('node-rdkafka')
+const config = require('../../config')
 
 function createConsumer (groupName, topicName, action) {
   const options = {
-    kafkaHost: eventConfig.host,
-    groupId: groupName,
-    autoCommit: false,
-    sessionTimeout: 15000,
-    fetchMaxBytes: 10 * 1024 * 1024,
-    protocol: ['roundrobin'],
-    fromOffset: 'latest',
-    outOfRangeOffset: 'earliest'
+    ...getConsumerOptions(),
+    'group.id': groupName,
+    'enable.auto.commit': false,
+    'auto.offset.reset': 'earliest'
   }
 
-  const consumerGroup = new kafka.ConsumerGroup(options, topicName)
+  const consumer = new Kafka.KafkaConsumer(options, {})
+  consumer.connect()
 
-  consumerGroup.on('message', async function (message) {
-    console.log(`received event ${message.value}`)
+  consumer.on('ready', function () {
+    consumer.subscribe([topicName])
+    consumer.consume()
+  })
+
+  consumer.on('data', async function (data) {
     try {
-      const value = JSON.parse(message.value)
+      console.log(`received event ${data.value.toString()}`)
+      const value = JSON.parse(data.value)
       await action(value)
-      consumerGroup.commit((err, data) => {
-        if (err) console.error(err)
-        console.log('message committed')
-      })
+      consumer.commitMessage(data)
     } catch (err) {
-      console.error(`Unable to handle event: ${err}`)
+      console.error(`unable to process event: ${err}`)
     }
   })
 
-  consumerGroup.on('error', function onError (error) {
-    console.error(error)
+  consumer.on('event.error', function (err) {
+    console.error('Error from consumer')
+    console.error(err)
   })
 
-  console.log(`Started consumer for topic ${topicName} in group ${groupName}`)
+  console.log(`started consumer for topic ${topicName} in group ${groupName}`)
+}
+
+function getConsumerOptions () {
+  return config.isProd ? {
+    'metadata.broker.list': config.eventConfig.host,
+    'security.protocol': 'SASL_SSL',
+    'sasl.mechanisms': 'PLAIN',
+    'sasl.username': '$ConnectionString',
+    'sasl.password': config.eventConfig.eventHubConnectionString
+  } : {
+    'metadata.broker.list': config.eventConfig.host
+  }
 }
 
 module.exports = createConsumer
