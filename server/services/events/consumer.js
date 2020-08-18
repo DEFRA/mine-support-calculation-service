@@ -6,7 +6,8 @@ function createConsumer (groupName, topicName, action) {
     ...getConsumerOptions(),
     'group.id': groupName,
     'enable.auto.commit': false,
-    'auto.offset.reset': 'earliest'
+    'auto.offset.reset': 'earliest',
+    'socket.keepalive.enable': true
   }
 
   const consumer = new Kafka.KafkaConsumer(options, {})
@@ -29,7 +30,7 @@ function createConsumer (groupName, topicName, action) {
   })
 
   consumer.on('event.error', function (err) {
-    console.error('Error from consumer')
+    console.error('error from consumer')
     console.error(err)
   })
 
