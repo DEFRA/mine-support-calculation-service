@@ -2,7 +2,6 @@ const Kafka = require('node-rdkafka')
 const config = require('../../config')
 
 function sendEvent (topicName, value) {
-  console.log(value)
   const options = getProducerOptions()
 
   const producer = new Kafka.Producer(options)
