@@ -9,6 +9,8 @@ function createConsumer (groupName, topicName, action) {
     'auto.offset.reset': 'earliest'
   }
 
+  console.log(options)
+
   const consumer = new Kafka.KafkaConsumer(options, {})
   consumer.connect()
 
