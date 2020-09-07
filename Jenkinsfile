@@ -1,3 +1,3 @@
-@Library('defra-library@v-8') _
+@Library('defra-library@psd-968-parametered-acceptance-tests') _
 
 buildNodeJs environment: 'dev'
