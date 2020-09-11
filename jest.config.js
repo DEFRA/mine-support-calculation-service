@@ -40,8 +40,5 @@ module.exports = {
   ],
   resetModules: true,
   restoreMocks: true,
-  testEnvironment: 'node',
-  testPathIgnorePatterns: [
-    'test/integration/local'
-  ]
+  testEnvironment: 'node'
 }
