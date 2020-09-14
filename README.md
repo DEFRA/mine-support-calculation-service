@@ -37,7 +37,6 @@ and
 | ---------------------------------- | -------------------------------------------------------------------------------------------- |
 | MESSAGE_QUEUE_HOST                 | Azure Service Bus hostname, e.g. `myservicebus.servicebus.windows.net`                       |
 | MESSAGE_QUEUE_PASSWORD             | Azure Service Bus SAS policy key                                                             |
-| MESSAGE_QUEUE_SUFFIX               | Developer specific queue suffix to prevent collisions, only required for local development   |
 | MESSAGE_QUEUE_USER                 | Azure Service Bus SAS policy name, e.g. `RootManageSharedAccessKey`                          |
 
 ## Environment variables
