@@ -1,32 +1,34 @@
 const MessageReceiver = require('../../../server/services/messaging/message-receiver')
 const MessageSender = require('../../../server/services/messaging/message-sender')
 const config = require('../../../server/config')
-
-let messageReceiver
-let messageSender
-
-const message = {
-  content: 'hello'
-}
+const asbHelper = require('../../asb-helper')
 
 describe('message receiver', () => {
-  afterEach(async () => {
-    await messageReceiver.closeConnection()
+  const message = { content: 'hello' }
+  const testConfig = { ...config.calculationQueue }
+  let messageReceiver
+  let messageSender
+
+  beforeEach(async () => {
+    await asbHelper.clearQueue(testConfig)
+    messageSender = new MessageSender('test-sender', testConfig)
+    await messageSender.sendMessage(message)
     await messageSender.closeConnection()
   })
 
-  test('message receiver can receive messages', async () => {
+  afterEach(async () => {
+    await messageReceiver.closeConnection()
+  })
+
+  test('message receiver can receive messages', () => {
     expect.assertions(1)
     let done
-    const promise = new Promise((resolve) => {
-      done = resolve
-    })
-    const testConfig = { ...config.paymentQueueConfig }
-    messageReceiver = new MessageReceiver('test-receiver', testConfig)
-    await messageReceiver.setupReceiver((result) => done(result.hello === message.hello))
+    const promise = new Promise((resolve) => { done = resolve })
+    const action = (result) => {
+      done(result.content === message.content)
+    }
 
-    messageSender = new MessageSender('test-sender', testConfig)
-    await messageSender.sendMessage(message)
+    messageReceiver = new MessageReceiver('test-receiver', testConfig, undefined, action)
 
     return expect(promise).resolves.toEqual(true)
   })
