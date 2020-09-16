@@ -5,7 +5,7 @@ const asbHelper = require('../../asb-helper')
 
 describe('message receiver', () => {
   const message = { content: 'hello' }
-  const testConfig = { ...config.calculationQueue }
+  const testConfig = { ...config.calculationQueueConfig }
   let messageReceiver
   let messageSender
 
