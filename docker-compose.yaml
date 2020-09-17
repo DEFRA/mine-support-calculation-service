@@ -19,6 +19,7 @@ services:
       - ./scripts/:/home/node/scripts/
       - ./index.js:/home/node/index.js
       - ./package.json:/home/node/package.json
+      - ./jest.setup.js:/home/node/jest.setup.js
 
 volumes:
   node_modules: {}
