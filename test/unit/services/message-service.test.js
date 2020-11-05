@@ -1,5 +1,5 @@
-const createMessageService = require('../../../server/services/message-service')
-const config = require('../../../server/config')
+const createMessageService = require('../../../app/services/message-service')
+const config = require('../../../app/config')
 
 jest.mock('../../../server/services/messaging/message-receiver')
 jest.mock('../../../server/services/messaging/message-sender')
@@ -11,8 +11,8 @@ describe('Test message service', () => {
   beforeAll(async () => {
     const messageService = await createMessageService()
     await messageService.closeConnections()
-    MessageReceiver = require('../../../server/services/messaging/message-receiver')
-    MessageSender = require('../../../server/services/messaging/message-sender')
+    MessageReceiver = require('../../../app/services/messaging/message-receiver')
+    MessageSender = require('../../../app/services/messaging/message-sender')
   })
 
   test('Message service should create one sender and one receiver', async () => {

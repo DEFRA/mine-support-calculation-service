@@ -1,4 +1,4 @@
-const round = require('../../../server/services/round')
+const round = require('../../../app/services/round')
 
 describe('round', () => {
   test('rounds up if 5', () => {

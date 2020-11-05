@@ -1,4 +1,4 @@
-const net1 = require('../../../server/services/calculations/net1')
+const net1 = require('../../../app/services/calculations/net1')
 
 describe('net1', () => {
   test('an inaccessible business has a net1 of 0.045', () => {

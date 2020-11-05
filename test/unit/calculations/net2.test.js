@@ -1,4 +1,4 @@
-const net2 = require('../../../server/services/calculations/net2')
+const net2 = require('../../../app/services/calculations/net2')
 
 describe('net2', () => {
   test('a date before the base date has a net2 of 11', () => {

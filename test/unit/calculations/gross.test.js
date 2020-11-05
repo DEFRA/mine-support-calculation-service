@@ -1,4 +1,4 @@
-const gross = require('../../../server/services/calculations/gross')
+const gross = require('../../../app/services/calculations/gross')
 
 describe('gross', () => {
   test('a business has a gross of 200', () => {

@@ -1,4 +1,4 @@
-const healthService = require('../../server/services/health-service')
+const healthService = require('../../app/services/health-service')
 const fs = require('fs')
 jest.mock('fs')
 

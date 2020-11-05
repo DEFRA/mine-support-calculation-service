@@ -1,7 +1,7 @@
-require('./server/services/app-insights').setup()
-const createMessageService = require('./server/services/message-service')
-const healthService = require('./server/services/health-service')
-const config = require('./server/config/config')
+require('./app/services/app-insights').setup()
+const createMessageService = require('./app/services/message-service')
+const healthService = require('./app/services/health-service')
+const config = require('./app/config/config')
 
 let messageService
 

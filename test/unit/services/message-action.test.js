@@ -1,4 +1,4 @@
-const messageAction = require('../../../server/services/message-action')
+const messageAction = require('../../../app/services/message-action')
 
 describe('message action', () => {
   test('should calculate claim and send to queue', async () => {

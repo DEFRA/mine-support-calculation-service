@@ -1,4 +1,4 @@
-const service = require('../../server/services/calculation-service')
+const service = require('../../app/services/calculation-service')
 
 describe('calculation service', () => {
   test('total is gross minus net1 minus net 2, to two decimal places', () => {

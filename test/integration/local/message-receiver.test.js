@@ -1,6 +1,6 @@
-const MessageReceiver = require('../../../server/services/messaging/message-receiver')
-const MessageSender = require('../../../server/services/messaging/message-sender')
-const config = require('../../../server/config')
+const MessageReceiver = require('../../../app/services/messaging/message-receiver')
+const MessageSender = require('../../../app/services/messaging/message-sender')
+const config = require('../../../app/config')
 const asbHelper = require('../../asb-helper')
 
 describe('message receiver', () => {
