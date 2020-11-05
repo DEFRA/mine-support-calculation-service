@@ -17,6 +17,6 @@ ARG PARENT_VERSION
 LABEL uk.gov.defra.ffc.parent-image=defradigital/node:${PARENT_VERSION}
 COPY --from=development /home/node/index.js /home/node/package*.json /home/node/
 COPY --from=development /home/node/scripts/healthz  /home/node/scripts/healthz
-COPY --from=development /home/node/server  /home/node/server
+COPY --from=development /home/node/app  /home/node/app
 RUN npm ci
 CMD [ "node", "app" ]
