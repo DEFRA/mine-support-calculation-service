@@ -3,46 +3,28 @@
 set -e
 projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; pwd)"
 
-# Set Docker/Kubernetes resource names managed by this script
-serviceName="ffc-demo-calculation-service"
+service="ffc-demo-calculation-service"
 
 show_help() {
   echo "
-Run automated tests.
-
-Usage: scripts/test [OPTION...] [-- [DOCKER_OPTION...]]
-
-Options:
-  -b, --build  build container images before running tests
-  -h, --help   display this help text
-
-Docker options:
-  Any arguments after '--' are passed through to 'docker-compose down'.
-"
+    Usage: scripts/test [OPTION...]
+    Run tests.
+    Options:
+      -w, --watch   watch tests
+      -h, --help    display this help text
+    "
 }
 
 while :; do
   case $1 in
-    -b|--build)
-      build="true"
+    -w|--watch)
+      watch="true"
       ;;
 
-    -h|--help)
+    -h|--help)   # Call a "show_help" function to display a synopsis, then exit.
       show_help
-      exit 0
+      exit
       ;;
-
-    --)
-      shift
-      break
-      ;;
-
-    -?*)
-      echo "Unrecognised argument: $1"
-      show_help
-      exit 1
-      ;;
-
     *)
       break
   esac
@@ -51,26 +33,25 @@ while :; do
 done
 
 compose() {
-  (
-    cd "${projectRoot}"
-    docker-compose -p ${serviceName}-test -f docker-compose.yaml -f docker-compose.test.yaml $@
-  )
+  if [ "${watch}" != "true" ]; then
+    docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -p "${service}-test" $@
+  else
+    docker-compose -f docker-compose.yaml -f docker-compose.test.yaml -f docker-compose.test.watch.yaml -p "${service}-test" $@
+  fi
 }
 
 (
   cd "${projectRoot}"
 
   # Guarantee clean environment
-  compose down --volumes
+  compose down -v
 
-  # Build test images
-  if [ "${build}" = "true" ]; then
-    compose build
-  fi
+  # Ensure container images are up to date
+  compose build
 
   # Run tests
-  compose run ${serviceName}
+  compose run ${service} ${command}
 
   # Clean up
-  compose down --volumes
+  compose down -v
 )

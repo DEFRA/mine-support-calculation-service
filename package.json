@@ -9,7 +9,7 @@
     "test": "npm run test:unit",
     "test:lint": "standard",
     "test:unit": "jest --runInBand --forceExit",
-    "test:unit-watch": "jest --coverage=false --onlyChanged --runInBand --watch"
+    "test:watch": "jest --coverage=false --onlyChanged --runInBand --watch"
   },
   "homepage": "https://github.com/DEFRA/mine-support-calculation-service",
   "author": "Defra DDTS",
