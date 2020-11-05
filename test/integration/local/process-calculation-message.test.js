@@ -10,17 +10,22 @@ describe('processing claim message', () => {
       email: 'joe.bloggs@defra.gov.uk'
     },
     complete: jest.fn(),
-    abandon: jest.fn()
+    abandon: jest.fn(),
+    deadletter: jest.fn()
+  }
+
+  const paymentSender = {
+    sendMessage: jest.fn()
   }
 
   test('should complete valid claim', async () => {
-    await processCalculationMessage(message)
+    await processCalculationMessage(message, paymentSender)
     expect(message.complete).toHaveBeenCalled()
   })
 
-  test('should abandon invalid claim', async () => {
-    message.body = 'not a claim'
-    await processCalculationMessage(message)
-    expect(message.abandon).toHaveBeenCalled()
+  test('should deadletter invalid claim', async () => {
+    message.body = undefined
+    await processCalculationMessage(message, paymentSender)
+    expect(message.deadletter).toHaveBeenCalled()
   })
 })
