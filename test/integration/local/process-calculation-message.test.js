@@ -24,8 +24,14 @@ describe('processing claim message', () => {
   })
 
   test('should deadletter invalid claim', async () => {
-    message.body = undefined
+    message.body = {}
     await processCalculationMessage(message, paymentSender)
     expect(message.deadletter).toHaveBeenCalled()
+  })
+
+  test('should abandon no claim', async () => {
+    message.body = undefined
+    await processCalculationMessage(message, paymentSender)
+    expect(message.abandon).toHaveBeenCalled()
   })
 })
