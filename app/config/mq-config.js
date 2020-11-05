@@ -2,7 +2,9 @@ const joi = require('@hapi/joi')
 
 const mqSchema = joi.object({
   messageQueue: {
-    host: joi.string().default('localhost')
+    host: joi.string().default('localhost'),
+    usePodIdentity: joi.bool().default(false),
+    type: joi.string()
   },
   calculationQueue: {
     address: joi.string().default('calculation'),
@@ -12,14 +14,15 @@ const mqSchema = joi.object({
   paymentQueue: {
     address: joi.string().default('payment'),
     username: joi.string(),
-    password: joi.string(),
-    sendTimeoutInSeconds: joi.number().default(10)
+    password: joi.string()
   }
 })
 
 const mqConfig = {
   messageQueue: {
-    host: process.env.MESSAGE_QUEUE_HOST
+    host: process.env.MESSAGE_QUEUE_HOST,
+    usePodIdentity: process.env.NODE_ENV === 'production',
+    type: 'queue'
   },
   calculationQueue: {
     address: process.env.CALCULATION_QUEUE_ADDRESS,
@@ -29,7 +32,6 @@ const mqConfig = {
   paymentQueue: {
     address: process.env.PAYMENT_QUEUE_ADDRESS,
     password: process.env.MESSAGE_QUEUE_PASSWORD,
-    sendTimeoutInSeconds: process.env.SEND_TIMEOUT_IN_SECONDS,
     username: process.env.MESSAGE_QUEUE_USER
   }
 }
