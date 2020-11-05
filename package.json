@@ -2,10 +2,10 @@
   "name": "ffc-demo-calculation-service",
   "description": "Digital service mock to claim public money in the event property subsides into mine shaft.",
   "version": "3.12.1",
-  "main": "index.js",
+  "main": "app/index.js",
   "scripts": {
     "pretest": "npm run test:lint",
-    "start:watch": "nodemon --inspect=0.0.0.0 --ext js --legacy-watch index.js",
+    "start:watch": "nodemon --inspect=0.0.0.0 --ext js --legacy-watch app/index.js",
     "test": "npm run test:unit",
     "test:lint": "standard",
     "test:unit": "jest --runInBand --forceExit",
