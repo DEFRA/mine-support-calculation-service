@@ -139,7 +139,6 @@ An example message:
   "propertyType": "business",
   "accessible": false,
   "dateOfSubsidence": "2019-07-26T09:54:19.622Z",
-  "mineType": ["gold"],
   "email": "test@email.com"
 }
 ```

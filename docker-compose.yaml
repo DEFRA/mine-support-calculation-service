@@ -13,12 +13,3 @@ services:
       MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD:-notset}
       MESSAGE_QUEUE_USER: ${MESSAGE_QUEUE_USER:-notset}
       PAYMENT_QUEUE_ADDRESS: ${PAYMENT_QUEUE_ADDRESS}
-    volumes:
-      - ./server/:/home/node/server/
-      - ./test/:/home/node/test/
-      - ./scripts/:/home/node/scripts/
-      - ./index.js:/home/node/index.js
-      - ./package.json:/home/node/package.json
-
-volumes:
-  node_modules: {}

@@ -1,21 +1,19 @@
 require('./services/app-insights').setup()
-const createMessageService = require('./services/message-service')
+const messageService = require('./services/messaging')
 const healthService = require('./services/health-service')
-const config = require('./config/config')
-
-let messageService
+const config = require('./config')
 
 process.on('SIGTERM', async () => {
-  await messageService.closeConnections()
+  await messageService.stop()
   process.exit(0)
 })
 
 process.on('SIGINT', async () => {
-  await messageService.closeConnections()
+  await messageService.stop()
   process.exit(0)
 })
 
 module.exports = (async function startService () {
-  messageService = await createMessageService()
   setInterval(healthService, config.healthzFileInterval)
+  await messageService.start()
 }())

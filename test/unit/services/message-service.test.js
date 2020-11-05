@@ -1,4 +1,4 @@
-const createMessageService = require('../../../app/services/message-service')
+const createMessageService = require('../../../app/services/messaging/message-service')
 const config = require('../../../app/config')
 
 jest.mock('../../../server/services/messaging/message-receiver')
