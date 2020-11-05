@@ -1,5 +1,5 @@
 require('./services/app-insights').setup()
-const messageService = require('./services/messaging')
+const messageService = require('./messaging')
 const healthService = require('./services/health-service')
 const config = require('./config')
 

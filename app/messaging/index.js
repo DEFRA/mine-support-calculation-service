@@ -1,4 +1,4 @@
-const config = require('../../config')
+const config = require('../config')
 const processCalculationMessage = require('./process-calculation-message')
 const { MessageReceiver, MessageSender } = require('ffc-messaging')
 let paymentSender
