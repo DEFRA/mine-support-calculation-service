@@ -5,6 +5,7 @@ services:
       context: .
       target: production
     image: ffc-demo-calculation-service
+    container_name: ffc-demo-calculation-service
     environment:
       APPINSIGHTS_CLOUDROLE: ffc-demo-calculation-service-local
       APPINSIGHTS_INSTRUMENTATIONKEY: ${APPINSIGHTS_INSTRUMENTATIONKEY}
