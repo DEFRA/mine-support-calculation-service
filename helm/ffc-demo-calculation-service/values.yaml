@@ -7,7 +7,7 @@ image: ffc-demo-calculation-service
 labels: {}
 
 appInsights:
-  key:
+  key: 123A
 
 azureIdentity:
   clientID: not-a-real-clientID
