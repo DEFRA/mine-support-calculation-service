@@ -1,7 +1,7 @@
 {
   "name": "ffc-demo-calculation-service",
   "description": "Digital service mock to claim public money in the event property subsides into mine shaft.",
-  "version": "3.13.3",
+  "version": "3.13.4",
   "main": "app/index.js",
   "scripts": {
     "pretest": "npm run test:lint",
