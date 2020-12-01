@@ -1,3 +1,3 @@
-@Library('defra-library@v-9') _
+@Library('defra-library@fix-values-integration') _
 
-buildNodeJs environment: 'dev', defaultBranch: 'master'
+buildNodeJs defaultBranch: 'master'
