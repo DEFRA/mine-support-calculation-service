@@ -16,7 +16,7 @@ const mqSchema = joi.object({
     address: joi.string().default('payment'),
     username: joi.string(),
     password: joi.string(),
-    type: joi.string.optional()
+    type: joi.string().optional()
   }
 })
 
