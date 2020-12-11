@@ -1,4 +1,5 @@
 resources:
   queues:
-    - name: payment
     - name: calculation
+  topics:
+    - name: payment

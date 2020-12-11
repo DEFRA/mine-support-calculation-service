@@ -40,7 +40,7 @@ container:
   allowPrivilegeEscalation: false
   messageQueueHost: amq
   calculationQueueAddress: calculation
-  paymentQueueAddress: payment
+  paymentTopicAddress: payment
 
 livenessProbe:
   initialDelaySeconds: 70

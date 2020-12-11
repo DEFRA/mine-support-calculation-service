@@ -12,10 +12,11 @@ const mqSchema = joi.object({
     username: joi.string(),
     password: joi.string()
   },
-  paymentQueue: {
+  paymentTopic: {
     address: joi.string().default('payment'),
     username: joi.string(),
-    password: joi.string()
+    password: joi.string(),
+    type: joi.string.optional()
   }
 })
 
@@ -31,10 +32,11 @@ const mqConfig = {
     password: process.env.MESSAGE_QUEUE_PASSWORD,
     username: process.env.MESSAGE_QUEUE_USER
   },
-  paymentQueue: {
-    address: process.env.PAYMENT_QUEUE_ADDRESS,
+  paymentTopic: {
+    address: process.env.PAYMENT_TOPIC_ADDRESS,
     password: process.env.MESSAGE_QUEUE_PASSWORD,
-    username: process.env.MESSAGE_QUEUE_USER
+    username: process.env.MESSAGE_QUEUE_USER,    
+    type: 'topic'
   }
 }
 
@@ -47,7 +49,7 @@ if (mqResult.error) {
   throw new Error(`The message queue config is invalid. ${mqResult.error.message}`)
 }
 
-const paymentQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.paymentQueue }
+const paymentTopicConfig = { ...mqResult.value.messageQueue, ...mqResult.value.paymentTopic }
 const calculationQueueConfig = { ...mqResult.value.messageQueue, ...mqResult.value.calculationQueue }
 
-module.exports = { paymentQueueConfig, calculationQueueConfig }
+module.exports = { paymentTopicConfig, calculationQueueConfig }

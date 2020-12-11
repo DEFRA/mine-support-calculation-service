@@ -5,5 +5,5 @@ data:
   CALCULATION_QUEUE_ADDRESS: {{ quote .Values.container.calculationQueueAddress }}
   MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
   NODE_ENV: {{ quote .Values.environment }}
-  PAYMENT_QUEUE_ADDRESS: {{ quote .Values.container.paymentQueueAddress }}
+  PAYMENT_TOPIC_ADDRESS: {{ quote .Values.container.paymentTopicAddress }}
 {{- end -}}

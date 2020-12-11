@@ -5,7 +5,7 @@ let paymentSender
 let calculationReceiver
 
 async function start () {
-  paymentSender = new MessageSender(config.paymentQueueConfig)
+  paymentSender = new MessageSender(config.paymentTopicConfig)
   await paymentSender.connect()
   const calculationAction = message => processCalculationMessage(message, paymentSender)
   calculationReceiver = new MessageReceiver(config.calculationQueueConfig, calculationAction)

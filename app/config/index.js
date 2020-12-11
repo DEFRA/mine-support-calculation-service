@@ -29,7 +29,7 @@ const value = result.value
 value.isDev = value.env === 'development'
 value.isProd = value.env === 'production'
 
-value.paymentQueueConfig = mqConfig.paymentQueueConfig
+value.paymentTopicConfig = mqConfig.paymentTopicConfig
 value.calculationQueueConfig = mqConfig.calculationQueueConfig
 
 module.exports = value
