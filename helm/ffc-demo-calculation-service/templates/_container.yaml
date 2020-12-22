@@ -1,6 +1,3 @@
 {{- define "ffc-demo-calculation-service.container" -}}
 livenessProbe: {{ include "ffc-helm-library.exec-probe" (list . .Values.livenessProbe) | nindent 4}}
-volumeMounts:
-- mountPath: /tmp
-  name: health-dir
 {{- end -}}
