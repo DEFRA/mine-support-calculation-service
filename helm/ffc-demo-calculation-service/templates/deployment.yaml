@@ -4,8 +4,5 @@ spec:
   template:
     spec:
       containers:
-      - {{ include "ffc-helm-library.container" (list . "ffc-demo-calculation-service.container") }}
-      volumes:
-      - name: health-dir
-        emptyDir: {}
+      - {{ include "ffc-helm-library.container" (list . "ffc-demo-calculation-service.container") }}      
 {{- end -}}
