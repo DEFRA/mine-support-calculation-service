@@ -1,6 +1,6 @@
 {
   "name": "ffc-demo-calculation-service",
-  "description": "Digital service mock to claim public money in the event property subsides into mine shafts.",
+  "description": "Digital service mock to claim public money in the event property subsides into mine shafts!",
   "version": "4.0.4",
   "main": "app/index.js",
   "scripts": {
