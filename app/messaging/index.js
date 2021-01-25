@@ -1,21 +1,17 @@
 const config = require('../config')
 const processCalculationMessage = require('./process-calculation-message')
-const { MessageReceiver, MessageSender } = require('ffc-messaging')
-let paymentSender
+const { MessageReceiver } = require('ffc-messaging')
 let calculationReceiver
 
 async function start () {
-  paymentSender = new MessageSender(config.paymentTopicConfig)
-  await paymentSender.connect()
-  const calculationAction = message => processCalculationMessage(message, paymentSender)
+  const calculationAction = message => processCalculationMessage(message, calculationReceiver)
   calculationReceiver = new MessageReceiver(config.calculationQueueConfig, calculationAction)
-  await calculationReceiver.connect()
+  await calculationReceiver.subscribe()
   console.info('Ready to receive claims')
 }
 
 async function stop () {
   await calculationReceiver.closeConnection()
-  await paymentSender.closeConnection()
 }
 
 module.exports = { start, stop }

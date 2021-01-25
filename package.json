@@ -30,7 +30,7 @@
     "@azure/service-bus": "^1.1.8",
     "@hapi/joi": "^17.1.1",
     "applicationinsights": "^1.8.0",
-    "ffc-messaging": "^1.0.5"
+    "ffc-messaging": "2.0.0-pre.4"
   },
   "devDependencies": {
     "jest": "^26.1.0",
