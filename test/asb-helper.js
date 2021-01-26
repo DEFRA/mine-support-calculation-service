@@ -1,4 +1,4 @@
-const { ReceiveMode, ServiceBusClient } = require('@azure/service-bus')
+const { ServiceBusClient } = require('@azure/service-bus')
 
 // When calling this within a test script, ensure there is a generous timeout
 // for the connections to complete, `10000` should be enough (per queue).
@@ -8,11 +8,10 @@ async function clearQueue (config) {
   let sbClient
   try {
     const connectionString = `Endpoint=sb://${config.host}/;SharedAccessKeyName=${config.username};SharedAccessKey=${config.password}`
-    sbClient = ServiceBusClient.createFromConnectionString(connectionString)
+    sbClient = new ServiceBusClient(connectionString)
 
     const queueAddress = config.address
-    const queueClient = sbClient.createQueueClient(queueAddress)
-    const receiver = queueClient.createReceiver(ReceiveMode.receiveAndDelete)
+    const receiver = sbClient.createReceiver(queueAddress, { receiveMode: 'receiveAndDelete' })
     console.log(`Setup to receive messages from '${queueAddress}'.`)
 
     const batchSize = 10
@@ -26,7 +25,6 @@ async function clearQueue (config) {
     } while (messages.length > 0 && messages.length === batchSize)
 
     console.log(`No more messages in: '${queueAddress}'.`)
-    await queueClient.close()
   } catch (err) {
     console.log(err)
     throw err

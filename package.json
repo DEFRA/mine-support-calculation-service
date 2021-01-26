@@ -26,12 +26,12 @@
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
-    "@azure/service-bus": "^1.1.8",
     "@hapi/joi": "^17.1.1",
     "applicationinsights": "^1.8.0",
     "ffc-messaging": "2.0.0-pre.4"
   },
   "devDependencies": {
+    "@azure/service-bus": "^7.0.2",
     "jest": "^26.1.0",
     "jest-junit": "^11.1.0",
     "nodemon": "^2.0.4",
