@@ -19,11 +19,11 @@ async function clearQueue (config) {
     let messages
     do {
       console.log(`Receiving messages, batch ${counter}.`)
-      messages = await receiver.receiveMessages(batchSize, 5)
+      messages = await receiver.receiveMessages(batchSize, { maxWaitTimeInMs: 1000, maxTimeAfterFirstMessageInMs: 5000 })
       console.log(`Received (and deleted) ${messages.length} messages.`)
       counter++
     } while (messages.length > 0 && messages.length === batchSize)
-
+    await receiver.close
     console.log(`No more messages in: '${queueAddress}'.`)
   } catch (err) {
     console.log(err)
