@@ -6,6 +6,9 @@ ignore:
     - '@azure/ms-rest-nodeauth > adal-node > request > har-validator > ajv':
         reason: No known exploit
         expires: '2020-12-31T00:00:00.000Z'
+      ffc-messaging > @azure/ms-rest-nodeauth > adal-node > request > har-validator > ajv:
+        reason: No vuln
+        expires: '2021-02-27T13:16:02.224Z'
     - ffc-messaging > @azure/ms-rest-nodeauth > adal-node > request > har-validator > ajv:
         reason: No vuln
         expires: '2020-12-31T14:47:26.655Z'
