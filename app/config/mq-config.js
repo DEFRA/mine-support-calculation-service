@@ -3,7 +3,7 @@ const joi = require('@hapi/joi')
 const mqSchema = joi.object({
   messageQueue: {
     host: joi.string().default('localhost'),
-    useCredentialChain: joi.bool().default(false),
+    usePodIdentity: joi.bool().default(false),
     type: joi.string(),
     appInsights: joi.object()
   },
@@ -23,7 +23,7 @@ const mqSchema = joi.object({
 const mqConfig = {
   messageQueue: {
     host: process.env.MESSAGE_QUEUE_HOST,
-    useCredentialChain: process.env.NODE_ENV === 'production',
+    usePodIdentity: process.env.NODE_ENV === 'production',
     type: 'queue',
     appInsights: process.env.NODE_ENV === 'production' ? require('applicationinsights') : undefined
   },
