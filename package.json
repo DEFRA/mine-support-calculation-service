@@ -28,7 +28,7 @@
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "applicationinsights": "^1.8.0",
-    "ffc-messaging": "2.0.0-pre.13"
+    "ffc-messaging": "2.0.0-pre.14"
   },
   "devDependencies": {
     "@azure/service-bus": "^7.0.2",
