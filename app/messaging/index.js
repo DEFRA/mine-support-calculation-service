@@ -6,7 +6,6 @@ let calculationReceiver
 async function start () {
   const calculationAction = message => processCalculationMessage(message, calculationReceiver)
   calculationReceiver = new MessageReceiver(config.calculationQueueConfig, calculationAction)
-  await calculationReceiver.connect()
   await calculationReceiver.subscribe()
   console.info('Ready to receive claims')
 }
