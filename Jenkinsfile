@@ -1,3 +1,3 @@
-@Library('defra-library@v-9') _
+@Library('defra-library@psd-1133-remove-steps') _
 
 buildNodeJs defaultBranch: 'master'
