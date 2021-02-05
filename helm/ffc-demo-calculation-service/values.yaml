@@ -24,6 +24,10 @@ deployment:
   restartPolicy: Always
   priorityClassName: low
   replicas: 1
+  minReplicas: 1
+  maxReplicas: 3
+  cpuThreshold: 80
+  memoryThreshold: 80
   minReadySeconds: 5
   redeployOnChange: update this field to force a change
   imagePullSecret:
