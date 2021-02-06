@@ -26,7 +26,7 @@ deployment:
   replicas: 1
   minReplicas: 1
   maxReplicas: 3
-  cpuThreshold: 80
+  cpuThreshold: 40
   memoryThreshold: 80
   minReadySeconds: 5
   redeployOnChange: update this field to force a change
@@ -36,10 +36,10 @@ deployment:
 
 container:
   imagePullPolicy: IfNotPresent
-  requestMemory: 30Mi
-  requestCpu: 30m
-  limitMemory: 30Mi
-  limitCpu: 30m
+  requestMemory: 60Mi
+  requestCpu: 40m
+  limitMemory: 60Mi
+  limitCpu: 40m
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   messageQueueHost: amq
