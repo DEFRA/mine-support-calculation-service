@@ -1,7 +1,7 @@
 {
   "name": "ffc-demo-calculation-service",
   "description": "Digital service mock to claim public money in the event property subsides into mine shaft.",
-  "version": "4.2.1",
+  "version": "4.2.2",
   "main": "app/index.js",
   "scripts": {
     "pretest": "npm run test:lint",
@@ -28,7 +28,7 @@
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "applicationinsights": "^1.8.0",
-    "ffc-messaging": "2.1.0"
+    "ffc-messaging": "2.1.1"
   },
   "devDependencies": {
     "@azure/service-bus": "^7.0.2",
