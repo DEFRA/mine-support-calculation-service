@@ -25,8 +25,8 @@ deployment:
   priorityClassName: low
   replicas: 1
   minReplicas: 1
-  maxReplicas: 3
-  cpuThreshold: 10
+  maxReplicas: 20
+  cpuThreshold: 20
   memoryThreshold: 80
   minReadySeconds: 5
   redeployOnChange: update this field to force a change
