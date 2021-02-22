@@ -45,6 +45,7 @@ container:
   messageQueueHost: amq
   calculationQueueAddress: calculation
   paymentTopicAddress: payment
+  protectiveMonitorUrl:
 
 livenessProbe:
   initialDelaySeconds: 70
