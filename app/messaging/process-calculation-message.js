@@ -1,4 +1,5 @@
 const calculationService = require('../services/calculation-service')
+const protectiveMonitoringService = require('../services/protective-monitoring-service')
 const sendCalculation = require('./send-calculation')
 
 async function messageAction (message, calculationReceiver) {
@@ -10,10 +11,12 @@ async function messageAction (message, calculationReceiver) {
       const value = calculationService.calculate(claim)
       await sendCalculation({ claimId: claim.claimId, value })
       await calculationReceiver.completeMessage(message)
+      protectiveMonitoringService.sendEvent()
     }
   } catch (err) {
     console.error('Unable to process message:', err)
     await calculationReceiver.abandonMessage(message)
   }
 }
+
 module.exports = messageAction

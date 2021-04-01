@@ -21,15 +21,15 @@
     "Paul Andrews paul.andrews@defra.gov.uk",
     "Steve Hunt steven.hunt@defra.gov.uk",
     "Fay Toward fay.toward@rpa.gov.uk",
-    "Fareed Mohammed <fareed.mohammed@defra.gov.uk>",
-    "Steve Dickinson <steve.dickinson@defra.gov.uk>"
+    "Fareed Mohammed fareed.mohammed@defra.gov.uk",
+    "Steve Dickinson steve.dickinson@defra.gov.uk"
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "applicationinsights": "^1.8.0",
     "ffc-messaging": "2.1.1",
-    "ffc-protective-monitoring": "^1.0.0-alpha.4"
+    "ffc-protective-monitoring": "^1.0.0-alpha.5"
   },
   "devDependencies": {
     "@azure/service-bus": "^7.0.2",
