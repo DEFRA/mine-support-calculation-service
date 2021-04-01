@@ -1,6 +1,6 @@
 const { PublishEvent } = require('ffc-protective-monitoring')
 
-function sendEvent () {
+function sendEvent (message) {
   console.log(process.env.PROTECTIVE_MONITORING_URL)
   // const protectiveMonitoring = new PublishEvent(process.env.PROTECTIVE_MONITORING_URL)
   const protectiveMonitoring = new PublishEvent('https://prod-52.northeurope.logic.azure.com:443/workflows/7b54bcdf13134cfbb63edd95d7fb81f2/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=kVFdY0yXQ08l81Y9E2tlsBviD1FriETI1DlznFfhKCI')
@@ -17,7 +17,7 @@ function sendEvent () {
     priority: '0',
     details: {
       transactioncode: '0001',
-      message: 'Processing calculation message',
+      message,
       additionalinfo: '<details or obfuscated location of document, etc.>'
     }
   })

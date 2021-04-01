@@ -11,7 +11,7 @@ async function messageAction (message, calculationReceiver) {
       const value = calculationService.calculate(claim)
       await sendCalculation({ claimId: claim.claimId, value })
       await calculationReceiver.completeMessage(message)
-      protectiveMonitoringService.sendEvent()
+      protectiveMonitoringService.sendEvent('Processing calculation message')
     }
   } catch (err) {
     console.error('Unable to process message:', err)
