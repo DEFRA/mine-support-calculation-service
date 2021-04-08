@@ -6,5 +6,5 @@ data:
   MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
   NODE_ENV: {{ quote .Values.environment }}
   PAYMENT_TOPIC_ADDRESS: {{ quote .Values.container.paymentTopicAddress }}
-  PROTECTIVE_MONITOR_URL: {{ quote .Values.config.protectiveMonitorUrl}}
+  PROTECTIVE_MONITOR_URL: {{ quote .Values.container.protectiveMonitorUrl}}
 {{- end -}}
