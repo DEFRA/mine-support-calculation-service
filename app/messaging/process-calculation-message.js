@@ -6,7 +6,7 @@ async function messageAction (message, calculationReceiver) {
   try {
     const claim = message.body
     if (claim.claimId === undefined) {
-      calculationReceiver.deadLetterMessage(message)
+      await calculationReceiver.deadLetterMessage(message)
     } else {
       const value = calculationService.calculate(claim)
       await sendCalculation({ claimId: claim.claimId, value })
