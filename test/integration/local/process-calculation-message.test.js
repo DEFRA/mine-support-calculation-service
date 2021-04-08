@@ -23,7 +23,7 @@ describe('processing claim message', () => {
   })
 
   test('should deadletter invalid claim', async () => {
-    message.body = {}
+    message.body.claim = {}
     await processCalculationMessage(message, calculationReceiver)
     expect(calculationReceiver.deadLetterMessage).toHaveBeenCalled()
   })
