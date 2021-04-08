@@ -9,11 +9,11 @@ async function sendEvent (claimId, event) {
     version: '1.1',
     application: 'ffc-demo-calculation-service',
     component: 'ffc-demo-calculation-service',
-    ip: '',
+    ip: 'none',
     pmccode: '0001',
     priority: '0',
     details: {
-      event
+      message: event
     }
   })
 }
