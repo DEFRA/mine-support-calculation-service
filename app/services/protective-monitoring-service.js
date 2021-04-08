@@ -13,7 +13,7 @@ async function sendEvent (claimId, event) {
     pmccode: '0001',
     priority: '0',
     details: {
-      event
+      message: event
     }
   })
 }
