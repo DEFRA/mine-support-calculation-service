@@ -5,7 +5,7 @@ const mqConfig = require('./mq-config')
 const schema = joi.object({
   env: joi.string().valid('development', 'test', 'production').default('development'),
   healthzFileInterval: joi.number().default(10000).max(30000),
-  protectiveMonitoringUrl: process.env.PROTECTIVE_MONITORING_URL
+  protectiveMonitoringUrl: joi.string().allow('')
 })
 
 const config = {
