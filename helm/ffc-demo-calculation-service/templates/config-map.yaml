@@ -6,7 +6,7 @@ data:
   MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
   NODE_ENV: {{ quote .Values.environment }}
   PAYMENT_TOPIC_ADDRESS: {{ quote .Values.container.paymentTopicAddress }}
-  {{- if .Values.container.redisHostname }}
+  {{- if .Values.container.protectiveMonitoringUrl }}
   PROTECTIVE_MONITORING_URL: {{ quote .Values.container.protectiveMonitoringUrl }}
   {{- end }}
 {{- end -}}
