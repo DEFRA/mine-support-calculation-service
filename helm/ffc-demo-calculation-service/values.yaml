@@ -33,8 +33,8 @@ deployment:
 
 container:
   imagePullPolicy: IfNotPresent
-  requestMemory: 60Mi
-  requestCpu: 40m
+  requestMemory: 5Mi
+  requestCpu: 5m
   limitMemory: 60Mi
   limitCpu: 40m
   messageQueueHost: amq
