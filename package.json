@@ -1,7 +1,7 @@
 {
   "name": "ffc-demo-calculation-service",
   "description": "Digital service mock to claim public money in the event property subsides into mine shaft.",
-  "version": "4.3.3",
+  "version": "4.3.4",
   "main": "app/index.js",
   "scripts": {
     "pretest": "npm run test:lint",
@@ -9,7 +9,8 @@
     "test": "npm run test:unit",
     "test:lint": "standard",
     "test:unit": "jest --runInBand --forceExit",
-    "test:watch": "jest --coverage=false --onlyChanged --runInBand --watch"
+    "test:watch": "jest --coverage=false --onlyChanged --runInBand --watch",
+    "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/jest/bin/jest.js --coverage=false --onlyChanged --watch --runInBand --no-cache"
   },
   "homepage": "https://github.com/DEFRA/mine-support-calculation-service",
   "author": "Defra DDTS",
@@ -28,7 +29,7 @@
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "applicationinsights": "^1.8.10",
-    "ffc-messaging": "2.1.1",
+    "ffc-messaging": "2.3.1",
     "ffc-protective-monitoring": "^1.0.0"
   },
   "devDependencies": {
