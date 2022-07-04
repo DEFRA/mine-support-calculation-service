@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.22.1
+version: v1.22.0
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
   SNYK-JS-AJV-584908:
@@ -13,4 +13,22 @@ ignore:
     - ffc-messaging > @azure/identity > keytar > prebuild-install > npmlog > gauge > wide-align > string-width > strip-ansi > ansi-regex:
         reason: None given
         expires: '2021-10-24T20:37:51.475Z'
+  SNYK-JS-NWSAPI-2841516:
+    - '@jest/core > jest-config > jest-environment-jsdom > jsdom > nwsapi':
+        reason: None given
+        expires: '2022-08-03T10:36:49.388Z'
+    - jest > @jest/core > jest-config > jest-environment-jsdom > jsdom > nwsapi:
+        reason: None given
+        expires: '2022-08-03T10:36:49.388Z'
+  SNYK-JS-UNSETVALUE-2400660:
+    - '@jest/core > @jest/reporters > @jest/transform > jest-haste-map > sane > anymatch > micromatch > braces > snapdragon > base > cache-base > unset-value':
+        reason: None given
+        expires: '2022-08-03T10:36:49.388Z'
+    - jest > @jest/core > @jest/reporters > @jest/transform > jest-haste-map > sane > anymatch > micromatch > braces > snapdragon > base > cache-base > unset-value:
+        reason: None given
+        expires: '2022-08-03T10:36:49.389Z'
+  SNYK-JS-Y18N-1021887:
+    - '@jest/core > jest-config > @jest/test-sequencer > jest-runner > jest-jasmine2 > jest-runtime > yargs > y18n':
+        reason: None given
+        expires: '2022-08-03T10:36:49.389Z'
 patch: {}
