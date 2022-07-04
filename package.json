@@ -27,16 +27,16 @@
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
-    "@hapi/joi": "^17.1.1",
-    "applicationinsights": "^1.8.10",
-    "ffc-protective-monitoring": "^1.0.2"
+    "@hapi/joi": "17.1.1",
+    "applicationinsights": "2.3.3",
+    "ffc-protective-monitoring": "1.0.2"
   },
   "devDependencies": {
-    "@azure/service-bus": "^7.0.5",
-    "jest": "^26.1.0",
-    "jest-junit": "^13.0.0",
-    "nodemon": "^2.0.7",
-    "standard": "^16.0.4"
+    "@azure/service-bus": "7.5.1",
+    "jest": "28.1.2",
+    "jest-junit": "14.0.0",
+    "nodemon": "2.0.18",
+    "standard": "17.0.0"
   },
   "standard": {
     "globals": [
