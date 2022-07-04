@@ -28,7 +28,8 @@
   "license": "OGL-UK-3.0",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "applicationinsights": "^1.8.10"
+    "applicationinsights": "^1.8.10",
+    "ffc-protective-monitoring": "^1.0.1"
   },
   "devDependencies": {
     "@azure/service-bus": "^7.0.5",
