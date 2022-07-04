@@ -1,5 +1,6 @@
 const joi = require('joi')
 const mqConfig = require('./mq-config')
+// a nothing change
 
 // Define config schema
 const schema = joi.object({
