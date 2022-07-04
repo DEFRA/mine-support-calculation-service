@@ -1,3 +1,3 @@
-@Library('defra-library@v-9') _
+@Library('defra-library@sfi-2134-merge-trigger') _
 
 buildNodeJs defaultBranch: 'master'
