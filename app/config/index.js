@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi')
+const joi = require('joi')
 const mqConfig = require('./mq-config')
 
 // Define config schema
