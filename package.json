@@ -1,7 +1,7 @@
 {
   "name": "ffc-demo-calculation-service",
   "description": "Digital service mock to claim public money in the event property subsides into mine shaft.",
-  "version": "4.3.6",
+  "version": "4.3.7",
   "main": "app/index.js",
   "scripts": {
     "pretest": "npm run test:lint",
@@ -36,7 +36,7 @@
     "@azure/service-bus": "7.5.1",
     "jest": "28.1.2",
     "jest-junit": "14.0.0",
-    "nodemon": "2.0.18",
+    "nodemon": "2.0.20",
     "standard": "17.0.0"
   },
   "standard": {
