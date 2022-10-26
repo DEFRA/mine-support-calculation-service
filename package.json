@@ -29,7 +29,7 @@
   "dependencies": {
     "applicationinsights": "2.3.3",
     "ffc-messaging": "2.5.1",
-    "ffc-protective-monitoring": "^1.0.3",
+    "ffc-protective-monitoring": "1.0.3",
     "joi": "17.6.0"
   },
   "devDependencies": {
