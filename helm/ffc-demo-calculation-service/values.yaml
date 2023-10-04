@@ -48,4 +48,8 @@ livenessProbe:
   failureThreshold: 3
   script: /home/node/scripts/healthz
 
-aadPodIdentity: true
+aadPodIdentity: false 
+aadWorkloadIdentity: true
+
+serviceAccount:
+  name: ffc-demo

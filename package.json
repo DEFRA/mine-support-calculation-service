@@ -1,14 +1,14 @@
 {
   "name": "ffc-demo-calculation-service",
   "description": "Digital service mock to claim public money in the event property subsides into mine shaft.",
-  "version": "4.3.9",
+  "version": "4.3.10",
   "main": "app/index.js",
   "scripts": {
     "pretest": "npm run test:lint",
     "start:watch": "nodemon --inspect=0.0.0.0 --ext js --legacy-watch app/index.js",
-    "test": "npm run test:unit",
+    "test": "jest --runInBand --forceExit",
     "test:lint": "standard",
-    "test:unit": "jest --runInBand --forceExit",
+    "test:unit": "jest --runInBand --testPathPattern=test/unit --coverage=false",
     "test:watch": "jest --coverage=false --onlyChanged --runInBand --watch",
     "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/jest/bin/jest.js --coverage=false --onlyChanged --watch --runInBand --no-cache"
   },

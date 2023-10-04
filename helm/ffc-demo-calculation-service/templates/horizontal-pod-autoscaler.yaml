@@ -1,4 +1,4 @@
-{{- include "ffc-helm-library.horizontal-pod-autoscaler" (list . "ffc-demo-calculation-service.horizontal-pod-autoscaler") -}}
+{{- include "adp-helm-library.horizontal-pod-autoscaler" (list . "ffc-demo-calculation-service.horizontal-pod-autoscaler") -}}
 {{- define "ffc-demo-calculation-service.horizontal-pod-autoscaler" -}}
 spec:  
   metrics:
