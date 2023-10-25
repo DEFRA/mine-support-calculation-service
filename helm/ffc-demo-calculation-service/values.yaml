@@ -9,17 +9,6 @@ labels: {}
 appInsights:
   key:
 
-azureIdentity:
-  clientID: not-a-real-clientID
-  resourceID: not-a-real-resourceID
-
-containerConfigMap:
-  name: ffc-demo-calculation-service-config-map
-
-containerSecret:
-  name: ffc-demo-calculation-service-container-secret
-  type: Opaque
-
 deployment:
   restartPolicy: Always
   priorityClassName: low
@@ -48,8 +37,25 @@ livenessProbe:
   failureThreshold: 3
   script: /home/node/scripts/healthz
 
-aadPodIdentity: false 
 aadWorkloadIdentity: true
 
 serviceAccount:
   name: ffc-demo
+  roleArn: true
+
+containerConfigMap:
+  name: 'ffc-demo-calculation-service-config-map'
+  configServiceUrl: 'https://sndadpinfac1401.azconfig.io'
+  auth:
+    workloadIdentity:
+      clientId: e9badf28-ce66-4dd3-97e1-e28bfb1da26b
+  keyValues:
+    labelFilter: 'ffc-demo-calculation-service'
+    refresh:
+      interval: 2m
+      monitorKey: 'Sentinel'
+      monitorLabel: 'ffc-demo-calculation-service'
+
+managedIdPrefix: sndadpinfmid1401
+userAssignedIdentity:
+  managedIdName: ffc-demo-services

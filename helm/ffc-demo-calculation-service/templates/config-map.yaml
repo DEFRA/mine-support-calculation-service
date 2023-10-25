@@ -1,12 +1,1 @@
-{{- include "adp-helm-library.container-config-map" (list . "ffc-demo-calculation-service.config-map") -}}
-{{- define "ffc-demo-calculation-service.config-map" -}}
-data:
-  APPINSIGHTS_CLOUDROLE: {{ quote .Values.name }}
-  CALCULATION_QUEUE_ADDRESS: {{ quote .Values.container.calculationQueueAddress }}
-  MESSAGE_QUEUE_HOST: {{ quote .Values.container.messageQueueHost }}
-  NODE_ENV: {{ quote .Values.environment }}
-  PAYMENT_TOPIC_ADDRESS: {{ quote .Values.container.paymentTopicAddress }}
-  {{- if .Values.container.protectiveMonitoringUrl }}
-  PROTECTIVE_MONITORING_URL: {{ quote .Values.container.protectiveMonitoringUrl }}
-  {{- end }}
-{{- end -}}
+{{- include "adp-helm-library.azure-config-service-map" . -}}
