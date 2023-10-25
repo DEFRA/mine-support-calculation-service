@@ -41,6 +41,13 @@
             "label": "{{serviceName}}",
             "content_type": "",
             "tags": {}
+        },
+        {
+            "key": "PROTECTIVE_MONITORING_URL",
+            "value": "",
+            "label": "{{serviceName}}",
+            "content_type": "",
+            "tags": {}
         }
     ]
 }
