@@ -1,6 +1,6 @@
 apiVersion: v2
-name: ffc-demo-web-infra
-description: A ASO Helm chart to deploy the FFC Demo Web Infrastructure
+name: ffc-demo-calculation-service-infra
+description: A ASO Helm chart to deploy the FFC Demo Calculation Service Infrastructure
 version: 0.0.1
 dependencies:
 - name: adp-aso-helm-library
