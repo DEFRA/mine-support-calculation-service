@@ -1,6 +1,6 @@
 namespace: ffc-demo
 
-subscriptionId: "55f3b8c6-6800-41c7-a40d-2adb5e4e1bd1"
+subscriptionId: "dummySubscriptionId"
 serviceBusResourceGroupName: sndadpinfrg1401
 serviceBusNamespaceName: sndadpinfsb1401
 
@@ -9,3 +9,15 @@ asoAnnotations:
 
 namespaceTopics:
   - name: payment   
+
+tags:
+  Environment: SND1
+  ServiceCode: ADP
+  ServiceName: ffc-demo-calculation-service
+  ServiceType: Shared
+  Purpose: Define purpose
+  ManagedBy: ASO
+  kubernetes_cluster: SNDADPINFAK1401
+
+userAssignedIdentity:
+  managedIdName: "dummyminame"
