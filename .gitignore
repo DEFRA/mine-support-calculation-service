@@ -71,3 +71,4 @@ test-output
 helm/**/*.lock
 
 .npmrc
+/.vs
