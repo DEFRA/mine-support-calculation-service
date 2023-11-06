@@ -9,6 +9,14 @@ asoAnnotations:
 
 namespaceTopics:
   - name: payment   
+    roleAssignments:
+      - roleName: 'TopicSender'
+
+namespaceQueues:
+  - name: calculation
+    owner: 'no'
+    roleAssignments:
+      - roleName: 'QueueReceiver'
 
 tags:
   Environment: SND1
@@ -18,6 +26,3 @@ tags:
   Purpose: Define purpose
   ManagedBy: ASO
   kubernetes_cluster: SNDADPINFAK1401
-
-userAssignedIdentity:
-  managedIdName: "dummyminame"
