@@ -1,6 +1,5 @@
 namespace: ffc-demo
 
-subscriptionId: "dummySubscriptionId"
 serviceBusResourceGroupName: sndadpinfrg1401
 serviceBusNamespaceName: sndadpinfsb1401
 
@@ -26,3 +25,9 @@ tags:
   Purpose: Define purpose
   ManagedBy: ASO
   kubernetes_cluster: SNDADPINFAK1401
+
+#Dummy placeholder values only for linting. NOT TO BE POPULATED
+subscriptionId: "dummySubscriptionId"
+userAssignedIdentity: {}
+teamMIPrefix: "dummy"
+serviceName: "dummy"
