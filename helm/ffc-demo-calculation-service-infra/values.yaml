@@ -29,5 +29,6 @@ tags:
 #Dummy placeholder values only for linting. NOT TO BE POPULATED
 subscriptionId: "dummySubscriptionId"
 userAssignedIdentity: {}
-teamMIPrefix: "dummy"
-serviceName: "dummy"
+teamMIPrefix: "dummy-mi-prefix"
+serviceName: "dummy-svc"
+teamResourceGroupName: "dummy-rsg"
