@@ -47,12 +47,5 @@
         "label": "{{serviceName}}",
         "content_type": "",
         "tags": {}
-    },
-    {
-        "key": "Sentinel",
-        "value": "1",
-        "label": "{{serviceName}}",
-        "content_type": "",
-        "tags": {}
     }
 ]
