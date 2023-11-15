@@ -4,7 +4,7 @@ const mqSchema = joi.object({
   messageQueue: {
     host: joi.string().default('localhost'),
     useCredentialChain: joi.bool().default(false),
-    managedIdentityClientId: joi.string().default(''),
+    managedIdentityClientId: joi.string().optional(),
     type: joi.string(),
     appInsights: joi.object()
   },
