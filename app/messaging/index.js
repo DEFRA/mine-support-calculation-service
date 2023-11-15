@@ -1,6 +1,6 @@
 const config = require('../config')
 const processCalculationMessage = require('./process-calculation-message')
-const { MessageReceiver } = require('ffc-messaging')
+const { MessageReceiver } = require('adp-messaging')
 let calculationReceiver
 
 async function start () {

@@ -1,5 +1,5 @@
 const config = require('../config')
-const { MessageSender } = require('ffc-messaging')
+const { MessageSender } = require('adp-messaging')
 const createMessage = require('./create-message')
 const protectiveMonitoringSendEvent = require('../services/protective-monitoring-service')
 

@@ -6,11 +6,11 @@ ignore:
     - '@azure/ms-rest-nodeauth > adal-node > request > har-validator > ajv':
         reason: No known exploit
         expires: '2020-12-31T00:00:00.000Z'
-    - ffc-messaging > @azure/ms-rest-nodeauth > adal-node > request > har-validator > ajv:
+    - adp-messaging > @azure/ms-rest-nodeauth > adal-node > request > har-validator > ajv:
         reason: No vuln
         expires: '2020-12-31T14:47:26.655Z'
   SNYK-JS-ANSIREGEX-1583908:
-    - ffc-messaging > @azure/identity > keytar > prebuild-install > npmlog > gauge > wide-align > string-width > strip-ansi > ansi-regex:
+    - adp-messaging > @azure/identity > keytar > prebuild-install > npmlog > gauge > wide-align > string-width > strip-ansi > ansi-regex:
         reason: None given
         expires: '2021-10-24T20:37:51.475Z'
   SNYK-JS-NWSAPI-2841516:
