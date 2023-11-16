@@ -19,23 +19,23 @@ metadata:
 spec:
   type: backend
   lifecycle: beta
-  owner: "group:default/fcp-payments"
-  system: ffc-demo-service
+  owner: "group:default/fcp-demo"
+  system: fcp-demo-service
   dependsOn:
-    - "resource:default/ffc-demo-calculation-queue"
-    - "resource:default/ffc-demo-payment-topic"
+    - "resource:default/fcp-demo-calculation-queue"
+    - "resource:default/fcp-demo-payment-topic"
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: ffc-demo-payment-topic
+  name: fcp-demo-payment-topic
   description: Payments message topic
   tags:
     - azure-service-bus
     - topic
 spec:
   type: message-topic
-  owner: "group:default/fcp-payments"
-  system: ffc-demo-service
+  owner: "group:default/fcp-demo"
+  system: fcp-demo-service
   dependsOn:
-    - "resource:default/ffc-demo-service-bus"
+    - "resource:default/ADPINFSB01"
