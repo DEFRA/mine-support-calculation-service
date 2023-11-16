@@ -35,13 +35,6 @@
         "tags": {}
     },
     {
-        "key": "APPINSIGHTS_INSTRUMENTATIONKEY",
-        "value": "36932cc4-12b7-4f0f-bbee-36ba20174390",
-        "label": "{{serviceName}}",
-        "content_type": "",
-        "tags": {}
-    },
-    {
         "key": "PROTECTIVE_MONITORING_URL",
         "value": "",
         "label": "{{serviceName}}",
