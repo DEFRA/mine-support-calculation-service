@@ -2,7 +2,9 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     '**/*.js',
-    '!**/*.test.js'
+    '!**/*.test.js',
+    '!*/messaging/index.js',
+    '!*/messaging/send-calculation.js'
   ],
   coverageDirectory: 'test-output',
   coverageReporters: [
