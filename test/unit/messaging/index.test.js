@@ -1,20 +1,41 @@
 const { start, stop } = require('../../../app/messaging/index')
 
-jest.mock('../../../app/messaging/index', () => {
+const processCalculationMessage = require('../../../app/messaging/process-calculation-message')
+const { MessageReceiver } = require('adp-messaging')
+
+jest.mock('adp-messaging', () => {
   return {
-    start: jest.fn().mockImplementation(() => 'start receiving message'),
-    stop: jest.fn().mockImplementation(() => 'close connection')
+    MessageReceiver: jest.fn().mockImplementation(() => {
+      return {
+        subscribe: jest.fn(),
+        closeConnection: jest.fn()
+      }
+    })
   }
 })
-describe('messaging index', () => {
-  test('start should be called', () => {
-    start()
-    expect(start).toHaveBeenCalled()
-    expect(start()).toBe('start receiving message')
+
+jest.mock('../../../app/messaging/process-calculation-message', () =>
+  jest.fn()
+)
+
+describe('messaging module', () => {
+  beforeEach(() => {
+    // Clear all instances and calls to constructor and all methods:
+    MessageReceiver.mockClear()
+    processCalculationMessage.mockClear()
   })
-  test('stop should be called', () => {
-    stop()
-    expect(stop).toHaveBeenCalled()
-    expect(stop()).toBe('close connection')
+
+  test('start should create a new MessageReceiver and subscribe', async () => {
+    await start()
+    expect(MessageReceiver).toHaveBeenCalledTimes(1)
+    expect(MessageReceiver.mock.results[0].value.subscribe).toHaveBeenCalled()
+  })
+
+  test('stop should close connection', async () => {
+    await start()
+    await stop()
+    expect(
+      MessageReceiver.mock.results[0].value.closeConnection
+    ).toHaveBeenCalledTimes(1)
   })
 })
