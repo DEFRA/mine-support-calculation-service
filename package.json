@@ -1,7 +1,7 @@
 {
   "name": "ffc-demo-calculation-service",
   "description": "Digital service mock to claim public money in the event property subsides into mine shaft.",
-  "version": "4.3.12",
+  "version": "4.3.13",
   "main": "app/index.js",
   "scripts": {
     "pretest": "npm run test:lint",
@@ -27,7 +27,7 @@
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
-    "adp-messaging": "^2.9.0-alpha.2",
+    "adp-messaging": "2.9.0",
     "applicationinsights": "2.7.3",
     "ffc-protective-monitoring": "1.0.4",
     "joi": "17.10.1"
