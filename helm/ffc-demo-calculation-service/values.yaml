@@ -22,10 +22,7 @@ deployment:
 
 container:
   imagePullPolicy: IfNotPresent
-  requestMemory: 5Mi
-  requestCpu: 5m
-  limitMemory: 60Mi
-  limitCpu: 40m
+  memCpuTier: S
   messageQueueHost: amq
   calculationQueueAddress: calculation
   paymentTopicAddress: payment
