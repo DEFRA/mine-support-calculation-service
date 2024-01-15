@@ -22,7 +22,7 @@ deployment:
 
 container:
   imagePullPolicy: IfNotPresent
-  memCpuTier: S
+  memCpuTier: M
   messageQueueHost: amq
   calculationQueueAddress: calculation
   paymentTopicAddress: payment
