@@ -1,0 +1,10 @@
+- key: NODE_ENV
+  value: "production"
+- key: APPINSIGHTS_CLOUDROLE
+  value: "{{serviceName}}"  
+- key: CALCULATION_QUEUE_ADDRESS
+  value: "ffc-demo-calculation"
+- key: PAYMENT_TOPIC_ADDRESS
+  value: "ffc-demo-payment"  
+- key: PROTECTIVE_MONITORING_URL
+  value: "" 

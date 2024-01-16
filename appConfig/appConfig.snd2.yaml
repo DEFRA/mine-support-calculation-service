@@ -1,0 +1,2 @@
+- key: MESSAGE_QUEUE_HOST
+  value: "SNDADPINFSB2401.servicebus.windows.net" 
