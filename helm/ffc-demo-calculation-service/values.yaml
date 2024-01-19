@@ -1,32 +1,19 @@
-environment: development
 name: ffc-demo-calculation-service
 namespace: ffc-demo
-workstream: ffc-demo
 image: ffc-demo-calculation-service
 
 labels: {}
 
-appInsights:
-  key:
-
 deployment:
-  restartPolicy: Always
   priorityClassName: low
-  replicas: 1
   minReplicas: 1
   maxReplicas: 3
   cpuThreshold: 80
   memoryThreshold: 80
   minReadySeconds: 5
-  imagePullSecret:
 
 container:
-  imagePullPolicy: IfNotPresent
   memCpuTier: M
-  messageQueueHost: amq
-  calculationQueueAddress: calculation
-  paymentTopicAddress: payment
-  protectiveMonitoringUrl:
 
 livenessProbe:
   initialDelaySeconds: 70
