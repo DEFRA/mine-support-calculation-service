@@ -11,11 +11,20 @@ metadata:
     dev.azure.com/project: DEFRA-FFC
     dev.azure.com/build-definition: ffc-demo-calculation-service
     sonarqube.org/project-key: adp-ffc-demo-calculation-service
+    grafana/dashboard-selector: "folderTitle == 'Managed Prometheus'"
   tags:
     - node
     - service-bus
     - private
     - back-end
+  links:
+    - url: https://github.com/DEFRA/ffc-demo-calculation-service/
+      title: View repository
+      icon: github
+    - url: https://dev.azure.com/defragovuk/DEFRA-FFC/_build?definitionId=4963
+      title: CI/CD Pipeline
+    - url: https://sonarcloud.io/project/overview?id=adp-ffc-demo-calculation-service
+      title: SonarCloud Analysis
 spec:
   type: backend
   lifecycle: beta
