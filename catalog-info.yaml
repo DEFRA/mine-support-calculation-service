@@ -9,7 +9,7 @@ metadata:
   annotations:
     github.com/project-slug: DEFRA/ffc-demo-calculation-service
     dev.azure.com/project: DEFRA-FFC
-    dev.azure.com/build-definition: DEFRA.ffc-demo-calculation-service
+    dev.azure.com/build-definition: ffc-demo-calculation-service
     sonarqube.org/project-key: adp-ffc-demo-calculation-service
   tags:
     - node
