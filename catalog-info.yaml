@@ -12,6 +12,7 @@ metadata:
     dev.azure.com/build-definition: ffc-demo-calculation-service
     sonarqube.org/project-key: adp-ffc-demo-calculation-service
     grafana/dashboard-selector: "folderTitle == 'Managed Prometheus'"
+    backstage.io/kubernetes-id: ffc-demo-calculation-service
   tags:
     - node
     - service-bus
