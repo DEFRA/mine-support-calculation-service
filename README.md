@@ -16,17 +16,13 @@ Optional:
 - Helm
 
 ### Azure Service Bus
-
 This service depends on a valid Azure Service Bus connection string for
 asynchronous communication.  The following environment variables need to be set
-in any non-production (`!config.isProd`) environment before the Docker
-container is started. When deployed into an appropriately configured AKS
-cluster (where [AAD Pod Identity](https://github.com/Azure/aad-pod-identity) is
-configured) the micro-service will use AAD Pod Identity through the manifests
-for
-[azure-identity](./helm/ffc-demo-claim-service/templates/azure-identity.yaml)
-and
-[azure-identity-binding](./helm/ffc-demo-claim-service/templates/azure-identity-binding.yaml).
+in any non-production (`process.env.NODE_ENV !== production`)
+environment before the Docker container is started. When deployed
+into an appropriately configured AKS cluster (where
+[Azure Workload Identity](https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview) is
+configured) the micro-service will use Azure Workload Identity configured on the deployment helm template which is included in the application helm chart.
 
 | Name                               | Description                                                                                  |
 | ---------------------------------- | -------------------------------------------------------------------------------------------- |
@@ -151,6 +147,14 @@ containing a timestamp to the `/tmp` directory.  If the timestamp has not been
 updated in the last 30 seconds, the probe will report the service is not
 functioning.
 
+### Deploy to Kubernetes
+
+For production deployments, 2 helm charts are included in the `.\helm` folder.
+- `ffc-demo-calculation-service-infra` for Application infrastructure deployment (servicebus queues, topics, storage accounts) using [`adp-aso-helm-library`](https://github.com/DEFRA/adp-aso-helm-library)
+- `ffc-demo-calculation-service` for Application deployment using [`adp-helm-library`](https://github.com/DEFRA/adp-helm-library)
+
+These helm charts take developer inputs from [values.yaml](/helm/ffc-demo-calculation-service/values.yaml) and [values.yaml](/helm/ffc-demo-calculation-service-infra/values.yaml). On running the [`CI pipeline`](.azuredevops/build.yaml) the images and helm charts are built and published to environment level Azure Container Registries.
+
 ## Dependency management
 
 Dependencies should be managed within a container using the development image
@@ -186,16 +190,13 @@ scripts/start --clean
 
 ## Build Pipeline
 
-The details of what is done during CI are best left to reviewing the
-[Jenkinsfile](Jenkinsfile) as it changes over time, however, at a high level
-the following happens:
+The [CI Pipeline](.azuredevops/build.yaml) does the following
 - The application is validated
 - The application is tested
-- The application is built into deployed artifacts
-- Those artifacts are deployed
+- The application is built into deployable artifacts (images and helm charts)
+- Pushing the artifacts to Azure Container Registry
 
-A detailed description on the build pipeline and PR work flow is available in
-the [Defra Confluence page](https://eaflood.atlassian.net/wiki/spaces/FFCPD/pages/1281359920/Build+Pipeline+and+PR+Workflow)
+A detailed description on the build pipeline [wiki page](https://github.com/DEFRA/ado-pipeline-common/blob/main/docs/AppBuildAndDeploy.md) 
 
 ## Licence
 

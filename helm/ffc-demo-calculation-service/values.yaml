@@ -20,9 +20,3 @@ livenessProbe:
   periodSeconds: 10
   failureThreshold: 3
   script: /home/node/scripts/healthz
-
-aadWorkloadIdentity: true
-
-serviceAccount:
-  name: ffc-demo
-  roleArn: true
