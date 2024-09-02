@@ -30,7 +30,7 @@
     "adp-messaging": "2.9.0",
     "applicationinsights": "2.7.3",
     "ffc-protective-monitoring": "1.0.4",
-    "joi": "17.10.1"
+    "joi": "17.13.3"
   },
   "devDependencies": {
     "@azure/service-bus": "7.9.1",
