@@ -28,7 +28,7 @@
   "license": "OGL-UK-3.0",
   "dependencies": {
     "adp-messaging": "2.9.0",
-    "applicationinsights": "2.7.3",
+    "applicationinsights": "2.9.6",
     "ffc-protective-monitoring": "1.0.4",
     "joi": "17.10.1"
   },
